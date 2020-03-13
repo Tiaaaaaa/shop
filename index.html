@@ -3,13 +3,19 @@
 <head>
   <meta charset="utf-8">
   <title></title>
+  <link rel="stylesheet" href="./assets/stylesheets/index.css">
+
 </head>
 <body>
 
-  <form action="resoconto.php" method="post">
-    cliente: <input type="text" name="cliente"><br>
-    <input type="submit">
-  </form>
+  <div class="container">
+
+    <p id="title">MercaLibro</p>
+
+    <p style="font-size:2em;">Inserire qua sotto il codice fiscale</p>
+    <form action="resoconto.php" method="post">
+      <input onchange="refresh()" type="text" name="cliente"><br>
+    </form>
 
 </body>
 </html>

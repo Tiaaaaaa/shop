@@ -1,0 +1,26 @@
+* {
+
+  color: red;
+  font-family: monospace;
+
+}
+
+#title {
+
+  font-size: 5em;
+
+}
+
+.flex {
+
+  display: flex;
+  flex-direction: column;
+
+}
+
+.show {
+
+  display: flex;
+  flex-direction: row;
+
+}

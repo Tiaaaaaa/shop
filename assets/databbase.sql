@@ -20,11 +20,12 @@ CREATE TABLE book(
 
 
 CREATE TABLE trades(
-	id 	 INT(2)   NOT NULL,
+	id 	   INT(2)   NOT NULL,
 	book 	 CHAR(13) NOT NULL,
 	seller CHAR(16) NOT NULL,
 	buyer  CHAR(16) DEFAULT NULL,
 	state  BOOLEAN  NOT NULL,
+	gain   FLOAT    NOT NULL,
 	PRIMARY KEY(id,book,seller),
 	FOREIGN KEY (book) REFERENCES book(ISBN)
 
