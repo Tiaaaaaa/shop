@@ -27,7 +27,7 @@
 
     $gain = 0;
     while ($row = mysqli_fetch_array($result_to_sell)) {
-      $to_sell .= "<tr><td>" . $row['ISBN'] .  ' </td> <td> ' . $row['title'] . "</td> <td> ". ((float)$row["price"] * 50)/100 . "</tr>";
+      $to_sell .= "<tr><td>" . $row['soubject'] .  ' </td> <td> ' . $row['title'] . "</td> <td> ". ((float)$row["price"] * 50)/100 . "</tr>";
       $gain += ((float)$row["price"] * 50)/100;
     }
 
@@ -57,6 +57,9 @@
       ?>
 
       <?php echo "<h1 align='center' id='title'>" . $cliente . "</h1>"  ?>
+
+      <div class="arrow" onclick="window.location.href = './index.html';"></div>
+
       <div id="sell">
 
         <h1>In vendita</h1>
@@ -66,11 +69,10 @@
           <div class="coln">
             <p align="center">Possibile guadagno: <?php echo $gain ?></p>
             <form action="sell.php" method="post">
-              <input type="submit" class="button" name="cliente" value="<?php echo $cliente ?>"/>
+              <input type="submit" class="button" name="cliente" onclick="refe" value="<?php echo $cliente ?>"/>
             </form>
           </div>
         </div>
-
 
       </div>
 
@@ -85,6 +87,12 @@
             <p align="center">Costo carrello: <?php echo $price ?> </p>
           </div>
         </div>
+
+        <script type="text/javascript">
+
+
+
+        </script>
 
       </div>
     </body>

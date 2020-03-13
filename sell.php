@@ -18,18 +18,22 @@
     $gain = 0.0;
   }
 
+  if (isset($_POST["book"])) {
+    $book = $_POST["book"];
+  }else{}
+
   if (isset($_POST["adding"])) {
     $adding = $_POST["adding"];
   }else {
-    $adding = "<th colspan = 3> Aggiungendo </th>";
+      $adding = "<th colspan = 3> Aggiungendo </th>";
   }
 
-  if (isset($_POST["book"])) {
+  if (isset($book)) {
 
     if ($selling = $conn->query("SELECT *
                                    FROM trades
                                   WHERE seller = '" . $cliente . "'
-                                    AND book   = '" . $_POST["book"] . "';")) {
+                                    AND book   = '" . $book . "';")) {
 
       } else {
         printf("Error select trades: %s\n", $conn->error);
@@ -46,71 +50,74 @@
       if ($insert = $conn->query("INSERT INTO trades
                                   VALUES (". $id .",". $_POST['book'] . ",'" . $cliente . "', NULL," . $usury . ");")) {
 
-        } else {
-          printf("Error insert: %s\n", $conn->error);
-        }
+      } else {
+        printf("Error insert: %s\n", $conn->error);
+      }
 
-        if($books = $conn ->query("SELECT *
-                                     FROM book
-                                    WHERE ISBN = '". $_POST["book"] ."'")){
+      if($books = $conn ->query("SELECT *
+                                   FROM book
+                                  WHERE ISBN = '". $book ."'")){
 
-        } else {
-          printf("Error select books: %s\n", $conn->error);
-        }
+      } else {
+        printf("Error select books: %s\n", $conn->error);
+      }
 
-        //Show the potential gain of the customer
-        $row = $books -> fetch_assoc();
-        $gain += ((float)$row["price"] * 50)/100;
+      //Show the potential gain of the customer
+      $row = $books -> fetch_assoc();
+      $gain += ((float)$row["price"] * 50)/100;
 
-        //Show the new books inserted
-        $adding .= "<tr><td>" . $row['soubject'] .  ' </td> <td> ' . $row['title'] . "</td> <td> ". ((float)$row["price"] * 50)/100 . "</tr>";
+      //Show the new books inserted
+      $adding .= "<tr><td>" . $row['soubject'] .  ' </td> <td> ' . $row['title'] . "</td> <td> ". ((float)$row["price"] * 50)/100 . "</tr>";
 
-          //Show concurrently new and old books
+        //Show concurrently new and old books
 
 
-        }
-        if ($old = $conn ->query("SELECT *
-          FROM trades
-          JOIN book
-          ON (trades.book = book.ISBN)
-          WHERE seller = '". $cliente . "'")) {
+      }
+      if ($old = $conn ->query("SELECT *
+                                  FROM trades
+                                  JOIN book
+                                    ON (trades.book = book.ISBN)
+                                 WHERE seller = '". $cliente . "'")) {
 
-          } else {
-            printf("Error select all: %s\n", $conn->error);
+      } else {
+        printf("Error select all: %s\n", $conn->error);
+      }
+      $older = "<table>
+        <tr><th> Materia </th> <th> Titolo </th> <th> Prezzo </th> <th> Volume </th> </tr>";
+
+        while ($row = mysqli_fetch_array($old)) {
+          $older .= "<tr><td>" . $row['soubject'] .  ' </td> <td> ' . $row['title'] . "</td> <td> ". ((float)$row["price"] * 50)/100 . "</td> <td> ". $row['volume'] . "</tr>";
           }
-          $older = "<table>";
 
-          while ($row = mysqli_fetch_array($old)) {
-            $older .= "<tr><td>" . $row['soubject'] .  ' </td> <td> ' . $row['title'] . "</td> <td> ". ((float)$row["price"] * 50)/100 . "</tr>";
-            }
 
-            echo $older;
-            $older = "</table>";
+          ?>
 
-            ?>
+          <h1 id="title" align="center">VENDI</h1>
 
-            <h1 id="title" align="center">VENDI</h1>
+            <form id="back" method="post" action="resoconto.php">
+              <input type="hidden" name="cliente" value="<?php echo $cliente; ?>">
+              <div class="arrow" onclick="document.getElementById('back').submit();"></div>
+            </form>
 
-            <div class="flex">
-              <form method="post">
-                <input type="hidden" name="cliente" value="<?php echo $cliente; ?>">
-                <input type="hidden" name="gain" value="<?php echo $gain; ?>">
-                <input type="hidden" name="adding" value="<?php echo $adding; ?>">
-                ISBN: <input name="book" value="" autofocus><br>
-                Usurato?: <input type="radio" name="usury" value="true"><br>
-                <input type="submit">
-              </form>
+          <div class="flex">
 
-            </div>
+            <b>Libro:</b>
+            <form method="post">
+              <input type="hidden" name="cliente" value="<?php echo $cliente; ?>">
+              <input type="hidden" name="gain" value="<?php echo $gain; ?>">
+              <input type="hidden" name="adding" value="<?php echo $adding; ?>">
+              <input name="book" value="" autofocus><br>
+              Usurato?: <input type="radio" name="usury" value="true"><br>
+            </form>
+          </div>
 
-            <div class="show">
-              <table>
-                <?php echo $adding ?>
-                <th>Possibile guadagno: <?php echo $gain ?></th>
-              </table>
-              <?php echo $older ?>
+          <div class="show">
+            <table>
+              <?php echo $adding ?>
+              <th colspan="3">Possibile guadagno: <?php echo $gain ?></th>
+            </table>
+            <?php echo $older ?>
+          </div>
 
-            </div>
-
-          </body>
-          </html>
+        </body>
+        </html>

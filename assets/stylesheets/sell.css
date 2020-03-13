@@ -2,6 +2,7 @@
 
   color: red;
   font-family: monospace;
+  font-size: 1.1em;
 
 }
 
@@ -13,14 +14,76 @@
 
 .flex {
 
+  position: relative;
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
 
 }
 
 .show {
 
+  position: relative;
+  top: 50px;
   display: flex;
-  flex-direction: row;
+  width: 100vw;
+}
+
+table {
+
+  margin: 10px;
+  border: 2px solid blue;
+  width: 48vw;
+
+}
+
+tr {
+
+  border: 2px solid blue;
+
+}
+
+.arrow {
+
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  width: 0px;
+  height: 0px;
+  border-top: 50px solid transparent;
+  border-right: 60px solid red;
+  border-bottom: 50px solid transparent;
+
+}
+
+.arrow::after {
+
+  content: "";
+  position: absolute;
+  top: -50px;
+  left: 50px;
+  width: 0;
+  height: 0;
+  border-top: 50px solid transparent;
+  border-right: 60px solid red;
+  border-bottom: 50px solid transparent;
+
+}
+
+.arrow:hover {
+
+  animation-duration: 1.3s;
+  animation-name: back;
+
+}
+
+@keyframes back {
+
+  0%   {left: 50px; }
+  25%  {left: 80px; }
+  50%  {left: 50px; }
+  75%  {left: 80px; }
+  100% {left: 50px; }
 
 }
