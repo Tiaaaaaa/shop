@@ -20,12 +20,12 @@ CREATE TABLE book(
 
 
 CREATE TABLE trades(
-	id 		 INT      NOT NULL AUTO_INCREMENT,
+	id 	 INT(2)   NOT NULL,
 	book 	 CHAR(13) NOT NULL,
 	seller CHAR(16) NOT NULL,
 	buyer  CHAR(16) DEFAULT NULL,
-	state  INT(1)   NOT NULL,
-	PRIMARY KEY(),
-	FOREIGN KEY book REFERENCES book(ISBN)
+	state  BOOLEAN  NOT NULL,
+	PRIMARY KEY(id,book,seller),
+	FOREIGN KEY (book) REFERENCES book(ISBN)
 
 );

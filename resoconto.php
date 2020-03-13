@@ -8,100 +8,87 @@
 
   <style media="screen">
 
-    #ciao{
-
-      height: 50vh;
-      width: 100vw;
-
-    }
-
-    td{
-
-      border: 2px solid black;
-
-    }
+  td{
+    border: 2px solid black;
+  }
 
   </style>
 
   <?php
 
-    $cliente = $_POST["cliente"];
+  $cliente = $_POST["cliente"];
 
-    $servername = "localhost";
-    $username = "root";
-    $dbname = "shop";
+  $servername = "localhost";
+  $username = "root";
+  $dbname = "shop";
 
-    // Create connection
-    $conn = new mysqli($servername, $username, "raspuino", $dbname);
+  // Create connection
+  $conn = new mysqli($servername, $username, "raspuino", $dbname);
 
-    // Check connection
-    if ($conn->connect_error) {
-      die("Connection failed: " . $conn->connect_error);
-    }
+  // Check connection
+  if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+  }
 
 
-//-----------SELL-------------------
-    $sql_to_sell= "SELECT *
-                     FROM trades
-                    WHERE seller like '$cliente'; ";
+  //-----------SELL-------------------
+  $sql_to_sell= "SELECT *
+                   FROM trades t
+                   JOIN book b
+                     ON (t.book = b.ISBN)
+                  WHERE seller like '$cliente'; ";
 
-    $result_to_sell = $conn->query($sql_to_sell);
-    printf("Select returned %d rows. </br> </br>", $result_to_sell->num_rows);
+  $result_to_sell = $conn->query($sql_to_sell);
 
-    $to_sell = "<table>";
+  $to_sell = "<table>";
 
-    while ($row = mysqli_fetch_array($result_to_sell)) {
-      $to_sell .= "<tr><td>" . $row['soubject'] .  ' </td> <td> ' . $row['title'] . "</td> <td> ". $row['price'] . "</tr>";
+  while ($row = mysqli_fetch_array($result_to_sell)) {
+    $to_sell .= "<tr><td>" . $row['ISBN'] .  ' </td> <td> ' . $row['title'] . "</td> <td> ". $row['price'] . "</tr>";
     }
 
     $to_sell .= "</table>";
 
 
-//------------BUY---------------
+    //------------BUY---------------
 
     $sql_to_buy= "SELECT *
-                    FROM trades
+                    FROM trades t
+                    JOIN book b
+                      ON (t.book = b.ISBN)
                    WHERE buyer like '$cliente'; ";
 
     $result_to_buy = $conn->query($sql_to_buy);
-    printf("Select returned %d rows. </br> </br>", $result_to_buy->num_rows);
 
     $to_buy = "<table>";
 
-    while ($row = mysqli_fetch_array($result_to_buy)) {
-      $to_buy .= "<tr><td>" . $row['soubject'] .  ' </td> <td> ' . $row['title'] . "</td> <td> ". $row['price'] . "</tr>";
-    }
+      while ($row = mysqli_fetch_array($result_to_buy)) {
+        $to_buy .= "<tr><td>" . $row['soubject'] .  ' </td> <td> ' . $row['title'] . "</td> <td> ". $row['price'] . "</tr>";
+      }
 
-    $to_buy .= "</table>";
+      $to_buy .= "</table>";
 
-  ?>
+      ?>
 
-  <form class="" method="post">
-    materia: <input id="client" onchange="change()" type="text" name="cliente" value="">
-  </form>
+        <div id="sell">
 
-  <div id="ciao">
+          <?php echo "<h1 align='center'>" . $cliente . "</h1>"  ?>
 
-    <?php echo "<h1 align='center'>" . $cliente . "</h1>"  ?>
+          <h1>In vendita</h1>
+          <?php echo $to_sell ?>
 
-    <h1>In vendita</h1>
-    <?php echo $to_sell ?>
-    <hr>
+          <form action="sell.php" method="post">
+            <input type="submit" class="button" name="cliente" value="<?php echo $cliente ?>"/>
+          </form>
 
-    <h1>In acquisto</h1>
-    <?php echo $to_buy ?>
-  </div>
+        </div>
 
-  <script type="text/javascript">
+        <hr>
 
-    function change() {
+        <div class="buy">
 
-      document.getElementById('sumbit').value = document.getElementById('client').value;
-      document.innerHTML = document.getElementById('client').value;
+          <h1>In acquisto</h1>
+          <?php echo $to_buy ?>
 
-    }
-
-  </script>
-
-</body>
-</html>
+        </div>
+      </body>
+      </html>
