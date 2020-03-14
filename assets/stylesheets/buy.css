@@ -6,6 +6,9 @@
 
 .filter {
 
+  display: flex;
+  padding: 20px;
+  justify-content: space-around; 
   width: 99vw;
   border: 2px solid red;
 

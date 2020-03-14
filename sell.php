@@ -58,7 +58,7 @@
 
       //Doing the insert
       if ($insert = $conn->query("INSERT INTO trades
-                                  VALUES ($id, '$_POST["book"]', $cliente, NULL, $usury, 0);")) {
+                                  VALUES (" . $id . ", '" . $_POST["book"] . "', '" . $cliente . "', NULL, $usury, 0);")) {
 
         } else {
           printf("Error insert: %s\n", $conn->error);

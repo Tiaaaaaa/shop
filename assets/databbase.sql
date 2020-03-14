@@ -13,7 +13,7 @@ CREATE TABLE book(
 	newAdoption CHAR(2),
 	toBuy 			CHAR(2),
 	advised 		CHAR(2),
-	reserve 		INT DEFAULT 0,
+	reserve 		INT 					DEFAULT 0,
 	PRIMARY KEY (ISBN),
 	CHECK(reserve >= 0)
 );
@@ -27,7 +27,7 @@ CREATE TABLE trades(
 	gain   FLOAT   ,
 	PRIMARY KEY (id,book,seller),
 	FOREIGN KEY (book)   REFERENCES book(ISBN),
-	FOREIGN KEY (seller) REFERENCES clients(F),
+	FOREIGN KEY (seller) REFERENCES clients(CF),
 	FOREIGN KEY (buyer)  REFERENCES clients(CF)
 
 );
@@ -35,5 +35,13 @@ CREATE TABLE trades(
 CREATE TABLE clients (
 	CF CHAR(16) NOT NULL,
 	position INT(3) NOT NULL
+
+);
+
+CREATE TABLE classes (
+	class VARCHAR(30) NOT NULL,
+	book  CHAR(13)    NOT NULL,
+	PRIMARY KEY (class, book),
+	FOREIGN KEY (book) REFERENCES book(ISBN)
 
 );
