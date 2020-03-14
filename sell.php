@@ -37,8 +37,8 @@
 
     if ($selling = $conn->query("SELECT *
                                    FROM trades
-                                  WHERE seller = '" . $cliente . "'
-                                    AND book   = '" . $book . "';")) {
+                                  WHERE seller = '$cliente'
+                                    AND book   = '$book';")) {
 
       }else {
         printf("Error select trades: %s\n", $conn->error);
@@ -58,7 +58,7 @@
 
       //Doing the insert
       if ($insert = $conn->query("INSERT INTO trades
-                                  VALUES (". $id .",". $_POST['book'] . ",'" . $cliente . "', NULL," . $usury . ", 0);")) {
+                                  VALUES ($id, '$_POST["book"]', $cliente, NULL, $usury, 0);")) {
 
         } else {
           printf("Error insert: %s\n", $conn->error);
@@ -66,7 +66,7 @@
 
         if(!$books = $conn ->query("SELECT *
                                       FROM book
-                                     WHERE ISBN = '". $book ."'")){
+                                     WHERE ISBN = '$book'")){
           }
 
           //Show the potential gain of the customer
@@ -99,7 +99,10 @@
                     <tr align='center'><b><td> Materia </td><td> Titolo </td><td> Prezzo </td><td> Volume </td></b></tr>";
 
           while ($row = mysqli_fetch_array($old)) {
-              $older .= "<tr><td>" . $row['soubject'] .  ' </td> <td> ' . $row['title'] . "</td> <td> ". ((float)$row["price"] * 50)/100 . "</td> <td> ". $row['volume'] . "</tr>";
+              $older .= "<tr><td>"  . $row['soubject'] .
+                        "</td><td>" . $row['title']    .
+                        "</td><td>" . ((float)$row["price"] * 50)/100 .
+                        "</td><td>" . $row['volume']   . "</tr>";
           }
 
 

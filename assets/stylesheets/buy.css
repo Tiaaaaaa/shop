@@ -10,3 +10,17 @@
   border: 2px solid red;
 
 }
+
+#buy {
+
+  background-color: aquamarine;
+  height: 100%;
+  width: 100%;
+
+}
+
+#buy:active {
+
+  background-color: bisque;
+
+}

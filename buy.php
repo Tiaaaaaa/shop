@@ -10,11 +10,36 @@
 
     <?php
 
+    foreach ($_POST as $key => $value) {
+      echo $key . "  " . $_POST[$key] . " </br> ";
+    }
+
     include_once './assets/connection.php';
 
     $cliente = $_POST["cliente"];
+    $book = "";
 
-    if (isset($_POST['book'])) {
+    if (isset($_POST['key'])) {
+      $book = $_POST['book'];
+
+      $seller = substr($_POST["key"], 0, -1);
+      $id     = substr($_POST["key"], -1);
+
+      echo "seller: " . $seller;
+      echo "id: " . $id;
+
+      if ($conn -> query("UPDATE trades
+                             SET buyer  = '$cliente'
+                           WHERE book   = '$book'
+                             AND seller = '$seller'
+                             AND id     = '(int)$id';")) {
+
+        }
+
+    }
+
+
+    if (isset($_POST['search'])) {
       $book = $_POST['book'];
 
       $storage = "SELECT *
@@ -24,9 +49,10 @@
                     JOIN book
                       ON (trades.book = book.ISBN)
                    WHERE trades.buyer IS NULL
-                     AND book.ISBN = '" . $book  . "';";
+                     AND trades.seller != '$cliente'
+                     AND book.ISBN = '$book';";
 
-    }else {
+    } else {
 
       $storage = "SELECT *
                     FROM clients
@@ -34,18 +60,18 @@
                       ON (clients.CF = trades.seller)
                     JOIN book
                       ON (trades.book = book.ISBN)
-                   WHERE buyer IS NULL;";
+                   WHERE buyer IS NULL
+                   AND trades.seller != '$cliente';";
 
     }
 
 
-
-    if($result = $conn->query($storage)){
+    if($result = $conn->query($storage)) {
     } else {
       printf("Error select trades: %s\n", $conn->error);
     }
 
-    $show = "<table> <th colspan='8'> Presenti </th>
+    $show = "<table> <th colspan='9'> In magazzino </th>
             <tr><td>  Posizione
             </td><td> Materia
             </td><td> Titolo
@@ -53,9 +79,11 @@
             </td><td> Volume
             </td><td> Nuova Adozione
             </td><td> Da comprare
-            </td><td> Consigliato";
+            </td><td> Consigliato
+            </td><th> ACQUISTA </th></tr>";
 
     while ($row = mysqli_fetch_array($result)) {
+      $form_id = "'buy'";
       $show .= "<tr><td>" . $row['position']                .
               "</td><td>" . $row['soubject']                .
               "</td><td>" . $row['title']                   .
@@ -63,7 +91,15 @@
               "</td><td>" . $row['volume']                  .
               "</td><td>" . $row['newAdoption']             .
               "</td><td>" . $row['toBuy']                   .
-              "</td><td>" . $row['advised']                 . "</tr>";
+              "</td><td>" . $row['advised']                 .
+              '</td><td>
+                <form id="buy" method="post">
+                  <input type="hidden" name="cliente" value="' . $cliente .'">
+                  <input type="hidden" name="book" value="' . $book .'">
+                  <input type="hidden" name="key" value="' . $row['seller'] . $row['id'] . '">
+                  <div onclick="document.getElementById(' . $form_id .').submit()"> Acquista </div>
+                </form>
+              </tr>';
     }
 
     ?>
@@ -76,18 +112,22 @@
       <div class="arrow" onclick="document.getElementById('back').submit();"></div>
     </form>
 
-    <div class="show_storage">
-
-      <?php echo $show ?>
-
-    </div>
-
-
     <div class="filter">
       <form method="post">
         <input type="hidden" name="cliente" value="<?php echo $cliente; ?>">
         <input type="text" name="book" value="">
+        <input type="hidden" name="search" value="true">
       </form>
+
+      <form method="post">
+        
+      </form>
+    </div>
+
+    <div class="show_storage">
+
+      <?php echo $show ?>
+
     </div>
 
   </body>

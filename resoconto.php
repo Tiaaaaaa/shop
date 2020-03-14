@@ -17,14 +17,9 @@
     $cf = new CodiceFiscale();
     $cf -> SetCF($cliente);
 
-    if ($cf -> GetCodiceValido()) {
+    if (!$cf -> GetCodiceValido()) {
 
-    }else {
-      
     }
-
-
-
 //-----Inserting a new client--------
 
     $sql_to_count_clients = "SELECT *
@@ -38,17 +33,17 @@
                           VALUES ('" . $cliente . "', " . $position .")";
 
     if ($result_insert = $conn -> query($insert_new_client)) {
-      echo "Nuovo cliente";
+      echo "<p align='center'> Nuovo cliente </p>";
     } else {
-      echo "cliente già presente";
+      echo "<p align='center'> cliente già presente </p>";
     }
 
     //-----------SELL-------------------
     $sql_to_sell= "SELECT *
-                     FROM trades t
-                     JOIN book b
-                       ON (t.book = b.ISBN)
-                    WHERE seller like '$cliente'; ";
+                     FROM trades
+                     JOIN book
+                       ON (trades.book = book.ISBN)
+                    WHERE seller = '$cliente'; ";
 
     $result_to_sell = $conn->query($sql_to_sell);
 
@@ -68,10 +63,10 @@
     //------------BUY---------------
 
     $sql_to_buy= "SELECT *
-                    FROM trades t
-                    JOIN book b
-                      ON (t.book = b.ISBN)
-                   WHERE buyer like '$cliente'; ";
+                    FROM trades
+                    JOIN book
+                      ON (trades.book = book.ISBN)
+                   WHERE buyer = '$cliente'; ";
 
     $result_to_buy = $conn->query($sql_to_buy);
 
