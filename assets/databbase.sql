@@ -18,15 +18,22 @@ CREATE TABLE book(
 	CHECK(reserve >= 0)
 );
 
-
 CREATE TABLE trades(
 	id 	   INT(2)   NOT NULL,
 	book 	 CHAR(13) NOT NULL,
 	seller CHAR(16) NOT NULL,
-	buyer  CHAR(16) DEFAULT NULL,
+	buyer  CHAR(16),
 	state  BOOLEAN  NOT NULL,
-	gain   FLOAT    NOT NULL,
-	PRIMARY KEY(id,book,seller),
-	FOREIGN KEY (book) REFERENCES book(ISBN)
+	gain   FLOAT   ,
+	PRIMARY KEY (id,book,seller),
+	FOREIGN KEY (book)   REFERENCES book(ISBN),
+	FOREIGN KEY (seller) REFERENCES clients(F),
+	FOREIGN KEY (buyer)  REFERENCES clients(CF)
+
+);
+
+CREATE TABLE clients (
+	CF CHAR(16) NOT NULL,
+	position INT(3) NOT NULL
 
 );

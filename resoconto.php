@@ -10,9 +10,38 @@
 
   <?php
     include_once './assets/connection.php';
+    include("./assets/cf.class.php");
 
     $cliente = $_POST["cliente"];
 
+    $cf = new CodiceFiscale();
+    $cf -> SetCF($cliente);
+
+    if ($cf -> GetCodiceValido()) {
+
+    }else {
+      
+    }
+
+
+
+//-----Inserting a new client--------
+
+    $sql_to_count_clients = "SELECT *
+                               FROM clients";
+
+    $result_to_count = $conn -> query($sql_to_count_clients);
+
+    $position = mysqli_num_rows($result_to_count) + 1;
+
+    $insert_new_client = "INSERT INTO clients
+                          VALUES ('" . $cliente . "', " . $position .")";
+
+    if ($result_insert = $conn -> query($insert_new_client)) {
+      echo "Nuovo cliente";
+    } else {
+      echo "cliente già presente";
+    }
 
     //-----------SELL-------------------
     $sql_to_sell= "SELECT *
@@ -64,6 +93,7 @@
 
       <h1 align='center' class="title"> <?php echo $cliente ?> </h1>
 
+<!-- BACK -->
       <div class="arrow" onclick="window.location.href = './index.html';"></div>
 
       <div id="sell">

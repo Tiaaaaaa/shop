@@ -11,9 +11,19 @@
 .show {
 
   position: relative;
-  top: 50px;
   display: flex;
+  flex-direction: column;
+  top: 50px;
   width: 100vw;
 }
 
-table { width: 48vw; }
+table { width: 98vw; }
+
+.current {
+
+  width: 99vw;
+  height: 15vh;
+  border: 1px solid red;
+  font-size: 1.5em;
+
+}

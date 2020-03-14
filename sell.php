@@ -12,6 +12,7 @@
 
   include_once './assets/connection.php';
 
+  //Obtaining all POST infomations
   $cliente = $_POST["cliente"];
   if (isset($_POST["gain"])) {
     $gain = $_POST["gain"];
@@ -23,76 +24,90 @@
     $book = $_POST["book"];
   }else{}
 
-    if (isset($_POST["adding"])) {
-      $adding = $_POST["adding"];
-    }else {
-      $adding = "<th colspan = 3> Aggiungendo </th>";
-    }
+  if (isset($_POST["adding"])) {
+    $adding = $_POST["adding"];
+  }else {
+    $adding = "<tr><th colspan='4'> In aggiunta </th></tr>
+               <tr align='center'><b><td> Materia </td><td> Titolo </td><td> Prezzo </td><td> Volume </td></b></tr>";
+  }
 
-    if (isset($book)) {
+  $current = "Inserisci un libro!";
 
-      if ($selling = $conn->query("SELECT *
-                                     FROM trades
-                                    WHERE seller = '" . $cliente . "'
-                                      AND book   = '" . $book . "';")) {
+  if (isset($book)) {
 
-        }else {
-          printf("Error select trades: %s\n", $conn->error);
-        }
-        $id = mysqli_num_rows($selling) + 1;
+    if ($selling = $conn->query("SELECT *
+                                   FROM trades
+                                  WHERE seller = '" . $cliente . "'
+                                    AND book   = '" . $book . "';")) {
 
-        if (isset($_POST["usury"])) {
-          $usury = "TRUE";
+      }else {
+        printf("Error select trades: %s\n", $conn->error);
+      }
+
+      //Defining trade index
+      //(if a delear wants to sell more than one egual books the index will be incremented)
+      $id = mysqli_num_rows($selling) + 1;
+
+      //Setting the usury
+      //(true means it is like shit)
+      if (isset($_POST["usury"])) {
+        $usury = "TRUE";
+      } else {
+        $usury = "FALSE";
+      }
+
+      //Doing the insert
+      if ($insert = $conn->query("INSERT INTO trades
+                                  VALUES (". $id .",". $_POST['book'] . ",'" . $cliente . "', NULL," . $usury . ", 0);")) {
+
         } else {
-          $usury = "FALSE";
+          printf("Error insert: %s\n", $conn->error);
         }
 
-        if ($insert = $conn->query("INSERT INTO trades
-                                     VALUES (". $id .",". $_POST['book'] . ",'" . $cliente . "', NULL," . $usury . ");")) {
-
-          } else {
-            printf("Error insert: %s\n", $conn->error);
+        if(!$books = $conn ->query("SELECT *
+                                      FROM book
+                                     WHERE ISBN = '". $book ."'")){
           }
 
-          if(!$books = $conn ->query("SELECT *
-                                       FROM book
-                                      WHERE ISBN = '". $book ."'")){
-            }else {
-              printf("Error select books: %s\n", $conn->error);
-            }
+          //Show the potential gain of the customer
+          $row = $books -> fetch_assoc();
+          $gain += ((float)$row["price"] * 50)/100;
 
-            //Show the potential gain of the customer
-            $row = $books -> fetch_assoc();
-            $gain += ((float)$row["price"] * 50)/100;
+          //Show the new books inserted
+          $adding .= "<tr><td>"  . $row['soubject'] .
+                     "</td><td>" . $row['title']    .
+                     "</td><td>" . ((float)$row["price"] * 50)/100 .
+                     "</td><td>" . $row['volume']   . "</tr>";
 
-            //Show the new books inserted
-            $adding .= "<tr><td>" . $row['soubject'] .  ' </td> <td> ' . $row['title'] . "</td> <td> ". ((float)$row["price"] * 50)/100 . "</tr>";
+          $current =  $row['soubject'] . "       " .
+                      $row['title']    . "       " .
+                      ((float)$row["price"] * 50)/100;
+          }
 
-              //Show concurrently new and old books
+          //Show together new and old books
+          if ($old = $conn ->query("SELECT *
+                                      FROM trades
+                                      JOIN book
+                                        ON (trades.book = book.ISBN)
+                                     WHERE seller = '". $cliente . "'")) {
+          }else {
+            printf("Error select all: %s\n", $conn->error);
+          }
+
+          $older = "<table>
+                    <tr><th colspan='4'> Tutti </th></tr>
+                    <tr align='center'><b><td> Materia </td><td> Titolo </td><td> Prezzo </td><td> Volume </td></b></tr>";
+
+          while ($row = mysqli_fetch_array($old)) {
+              $older .= "<tr><td>" . $row['soubject'] .  ' </td> <td> ' . $row['title'] . "</td> <td> ". ((float)$row["price"] * 50)/100 . "</td> <td> ". $row['volume'] . "</tr>";
+          }
 
 
-            }
-            if ($old = $conn ->query("SELECT *
-                                        FROM trades
-                                        JOIN book
-                                          ON (trades.book = book.ISBN)
-                                       WHERE seller = '". $cliente . "'")) {
-            }else {
-              printf("Error select all: %s\n", $conn->error);
-            }
-
-            $older = "<table>
-              <tr><th> Materia </th> <th> Titolo </th> <th> Prezzo </th> <th> Volume </th> </tr>";
-
-              while ($row = mysqli_fetch_array($old)) {
-                $older .= "<tr><td>" . $row['soubject'] .  ' </td> <td> ' . $row['title'] . "</td> <td> ". ((float)$row["price"] * 50)/100 . "</td> <td> ". $row['volume'] . "</tr>";
-                }
-
-
-          ?>
+        ?>
 
           <h1 class="title" align="center">VENDI</h1>
 
+<!-- BACK -->
             <form id="back" method="post" action="resoconto.php">
               <input type="hidden" name="cliente" value="<?php echo $cliente; ?>">
               <div class="arrow" onclick="document.getElementById('back').submit();"></div>
@@ -111,16 +126,19 @@
           </div>
 
           <div class="current">
-
-            
-
+            <p align="center">
+              <?php echo $current; ?>
+            </p>
           </div>
 
           <div class="show">
             <table>
               <?php echo $adding ?>
-              <th colspan="3">Possibile guadagno: <?php echo $gain ?></th>
+              <th colspan="4">Possibile guadagno: <?php echo $gain ?></th>
             </table>
+
+            <hr size="8px" color="red" style="width:100vw;'">
+
             <?php echo $older ?>
           </div>
 

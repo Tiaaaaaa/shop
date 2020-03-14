@@ -10,12 +10,20 @@
 
   <div class="container">
 
+    <p style="position:absolute;" id="date"></p>
     <p id="title">MercaLibro</p>
 
     <p style="font-size:2em;">Inserire qua sotto il codice fiscale</p>
     <form action="resoconto.php" method="post">
       <input onchange="refresh()" type="text" name="cliente" autofocus><br>
     </form>
+
+    <script type="text/javascript">
+
+      let a = Date.now();
+      document.getElementById('date').innerHTML = a.toUTCstring();
+
+    </script>
 
 </body>
 </html>
