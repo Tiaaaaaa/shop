@@ -16,7 +16,7 @@
 
     include_once './assets/connection.php';
 
-    $cliente = $_POST["cliente"];
+    $client = $_POST["client"];
     $book = "";
     $select_soubject = "";
 
@@ -42,7 +42,7 @@
       $gain = ((int)(mysqli_fetch_array($sql_gain)) * 10)/100;
 
       $sql_to_buy = "UPDATE trades
-                        SET buyer  = '$cliente', gain = '$gain'
+                        SET buyer  = '$client', gain = '$gain'
                       WHERE book   = '$book'
                         AND seller = '$seller'
                         AND id     = '$id';";
@@ -62,14 +62,14 @@
         $book = $_POST['book'];
 
         $sql_in_adding = "SELECT *
-                      FROM clients
-                      JOIN trades
-                        ON (clients.CF = trades.seller)
-                      JOIN book
-                        ON (trades.book = book.ISBN)
-                     WHERE trades.buyer IS NULL
-                       AND trades.seller != '$cliente'
-                       AND book.ISBN = '$book';";
+                            FROM clients
+                            JOIN trades
+                              ON (clients.email = trades.seller)
+                            JOIN book
+                              ON (trades.book = book.ISBN)
+                           WHERE trades.buyer IS NULL
+                             AND trades.seller != '$client'
+                             AND book.ISBN = '$book';";
 
       } else if (isset($_POST['class']) and $_POST['class'] != "Seleziona") {
 
@@ -77,32 +77,32 @@
         $class = $_POST['class'];
 
         $sql_in_adding = "SELECT *
-                      FROM clients
-                      JOIN trades
-                        ON (clients.CF = trades.seller)
-                      JOIN book
-                        ON (trades.book = book.ISBN)
-                      JOIN classes
-                        ON (book.ISBN = classes.book)
-                     WHERE trades.buyer IS NULL
-                       AND trades.seller != '$cliente'
-                       AND classes.class = '$class';";
+                            FROM clients
+                            JOIN trades
+                              ON (clients.email = trades.seller)
+                            JOIN book
+                              ON (trades.book = book.ISBN)
+                            JOIN classes
+                              ON (book.ISBN = classes.book)
+                           WHERE trades.buyer IS NULL
+                             AND trades.seller != '$client'
+                             AND classes.class = '$class';";
 
          //Filter trougth soubject
          if (isset($_POST['soubject']) and $_POST['soubject'] != "") {
            $soubject = "%" . $_POST['soubject'] . "%";
            $sql_in_adding = "SELECT *
-                         FROM clients
-                         JOIN trades
-                           ON (clients.CF = trades.seller)
-                         JOIN book
-                           ON (trades.book = book.ISBN)
-                         JOIN classes
-                           ON (book.ISBN = classes.book)
-                        WHERE trades.buyer IS NULL
-                          AND trades.seller != '$cliente'
-                          AND classes.class = '$class'
-                          AND book.soubject LIKE '$soubject';";
+                               FROM clients
+                               JOIN trades
+                                 ON (clients.email = trades.seller)
+                               JOIN book
+                                 ON (trades.book = book.ISBN)
+                               JOIN classes
+                                 ON (book.ISBN = classes.book)
+                              WHERE trades.buyer IS NULL
+                                AND trades.seller != '$client'
+                                AND classes.class = '$class'
+                                AND book.soubject LIKE '$soubject';";
          }
 
       }
@@ -110,28 +110,28 @@
     } else {
 
       $sql_in_adding = "SELECT *
-                    FROM clients
-                    JOIN trades
-                      ON (clients.CF = trades.seller)
-                    JOIN book
-                      ON (trades.book = book.ISBN)
-                   WHERE buyer IS NULL
-                     AND trades.seller != '$cliente';";
+                          FROM clients
+                          JOIN trades
+                            ON (clients.email = trades.seller)
+                          JOIN book
+                            ON (trades.book = book.ISBN)
+                         WHERE buyer IS NULL
+                           AND trades.seller != '$client';";
     }
 
     $sql_to_storage= "SELECT *
                         FROM trades
                         JOIN book
                           ON (trades.book = book.ISBN)
-                       WHERE buyer = '$cliente'; ";
+                       WHERE buyer IS NULL; ";
 
-//Making the table used to show the books in storage
-    if($result = $conn->query($sql_in_adding)) {
+
+    if($storage_result = $conn->query($sql_to_storage)) {
     } else {
-      printf("Error select trades: %s\n", $conn->error);
+      printf("Error select storage: %s\n", $conn->error);
     }
 
-    $in_adding = "<table> <th colspan='9'> In Aggiunta </th>
+    $in_storage = "<table> <th colspan='9'> In Magazzino </th>
             <tr><td>  Posizione
             </td><td> Materia
             </td><td> Titolo
@@ -142,8 +142,48 @@
             </td><td> Consigliato
             </td><th> ACQUISTA </th></tr>";
 
-    while ($row = mysqli_fetch_array($result)) {
+    while ($row = mysqli_fetch_array($storage_result)) {
+
       $form_id = "'buy" . $row['ISBN'] . $row['seller'] . $row['id'] . "'";
+
+      $in_storage.= "<tr><td>"  . $row['position']                    .
+                    "</td><td>" . $row['soubject']                    .
+                    "</td><td>" . $row['title']                       .
+                    "</td><td>" . ((float)$row["price"] * $value)/100 .
+                    "</td><td>" . $row['volume']                      .
+                    "</td><td>" . $row['newAdoption']                 .
+                    "</td><td>" . $row['toBuy']                       .
+                    "</td><td>" . $row['advised']                     .
+                    '</td><td>
+                      <form id='. $form_id .' method="post">
+                        <input type="hidden" name="client" value="' . $client .'">
+                        <input type="hidden" name="book" value="' . $row['ISBN'] .'">
+                        <input type="hidden" name="key" value="' . $row['seller'] . $row['id'] . '">
+                        <div class="buy" onclick="document.getElementById(' . $form_id .').submit()"> Acquista </div>
+                      </form>
+                    </tr>';
+     }
+
+     $in_storage .= "</table>";
+
+
+//Making the table used to show the books in storage
+    if($adding_result = $conn->query($sql_in_adding)) {
+    } else {
+      printf("Error select trades: %s\n", $conn->error);
+    }
+
+    $in_adding = "<table> <th colspan='8'> In Aggiunta </th>
+            <tr><td>  Posizione
+            </td><td> Materia
+            </td><td> Titolo
+            </td><td> Prezzo
+            </td><td> Volume
+            </td><td> Nuova Adozione
+            </td><td> Da comprare
+            </td><td> Consigliato</tr>";
+
+    while ($row = mysqli_fetch_array($adding_result)) {
 
       echo $row['state'];
 
@@ -160,16 +200,11 @@
                     "</td><td>" . $row['volume']                      .
                     "</td><td>" . $row['newAdoption']                 .
                     "</td><td>" . $row['toBuy']                       .
-                    "</td><td>" . $row['advised']                     .
-                    '</td><td>
-                      <form id='. $form_id .' method="post">
-                        <input type="hidden" name="cliente" value="' . $cliente .'">
-                        <input type="hidden" name="book" value="' . $row['ISBN'] .'">
-                        <input type="hidden" name="key" value="' . $row['seller'] . $row['id'] . '">
-                        <div class="buy" onclick="document.getElementById(' . $form_id .').submit()"> Acquista </div>
-                      </form>
-                    </tr>';
+                    "</td><td>" . $row['advised'];
     }
+
+    $in_storage .= "</table>";
+
 
     ?>
 
@@ -177,19 +212,19 @@
 
 <!-- BACK -->
     <form id="back" method="post" action="resoconto.php">
-      <input type="hidden" name="cliente" value="<?php echo $cliente; ?>">
+      <input type="hidden" name="client" value="<?php echo $client; ?>">
       <div class="arrow" onclick="document.getElementById('back').submit();"></div>
     </form>
 
     <div class="filter">
       <form method="post">
-        <input type="hidden" name="cliente" value="<?php echo $cliente; ?>">
+        <input type="hidden" name="client" value="<?php echo $client; ?>">
         Libro: <input type="text" name="book" value="">
         <input type="submit" name="search" value="Cerca">
       </form>
 
       <form method="post">
-        <input type="hidden" name="cliente" value="<?php echo $cliente; ?>">
+        <input type="hidden" name="client" value="<?php echo $client; ?>">
         <input type="hidden" name="class" value="<?php echo $class ?>">
         <fieldset>
           <legend>Classe: </legend>
@@ -227,21 +262,21 @@
       </form>
 
       <form method="post">
-        <input type="hidden" name="cliente" value="<?php echo $cliente; ?>">
+        <input type="hidden" name="client" value="<?php echo $client; ?>">
         <input type="submit" value="Ripristina ricerca">
       </form>
     </div>
 
+
     <div class="show_storage">
-
-
+      <?php echo $in_storage ?>
 
     </div>
 
     <hr size="8px" color="red" style="width:100vw;'">
     <hr size="8px" color="red" style="width:100vw;'">
 
-      <div class="adding">
+    <div class="adding">
 
       <?php echo $in_adding ?>
 

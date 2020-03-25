@@ -38,23 +38,14 @@
 
           //counting books
           if ($row['buyer'] == null) {
-
             $books_in_storage++;
-
           } else {
-
             $books_sold++;
-
           }
-
           $our_gain += $row['gain'];
-
-
         }
 
         $total_books = mysqli_num_rows($result);
-
-
     }
 
 

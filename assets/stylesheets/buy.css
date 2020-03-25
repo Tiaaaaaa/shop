@@ -1,5 +1,7 @@
 .show_storage {
 
+  margin-top: 60px;
+  margin-bottom: 60px;
   width: 99vw;
 
 }
@@ -25,5 +27,11 @@
 .buy:active {
 
   background-color: bisque;
+
+}
+
+.adding {
+  margin-top: 60px;
+  width: 99vw;
 
 }

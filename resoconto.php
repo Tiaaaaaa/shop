@@ -12,38 +12,25 @@
     include_once './assets/connection.php';
     include("./assets/cf.class.php");
 
-    $cliente = $_POST["cliente"];
+    $client = $_POST["client"];
 
-    $cf = new CodiceFiscale();
-    $cf -> SetCF($cliente);
-
-    if (!$cf -> GetCodiceValido()) {
-      echo "";
-    }
 //-----Inserting a new client--------
 
-    $sql_to_count_clients = "SELECT *
-                               FROM clients";
 
     $result_to_count = $conn -> query($sql_to_count_clients);
 
-    $position = mysqli_num_rows($result_to_count) + 1;
-
-    $insert_new_client = "INSERT INTO clients
-                               VALUES ('" . $cliente . "', " . $position .")";
-
     if ($result_insert = $conn -> query($insert_new_client)) {
-      echo "<p align='center'> Nuovo cliente </p>";
+      echo "<p align='center'> Nuovo client </p>";
     } else {
-      echo "<p align='center'> cliente già presente </p>";
+      echo "<p align='center'> client già presente </p>";
     }
 
-    //-----------SELL-------------------
+    //-----------SELL------------------
     $sql_to_sell= "SELECT *
                      FROM trades
                      JOIN book
                        ON (trades.book = book.ISBN)
-                    WHERE seller = '$cliente'; ";
+                    WHERE seller = '$client'; ";
 
     $result_to_sell = $conn->query($sql_to_sell);
 
@@ -60,13 +47,13 @@
 
     $to_sell .= "</table>";
 
-    //------------BUY---------------
+    //------------BUY------------------
 
     $sql_to_buy= "SELECT *
                     FROM trades
                     JOIN book
                       ON (trades.book = book.ISBN)
-                   WHERE buyer = '$cliente'; ";
+                   WHERE buyer = '$client'; ";
 
     $result_to_buy = $conn->query($sql_to_buy);
 
@@ -86,7 +73,7 @@
 
       ?>
 
-      <h1 align='center' class="title"> <?php echo $cliente ?> </h1>
+      <h1 align='center' class="title"> <?php echo $client ?> </h1>
 
 <!-- BACK -->
       <div class="arrow" onclick="window.location.href = './index.html';"></div>
@@ -100,7 +87,7 @@
           <div class="coln">
             <p align="center">Possibile guadagno: <?php echo $gain ?></p>
             <form action="sell.php" method="post">
-              <input type="submit" class="button" name="cliente" value="<?php echo $cliente ?>"/>
+              <input type="submit" class="button" name="client" value="<?php echo $client ?>"/>
             </form>
           </div>
         </div>
@@ -116,7 +103,7 @@
           <div class="coln">
             <p align="center">Costo carrello: <?php echo $price ?> </p>
             <form action="buy.php" method="post">
-              <input type="submit" class="button" name="cliente" value="<?php echo $cliente ?>"/>
+              <input type="submit" class="button" name="client" value="<?php echo $client ?>"/>
             </form>
           </div>
         </div>

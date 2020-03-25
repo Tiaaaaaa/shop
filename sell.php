@@ -13,7 +13,7 @@
   include_once './assets/connection.php';
 
   //Obtaining all POST infomations
-  $cliente = $_POST["cliente"];
+  $client = $_POST["client"];
   if (isset($_POST["gain"])) {
     $gain = $_POST["gain"];
   }else{
@@ -41,11 +41,28 @@
 
   $current = "Inserisci un libro!";
 
+  //give a position to the seller
+
+  $sql_finding_client = "SELECT *
+                           FROM trades
+                          WHERE seller = '$client'";
+
+  if (mysqli_num_rows($result_to_count = $conn->query($sql_finding_client)) == 0) {
+
+    $sql_to_count_clients = "SELECT *
+                               FROM clients";
+
+    $position = mysqli_num_rows($result_to_count = $conn->query($sql_finding_client))
+
+    $insert_new_client = "INSERT INTO clients
+                               VALUES ('" . $client . "', " . $position .")";
+  }
+
   if (isset($book)) {
 
     if ($selling = $conn->query("SELECT *
                                    FROM trades
-                                  WHERE seller = '$cliente'
+                                  WHERE seller = '$client'
                                     AND book   = '$book';")) {
 
       }else {
@@ -61,7 +78,7 @@
 
       //Doing the insert
       if ($insert = $conn->query("INSERT INTO trades
-                                  VALUES (" . $id . ", '" . $_POST["book"] . "', '" . $cliente . "', NULL, $usury, 0);")) {
+                                  VALUES (" . $id . ", '" . $_POST["book"] . "', '" . $client . "', NULL, $usury, 0);")) {
 
         } else {
           printf("Error insert: %s\n", $conn->error);
@@ -92,7 +109,7 @@
                                       FROM trades
                                       JOIN book
                                         ON (trades.book = book.ISBN)
-                                     WHERE seller = '". $cliente . "'")) {
+                                     WHERE seller = '". $client . "'")) {
           }else {
             printf("Error select all: %s\n", $conn->error);
           }
@@ -115,7 +132,7 @@
 
 <!-- BACK -->
             <form id="back" method="post" action="resoconto.php">
-              <input type="hidden" name="cliente" value="<?php echo $cliente; ?>">
+              <input type="hidden" name="client" value="<?php echo $client; ?>">
               <div class="arrow" onclick="document.getElementById('back').submit();"></div>
             </form>
 
@@ -123,7 +140,7 @@
 
             <b>Libro:</b>
             <form method="post">
-              <input type="hidden" name="cliente" value="<?php echo $cliente; ?>">
+              <input type="hidden" name="client" value="<?php echo $client; ?>">
               <input type="hidden" name="gain" value="<?php echo $gain; ?>">
               <input type="hidden" name="adding" value="<?php echo $adding; ?>">
               <input name="book" value="" autofocus><br>

@@ -29,7 +29,7 @@
 
     <p class="subtitle">Inserire qua sotto il codice fiscale</p>
     <form action="resoconto.php" method="post">
-      <input onchange="refresh()" type="text" name="cliente" autofocus><br>
+      <input onchange="refresh()" type="text" name="client" autofocus><br>
     </form>
 
   </div>
@@ -40,7 +40,6 @@
     document.getElementById('date').innerHTML = "oggi è il <br> " + a.getDate() + "/" + a.getMonth() + "/" +  a.getFullYear();
 
     function auth() {
-      console.log("ciao");
 
       document.getElementById('next').style.display = "none";
       document.getElementById('back').style.display = "block";
@@ -49,7 +48,6 @@
       document.getElementById('auth').style.opacity = "100";
 
       document.getElementById('auth').style.zIndex = "2";
-
 
     }
 
@@ -60,14 +58,10 @@
 
       document.getElementById('container').style.opacity = "100";
       document.getElementById('auth').style.opacity = "0";
+
       document.getElementById('auth').style.zIndex = "-1";
 
-
     }
-
-
-
-
 
   </script>
 
