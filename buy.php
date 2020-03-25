@@ -61,7 +61,7 @@
 
         $book = $_POST['book'];
 
-        $storage = "SELECT *
+        $sql_in_adding = "SELECT *
                       FROM clients
                       JOIN trades
                         ON (clients.CF = trades.seller)
@@ -76,7 +76,7 @@
 //Filter trougth class
         $class = $_POST['class'];
 
-        $storage = "SELECT *
+        $sql_in_adding = "SELECT *
                       FROM clients
                       JOIN trades
                         ON (clients.CF = trades.seller)
@@ -91,7 +91,7 @@
          //Filter trougth soubject
          if (isset($_POST['soubject']) and $_POST['soubject'] != "") {
            $soubject = "%" . $_POST['soubject'] . "%";
-           $storage = "SELECT *
+           $sql_in_adding = "SELECT *
                          FROM clients
                          JOIN trades
                            ON (clients.CF = trades.seller)
@@ -109,7 +109,7 @@
 
     } else {
 
-      $storage = "SELECT *
+      $sql_in_adding = "SELECT *
                     FROM clients
                     JOIN trades
                       ON (clients.CF = trades.seller)
@@ -119,13 +119,19 @@
                      AND trades.seller != '$cliente';";
     }
 
+    $sql_to_storage= "SELECT *
+                        FROM trades
+                        JOIN book
+                          ON (trades.book = book.ISBN)
+                       WHERE buyer = '$cliente'; ";
+
 //Making the table used to show the books in storage
-    if($result = $conn->query($storage)) {
+    if($result = $conn->query($sql_in_adding)) {
     } else {
       printf("Error select trades: %s\n", $conn->error);
     }
 
-    $show = "<table> <th colspan='9'> In magazzino </th>
+    $in_adding = "<table> <th colspan='9'> In Aggiunta </th>
             <tr><td>  Posizione
             </td><td> Materia
             </td><td> Titolo
@@ -147,22 +153,22 @@
         $value = 60;
       }
 
-      $show .= "<tr><td>" . $row['position']                    .
-              "</td><td>" . $row['soubject']                    .
-              "</td><td>" . $row['title']                       .
-              "</td><td>" . ((float)$row["price"] * $value)/100 .
-              "</td><td>" . $row['volume']                      .
-              "</td><td>" . $row['newAdoption']                 .
-              "</td><td>" . $row['toBuy']                       .
-              "</td><td>" . $row['advised']                     .
-              '</td><td>
-                <form id='. $form_id .' method="post">
-                  <input type="hidden" name="cliente" value="' . $cliente .'">
-                  <input type="hidden" name="book" value="' . $row['ISBN'] .'">
-                  <input type="hidden" name="key" value="' . $row['seller'] . $row['id'] . '">
-                  <div class="buy" onclick="document.getElementById(' . $form_id .').submit()"> Acquista </div>
-                </form>
-              </tr>';
+      $in_adding .= "<tr><td>"  . $row['position']                    .
+                    "</td><td>" . $row['soubject']                    .
+                    "</td><td>" . $row['title']                       .
+                    "</td><td>" . ((float)$row["price"] * $value)/100 .
+                    "</td><td>" . $row['volume']                      .
+                    "</td><td>" . $row['newAdoption']                 .
+                    "</td><td>" . $row['toBuy']                       .
+                    "</td><td>" . $row['advised']                     .
+                    '</td><td>
+                      <form id='. $form_id .' method="post">
+                        <input type="hidden" name="cliente" value="' . $cliente .'">
+                        <input type="hidden" name="book" value="' . $row['ISBN'] .'">
+                        <input type="hidden" name="key" value="' . $row['seller'] . $row['id'] . '">
+                        <div class="buy" onclick="document.getElementById(' . $form_id .').submit()"> Acquista </div>
+                      </form>
+                    </tr>';
     }
 
     ?>
@@ -228,7 +234,16 @@
 
     <div class="show_storage">
 
-      <?php echo $show ?>
+
+
+    </div>
+
+    <hr size="8px" color="red" style="width:100vw;'">
+    <hr size="8px" color="red" style="width:100vw;'">
+
+      <div class="adding">
+
+      <?php echo $in_adding ?>
 
     </div>
 

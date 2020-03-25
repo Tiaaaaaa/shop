@@ -30,7 +30,7 @@
     $position = mysqli_num_rows($result_to_count) + 1;
 
     $insert_new_client = "INSERT INTO clients
-                          VALUES ('" . $cliente . "', " . $position .")";
+                               VALUES ('" . $cliente . "', " . $position .")";
 
     if ($result_insert = $conn -> query($insert_new_client)) {
       echo "<p align='center'> Nuovo cliente </p>";
