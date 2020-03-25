@@ -3,27 +3,73 @@
 <head>
   <meta charset="utf-8">
   <title></title>
+  <link rel="stylesheet" href="./assets/stylesheets/general.css">
   <link rel="stylesheet" href="./assets/stylesheets/index.css">
 
 </head>
 <body>
 
-  <div class="container">
+  <button class="button" id="next" onclick="auth()">Visualizza statistiche</button>
+  <button class="button" id="back" onclick="back()">Visualizza inserimento</button>
 
-    <p style="position:absolute;" id="date"></p>
-    <p id="title">MercaLibro</p>
+  <div id="auth">
 
-    <p style="font-size:2em;">Inserire qua sotto il codice fiscale</p>
+    <p class="subtitle">Inserisci la password</p>
+
+    <form action="data.php" method="post">
+      <input type="password" name="password" value="">
+    </form>
+
+  </div>
+
+  <div id="container">
+
+    <p class="title">MercaLibro</p>
+    <p class="subtitle "id="date"></p>
+
+    <p class="subtitle">Inserire qua sotto il codice fiscale</p>
     <form action="resoconto.php" method="post">
       <input onchange="refresh()" type="text" name="cliente" autofocus><br>
     </form>
 
+  </div>
+
     <script type="text/javascript">
+    let a = new Date();
 
-      let a = Date.now();
-      document.getElementById('date').innerHTML = a.toUTCstring();
+    document.getElementById('date').innerHTML = "oggi è il <br> " + a.getDate() + "/" + a.getMonth() + "/" +  a.getFullYear();
 
-    </script>
+    function auth() {
+      console.log("ciao");
+
+      document.getElementById('next').style.display = "none";
+      document.getElementById('back').style.display = "block";
+
+      document.getElementById('container').style.opacity = "0";
+      document.getElementById('auth').style.opacity = "100";
+
+      document.getElementById('auth').style.zIndex = "2";
+
+
+    }
+
+    function back() {
+
+      document.getElementById('next').style.display = "block";
+      document.getElementById('back').style.display = "none";
+
+      document.getElementById('container').style.opacity = "100";
+      document.getElementById('auth').style.opacity = "0";
+      document.getElementById('auth').style.zIndex = "-1";
+
+
+    }
+
+
+
+
+
+  </script>
 
 </body>
 </html>

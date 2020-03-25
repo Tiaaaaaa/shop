@@ -1,0 +1,25 @@
+#error {
+
+  height: 95vh;
+  width: 95vw;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 10px solid red;
+
+}
+
+.container {
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 98vh;
+  width: 98vw;
+  font-family: monospace;
+  color: red;
+  margin: auto;
+
+}

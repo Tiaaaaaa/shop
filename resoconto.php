@@ -18,7 +18,7 @@
     $cf -> SetCF($cliente);
 
     if (!$cf -> GetCodiceValido()) {
-
+      echo "";
     }
 //-----Inserting a new client--------
 

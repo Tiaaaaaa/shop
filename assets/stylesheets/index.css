@@ -1,4 +1,4 @@
-.container {
+#container {
 
   display: flex;
   align-items: center;
@@ -20,9 +20,46 @@ input {
   text-align: center;
 }
 
-#title {
+#date{
 
-  font-size: 5em;
-  margin: 2em;
+  font-size: 30px;
+  margin-top: -20px;
+
+}
+
+#back { display: none;}
+
+.button {
+
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  padding: 10px;
+  color: navy;
+  border: 2px solid red;
+  background-color: white;
+  z-index: 3;
+
+}
+
+.button:hover{
+
+  color: red;
+
+}
+
+#auth {
+
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: auto;
+  width: 98vw;
+  height: 98vh;
+  font-family: monospace;
+  opacity: 0;
+  z-index: -1;
 
 }

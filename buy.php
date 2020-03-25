@@ -11,7 +11,7 @@
     <?php
 
     foreach ($_POST as $key => $value) {
-      echo $key . "  " . $_POST[$key] . " </br> ";
+      echo $key . "  " . $value . " </br> ";
     }
 
     include_once './assets/connection.php';
@@ -22,7 +22,7 @@
 
 
 //  If a buy button has been pressed, the "buyer" field in respective line
-//  will be updated NOT WORKING
+//  will be updated
 
     if (isset($_POST['key'])) {
       $book = $_POST['book'];
@@ -33,16 +33,29 @@
       echo "seller: " . $seller . "<br>";
       echo "id: " . $id;
 
-      if ($conn -> query("UPDATE trades
-                             SET buyer  = '$cliente'
-                           WHERE book   = '$book'
-                             AND seller = '$seller'
-                             AND id     = '(int)$id';")) {
-        }
+      $sql_to_find_gain = "SELECT price
+                             FROM book
+                            WHERE ISBN = '$book';";
+
+      $sql_gain = $conn -> query($sql_to_find_gain);
+
+      $gain = ((int)(mysqli_fetch_array($sql_gain)) * 10)/100;
+
+      $sql_to_buy = "UPDATE trades
+                        SET buyer  = '$cliente', gain = '$gain'
+                      WHERE book   = '$book'
+                        AND seller = '$seller'
+                        AND id     = '$id';";
+
+      if ($conn -> query($sql_to_buy)) {
+
+      }else {
+
+      }
     }
 
 
-//If there is a slected book in _POST[] the table will be filtered by that book
+//If there is a slected book in $_POST[] the table will be filtered by that book
     if (isset($_POST['search'])) {
       if (isset($_POST['book'])) {
 
@@ -58,7 +71,7 @@
                        AND trades.seller != '$cliente'
                        AND book.ISBN = '$book';";
 
-      } else if (isset($_POST['class'])) {
+      } else if (isset($_POST['class']) and $_POST['class'] != "Seleziona") {
 
 //Filter trougth class
         $class = $_POST['class'];
@@ -75,8 +88,23 @@
                        AND trades.seller != '$cliente'
                        AND classes.class = '$class';";
 
-        //Filter trougth soubject
-        $select_soubject = " "
+         //Filter trougth soubject
+         if (isset($_POST['soubject']) and $_POST['soubject'] != "") {
+           $soubject = "%" . $_POST['soubject'] . "%";
+           $storage = "SELECT *
+                         FROM clients
+                         JOIN trades
+                           ON (clients.CF = trades.seller)
+                         JOIN book
+                           ON (trades.book = book.ISBN)
+                         JOIN classes
+                           ON (book.ISBN = classes.book)
+                        WHERE trades.buyer IS NULL
+                          AND trades.seller != '$cliente'
+                          AND classes.class = '$class'
+                          AND book.soubject LIKE '$soubject';";
+         }
+
       }
 
     } else {
@@ -109,21 +137,30 @@
             </td><th> ACQUISTA </th></tr>";
 
     while ($row = mysqli_fetch_array($result)) {
-      $form_id = "'buy'";
-      $show .= "<tr><td>" . $row['position']                .
-              "</td><td>" . $row['soubject']                .
-              "</td><td>" . $row['title']                   .
-              "</td><td>" . ((float)$row["price"] * 60)/100 .
-              "</td><td>" . $row['volume']                  .
-              "</td><td>" . $row['newAdoption']             .
-              "</td><td>" . $row['toBuy']                   .
-              "</td><td>" . $row['advised']                 .
+      $form_id = "'buy" . $row['ISBN'] . $row['seller'] . $row['id'] . "'";
+
+      echo $row['state'];
+
+      if ($row['state'] == 1) {
+        $value = 50;
+      }else{
+        $value = 60;
+      }
+
+      $show .= "<tr><td>" . $row['position']                    .
+              "</td><td>" . $row['soubject']                    .
+              "</td><td>" . $row['title']                       .
+              "</td><td>" . ((float)$row["price"] * $value)/100 .
+              "</td><td>" . $row['volume']                      .
+              "</td><td>" . $row['newAdoption']                 .
+              "</td><td>" . $row['toBuy']                       .
+              "</td><td>" . $row['advised']                     .
               '</td><td>
-                <form id="buy" method="post">
+                <form id='. $form_id .' method="post">
                   <input type="hidden" name="cliente" value="' . $cliente .'">
-                  <input type="hidden" name="book" value="' . $book .'">
+                  <input type="hidden" name="book" value="' . $row['ISBN'] .'">
                   <input type="hidden" name="key" value="' . $row['seller'] . $row['id'] . '">
-                  <div onclick="document.getElementById(' . $form_id .').submit()"> Acquista </div>
+                  <div class="buy" onclick="document.getElementById(' . $form_id .').submit()"> Acquista </div>
                 </form>
               </tr>';
     }
@@ -150,7 +187,8 @@
         <input type="hidden" name="class" value="<?php echo $class ?>">
         <fieldset>
           <legend>Classe: </legend>
-          <select name="class" >
+          <select name="class">
+            <option value="Seleziona  ">Seleziona</option>
             <option value="1ITIS">1ITIS</option>
             <option value="2ITIS">2ITIS</option>
             <option value="2ITIS Chimica">2ITIS Chimica</option>
@@ -177,8 +215,8 @@
             <option value="2leFP op Meccanico Serale">2leFP op Meccanico Serale</option>
             <option value="3leFP op Meccanico Serale">3leFP op Meccanico Serale</option>
           </select>
+          <input type='text' name='soubject'>
           <input type="submit" name="search" value="Cerca">
-          <?php echo $select_soubject?>
         </fieldset>
       </form>
 

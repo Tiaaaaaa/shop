@@ -1,5 +1,1 @@
-- add filters into buy page
-
 - add remove option in sell page
-
--

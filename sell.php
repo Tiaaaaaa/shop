@@ -26,9 +26,17 @@
 
   if (isset($_POST["adding"])) {
     $adding = $_POST["adding"];
-  }else {
+  } else {
     $adding = "<tr><th colspan='4'> In aggiunta </th></tr>
                <tr align='center'><b><td> Materia </td><td> Titolo </td><td> Prezzo </td><td> Volume </td></b></tr>";
+  }
+
+  if (isset($_POST["usury"])) {
+    $usury = "TRUE";
+    $value = 40;
+  } else {
+    $usury = "FALSE";
+    $value = 50;
   }
 
   $current = "Inserisci un libro!";
@@ -50,11 +58,6 @@
 
       //Setting the usury
       //(true means it is like shit)
-      if (isset($_POST["usury"])) {
-        $usury = "TRUE";
-      } else {
-        $usury = "FALSE";
-      }
 
       //Doing the insert
       if ($insert = $conn->query("INSERT INTO trades
@@ -71,17 +74,17 @@
 
           //Show the potential gain of the customer
           $row = $books -> fetch_assoc();
-          $gain += ((float)$row["price"] * 50)/100;
+          $gain += ((float)$row["price"] * $value)/100;
 
           //Show the new books inserted
           $adding .= "<tr><td>"  . $row['soubject'] .
                      "</td><td>" . $row['title']    .
-                     "</td><td>" . ((float)$row["price"] * 50)/100 .
+                     "</td><td>" . ((float)$row["price"] * $value)/100 .
                      "</td><td>" . $row['volume']   . "</tr>";
 
           $current =  $row['soubject'] . "       " .
                       $row['title']    . "       " .
-                      ((float)$row["price"] * 50)/100;
+                      ((float)$row["price"] * $value)/100;
           }
 
           //Show together new and old books
@@ -101,7 +104,7 @@
           while ($row = mysqli_fetch_array($old)) {
               $older .= "<tr><td>"  . $row['soubject'] .
                         "</td><td>" . $row['title']    .
-                        "</td><td>" . ((float)$row["price"] * 50)/100 .
+                        "</td><td>" . ((float)$row["price"] * $value)/100 .
                         "</td><td>" . $row['volume']   . "</tr>";
           }
 
@@ -140,6 +143,7 @@
               <th colspan="4">Possibile guadagno: <?php echo $gain ?></th>
             </table>
 
+            <hr size="8px" color="red" style="width:100vw;'">
             <hr size="8px" color="red" style="width:100vw;'">
 
             <?php echo $older ?>
