@@ -41,25 +41,24 @@
 
   $current = "Inserisci un libro!";
 
-  //give a position to the seller
 
-  $sql_finding_client = "SELECT *
-                           FROM trades
-                          WHERE seller = '$client'";
-
-  if (mysqli_num_rows($result_to_count = $conn->query($sql_finding_client)) == 0) {
-
-    $sql_to_count_clients = "SELECT *
-                               FROM clients";
-
-    $position = mysqli_num_rows($result_to_count = $conn->query($sql_finding_client))
-
-    $insert_new_client = "INSERT INTO clients
-                               VALUES ('" . $client . "', " . $position .")";
-  }
 
   if (isset($book)) {
 
+    //give a position to the seller
+    $sql_to_count_clients = "SELECT *
+    FROM clients";
+
+    $position = mysqli_num_rows($result_to_count = $conn->query($sql_to_count_clients)) + 1 ;
+
+    $insert_new_client = "INSERT INTO clients
+    VALUES ('" . $client . "', " . $position .")";
+
+    if ($result_insert = $conn -> query($insert_new_client)) {
+      echo "<p align='center'> Nuovo cliente </p>";
+    } else {
+      echo "<p align='center'> Cliente già presente </p>";
+    }
     if ($selling = $conn->query("SELECT *
                                    FROM trades
                                   WHERE seller = '$client'
@@ -104,7 +103,7 @@
                       ((float)$row["price"] * $value)/100;
           }
 
-          //Show together new and old books
+          //Show together new and old books stored
           if ($old = $conn ->query("SELECT *
                                       FROM trades
                                       JOIN book
@@ -160,8 +159,8 @@
               <th colspan="4">Possibile guadagno: <?php echo $gain ?></th>
             </table>
 
-            <hr size="8px" color="red" style="width:100vw;'">
-            <hr size="8px" color="red" style="width:100vw;'">
+            <hr size="8px" color="red" style="width:98vw;'">
+            <hr size="8px" color="red" style="width:98vw;'">
 
             <?php echo $older ?>
           </div>

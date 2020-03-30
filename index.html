@@ -27,14 +27,15 @@
     <p class="title">MercaLibro</p>
     <p class="subtitle "id="date"></p>
 
-    <p class="subtitle">Inserire qua sotto il codice fiscale</p>
+    <p class="subtitle">Identificare il cliente qua sotto</p>
     <form action="resoconto.php" method="post">
-      <input onchange="refresh()" type="text" name="client" autofocus><br>
+      <input onchange="refresh()" type="email" name="client" autofocus placeholder="email"><br>
     </form>
 
   </div>
 
-    <script type="text/javascript">
+  <script type="text/javascript">
+
     let a = new Date();
 
     document.getElementById('date').innerHTML = "oggi è il <br> " + a.getDate() + "/" + a.getMonth() + "/" +  a.getFullYear();

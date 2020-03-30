@@ -14,17 +14,6 @@
 
     $client = $_POST["client"];
 
-//-----Inserting a new client--------
-
-
-    $result_to_count = $conn -> query($sql_to_count_clients);
-
-    if ($result_insert = $conn -> query($insert_new_client)) {
-      echo "<p align='center'> Nuovo client </p>";
-    } else {
-      echo "<p align='center'> client già presente </p>";
-    }
-
     //-----------SELL------------------
     $sql_to_sell= "SELECT *
                      FROM trades
@@ -38,11 +27,20 @@
 
     $gain = 0;
     while ($row = mysqli_fetch_array($result_to_sell)) {
+
+      if ($row['usury'] == 1) {
+        $value_to_sell = 40;
+        $value_to_buy = 50;
+      } else {
+        $value_to_sell = 50;
+        $value_to_buy = 60;
+      }
+
       $to_sell .= "<tr><td>"  . $row['soubject'] .
                   "</td><td>" . $row['title']    .
-                  "</td><td>" . ((float)$row["price"] * 50)/100 . "</tr>";
+                  "</td><td>" . ((float)$row["price"] * $value_to_sell)/100 . "</tr>";
 
-      $gain += ((float)$row["price"] * 50)/100;
+      $gain += ((float)$row["price"] * $value_to_sell)/100;
     }
 
     $to_sell .= "</table>";
@@ -64,9 +62,9 @@
       while ($row = mysqli_fetch_array($result_to_buy)) {
         $to_buy .= "<tr><td>"  . $row['soubject'] .
                    "</td><td>" . $row['title']    .
-                   "</td><td>" . ((float)$row["price"] * 60)/100 . "</tr>";
+                   "</td><td>" . ((float)$row["price"] * $value_to_buy)/100 . "</tr>";
 
-        $price += ((float)$row["price"] * 60)/100;
+        $price += ((float)$row["price"] * $value_to_buy)/100;
       }
 
       $to_buy .= "</table>";
@@ -85,7 +83,7 @@
         <div class="lua">
           <?php echo $to_sell ?>
           <div class="coln">
-            <p align="center">Possibile guadagno: <?php echo $gain ?></p>
+            <p align="center">Possibile guadagno: <?php echo $gain . "€" ?></p>
             <form action="sell.php" method="post">
               <input type="submit" class="button" name="client" value="<?php echo $client ?>"/>
             </form>
@@ -101,7 +99,7 @@
         <div class="lua">
           <?php echo $to_buy ?>
           <div class="coln">
-            <p align="center">Costo carrello: <?php echo $price ?> </p>
+            <p align="center">Costo carrello: <?php echo $price . "€"?> </p>
             <form action="buy.php" method="post">
               <input type="submit" class="button" name="client" value="<?php echo $client ?>"/>
             </form>

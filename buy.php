@@ -185,9 +185,9 @@
 
     while ($row = mysqli_fetch_array($adding_result)) {
 
-      echo $row['state'];
+      echo $row['usury'];
 
-      if ($row['state'] == 1) {
+      if ($row['usury'] == 1) {
         $value = 50;
       }else{
         $value = 60;
