@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <title>Comprare</title>
-  <link rel="stylesheet" href="./assets/stylesheets/buy.css">
-  <link rel="stylesheet" href="./assets/stylesheets/general.css">
+  <link rel="stylesheet" href="./buy.css">
+  <link rel="stylesheet" href="../stylesheets/general.css">
 </head>
   <body>
 
@@ -14,14 +14,14 @@
       echo $key . "  " . $value . " </br> ";
     }
 
-    include_once './assets/connection.php';
+    include_once '../assets/connection.php';
 
     $client = $_POST["client"];
     $book = "";
     $select_soubject = "";
 
 
-//  If a buy button has been pressed, the "buyer" field in respective line
+//  If a buy button has been pressed the "buyer" field in respective line
 //  will be updated
 
     if (isset($_POST['key'])) {
@@ -69,7 +69,8 @@
                               ON (trades.book = book.ISBN)
                            WHERE trades.buyer IS NULL
                              AND trades.seller != '$client'
-                             AND book.ISBN = '$book';";
+                             AND book.ISBN = '$book'
+                        ORDER BY soubject;";
 
       } else if (isset($_POST['class']) and $_POST['class'] != "Seleziona") {
 
@@ -86,7 +87,8 @@
                               ON (book.ISBN = classes.book)
                            WHERE trades.buyer IS NULL
                              AND trades.seller != '$client'
-                             AND classes.class = '$class';";
+                             AND classes.class = '$class'
+                        ORDER BY soubject;";
 
          //Filter trougth soubject and class
          if (isset($_POST['soubject']) and $_POST['soubject'] != "") {
@@ -102,7 +104,8 @@
                               WHERE trades.buyer IS NULL
                                 AND trades.seller != '$client'
                                 AND classes.class = '$class'
-                                AND book.soubject LIKE '$soubject';";
+                                AND book.soubject LIKE '$soubject'
+                           ORDER BY soubject;";
          }
 
       }
@@ -116,7 +119,8 @@
                           JOIN book
                             ON (trades.book = book.ISBN)
                          WHERE buyer IS NULL
-                           AND trades.seller != '$client';";
+                           AND trades.seller != '$client'
+                      ORDER BY soubject;";
     }
 
     $sql_in_adding= "SELECT *
@@ -126,7 +130,8 @@
                         JOIN book
                           ON (trades.book = book.ISBN)
                        WHERE buyer = '$client' 
-                         AND trades.seller != '$client';";
+                         AND trades.seller != '$client'
+                    ORDER BY soubject;";
 
 
     if($storage_result = $conn->query($sql_to_storage)) {
@@ -134,6 +139,7 @@
       printf("Error select storage: %s\n", $conn->error);
     }
 
+//header of stored books' table
     $in_storage = "<table> <th colspan='9'> In Magazzino </th>
                     <tr>
                       <td> Posizione      </td>
@@ -147,51 +153,8 @@
                       <th> ACQUISTA </th>
                     </tr>";
 
+//body of buyable books' table                  
     while ($row = mysqli_fetch_array($storage_result)) {
-
-      $form_id = "'buy" . $row['ISBN'] . $row['seller'] . $row['id'] . "'";
-
-      $in_storage.= "<tr><td>"  . $row['position']                    .
-                    "</td><td>" . $row['soubject']                    .
-                    "</td><td>" . $row['title']                       .
-                    "</td><td>" . ((float)$row["price"] * $value)/100 .
-                    "</td><td>" . $row['volume']                      .
-                    "</td><td>" . $row['newAdoption']                 .
-                    "</td><td>" . $row['toBuy']                       .
-                    "</td><td>" . $row['advised']                     .
-                    '</td><td>
-                      <form id='. $form_id .' method="post">
-                        <input type="hidden" name="client" value="' . $client .'">
-                        <input type="hidden" name="book" value="' . $row['ISBN'] .'">
-                        <input type="hidden" name="seller" value="' . $row['seller'] . '">
-                        <input type="hidden" name="id" value="'. $row['id'] .'">
-                        <div class="buy" onclick="document.getElementById(' . $form_id .').submit()"> Acquista </div>
-                      </form>
-                    </tr>';
-     }
-
-     $in_storage .= "</table>";
-
-
-//Making the table used to show the books in storage
-    if($adding_result = $conn->query($sql_in_adding)) {
-    } else {
-      printf("Error select trades: %s\n", $conn->error);
-    }
-
-    $in_adding = "<table> <th colspan='8'> In Aggiunta </th>
-                    <tr>
-                      <td> Posizione      </td>
-                      <td> Materia        </td>
-                      <td> Titolo         </td>
-                      <td> Prezzo         </td>
-                      <td> Volume         </td>
-                      <td> Nuova Adozione </td>
-                      <td> Da comprare    </td>
-                      <td> Consigliato    
-                    </tr>";
-
-    while ($row = mysqli_fetch_array($adding_result)) {
 
       if ($row['state'] == 1) {
         $value = 50;
@@ -199,25 +162,71 @@
         $value = 60;
       } 
 
+      $form_id = "'buy" . $row['ISBN'] . $row['seller'] . $row['id'] . "'";
+
+      $in_storage.= "<tr><td>"  . $row['position']                    .
+                    "</td><td>" . $row['soubject']                    .
+                    "</td><td>" . $row['title']                       .
+                    "</td><td>" . ($row["price"] * $value)/100        .  
+                    "</td><td>" . $row['volume']                      .
+                    "</td><td>" . $row['newAdoption']                 .
+                    "</td><td>" . $row['toBuy']                       .
+                    "</td><td>" . $row['advised']                     .
+                    '</td><td>  <button onclick="document.getElementById("confirm").style = "block"> Acquista </button>  
+                    
+                    </tr>';
+      }
+
+     $in_storage .= "</table>";
+     
+//building the table used to show the books in storage
+    if($adding_result = $conn->query($sql_in_adding)) {
+    } else {
+      printf("Error select trades: %s\n", $conn->error);
+    }
+//header of adding table 
+    $in_adding = "<table> <th colspan='8'> In Aggiunta </th>
+                    <tr>
+                      <td> Posizione      </td>
+                      <td> Materia        </td>
+                      <td> Titolo         </td>
+                      <td> Volume         </td>
+                      <td> Nuova Adozione </td>
+                      <td> Da comprare    </td>
+                      <td> Consigliato    </td>
+                    </tr>";
+
+    $total = 0;
+
+//body of adding table
+    while ($row = mysqli_fetch_array($adding_result)) {
+
       $in_adding .= "<tr><td>"  . $row['position']                    .
                     "</td><td>" . $row['soubject']                    .
                     "</td><td>" . $row['title']                       .
-                    "</td><td>" . ((float)$row["price"] * $value)/100 .
                     "</td><td>" . $row['volume']                      .
                     "</td><td>" . $row['newAdoption']                 .
                     "</td><td>" . $row['toBuy']                       .
                     "</td><td>" . $row['advised'];
+      
+      if (isset($_POST["price"])) {
+        $total += (float)$_POST["price"];
+      }else{
+        $total = 0;
+      }
+     
     }
 
-    $in_storage .= "</table>";
+    $in_adding .= "<th colspan= '7'> Total:" . $total . " <th>
+                  </table>";
 
 
   ?>
 
     <h1 class="title" align="center">COMPRA</h1>
 
-<!-- BACK -->
-    <form id="back" method="post" action="resoconto.php">
+    <!-- BACK -->
+    <form id="back" method="post" action="../resoconto/resoconto.php">
       <input type="hidden" name="client" value="<?php echo $client; ?>">
       <div class="arrow" onclick="document.getElementById('back').submit();"></div>
     </form>
@@ -225,6 +234,7 @@
     <div class="filter">
       <form method="post">
         <input type="hidden" name="client" value="<?php echo $client; ?>">
+        <input type="hidden" name="price" value="<?php echo ((float)$row["price"] * $value)/100 ?>">
         Libro: <input type="text" name="book" value="">
         <input type="submit" name="search" value="Cerca">
       </form>
@@ -280,6 +290,10 @@
       </form>
     </div>
 
+    <div id="confirm">
+        <h1>Vuoi aggiungere</h1>
+
+    </div>  
 
     <div class="show_storage">
       <?php echo $in_storage ?>

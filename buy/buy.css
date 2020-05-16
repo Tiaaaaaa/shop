@@ -35,3 +35,16 @@
   width: 99vw;
 
 }
+
+#confirm {
+
+  position: absolute;
+  display: none;
+  height: 45vh;
+  width: 40vw;
+  background-color: #fff;
+  border: 10px solid red;
+  margin-left: 30vw;
+  margin-right: 30vw;
+
+}

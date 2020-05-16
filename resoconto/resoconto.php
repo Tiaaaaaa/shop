@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <title>Resoconto Persona</title>
-  <link rel="stylesheet" href="./assets/stylesheets/general.css">
-  <link rel="stylesheet" href="./assets/stylesheets/resoconto.css">
+  <link rel="stylesheet" href="../stylesheets/general.css">
+  <link rel="stylesheet" href="./resoconto.css">
 </head>
 <body>
 
   <?php
-    include_once './assets/connection.php';
+    include_once '../assets/connection.php';
 
     $client = $_POST["client"];
 
@@ -83,7 +83,7 @@
           <?php echo $to_sell ?>
           <div class="coln">
             <p align="center">Possibile guadagno: <?php echo $gain . "€" ?></p>
-            <form action="sell.php" method="post">
+            <form action="../sell/sell.php" method="post">
               <input type="submit" class="button" name="client" value="<?php echo $client ?>"/>
             </form>
           </div>
@@ -99,7 +99,7 @@
           <?php echo $to_buy ?>
           <div class="coln">
             <p align="center">Costo carrello: <?php echo $price . "€"?> </p>
-            <form action="buy.php" method="post">
+            <form action="../buy/buy.php" method="post">
               <input type="submit" class="button" name="client" value="<?php echo $client ?>"/>
             </form>
           </div>
