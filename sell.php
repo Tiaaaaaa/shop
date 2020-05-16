@@ -24,18 +24,14 @@
     $book = $_POST["book"];
   }else{}
 
-  if (isset($_POST["adding"])) {
-    $adding = $_POST["adding"];
-  } else {
-    $adding = "<tr><th colspan='4'> In aggiunta </th></tr>
-               <tr align='center'><b><td> Materia </td><td> Titolo </td><td> Prezzo </td><td> Volume </td></b></tr>";
-  }
+//Setting the state
+//(true means is shit)
 
-  if (isset($_POST["usury"])) {
-    $usury = "TRUE";
+if (isset($_POST["state"])) {
+    $state = "TRUE";
     $value = 40;
   } else {
-    $usury = "FALSE";
+    $state = "FALSE";
     $value = 50;
   }
 
@@ -43,23 +39,25 @@
 
   $current = "Inserisci un libro!";
 
-
-
   if (isset($book)) {
 
     //give a position to the seller
     $sql_to_count_clients = "SELECT *
-    FROM clients";
+                               FROM clients";
 
     $position = mysqli_num_rows($result_to_count = $conn->query($sql_to_count_clients)) + 1 ;
 
     $insert_new_client = "INSERT INTO clients
-    VALUES ('" . $client . "', " . $position .")";
+                               VALUES ('" . $client . "', " . $position .")";
 
     if ($result_insert = $conn -> query($insert_new_client)) {
-      echo "<p align='center'> Nuovo cliente </p>";
+      echo "<p align='rigth'> Nuovo cliente! Pos: $position </p>";
     } else {
-      echo "<p align='center'> Cliente già presente </p>";
+
+      if($sql_to_position = $conn -> query("SELECT position FROM clients WHERE email = '$client'")){
+        $position = mysqli_fetch_array($sql_to_position)["position"];
+        echo "<p align='center'>Pos: ". $position ." </p>";
+      }
     }
     if ($selling = $conn->query("SELECT *
                                    FROM trades
@@ -74,15 +72,15 @@
       //(if a delear wants to sell more than one egual books the index will be incremented)
       $id = mysqli_num_rows($selling) + 1;
 
-      //Setting the usury
-      //(true means it is like shit)
+      //Setting the state
+      //(true means is shit)
 
       //Doing the insert
       if ($insert = $conn->query("INSERT INTO trades
-                                  VALUES (" . $id . ", '" . $_POST["book"] . "', '" . $client . "', NULL, $usury, 0);")) {
+                                  VALUES (" . $id . ", '" . $_POST["book"] . "', '" . $client . "', NULL, $state, 0);")) {
 
         } else {
-          printf("Error insert: %s\n", $conn->error);
+          printf("<p class='error'>Libro non presente </p>");
         }
 
         if(!$books = $conn ->query("SELECT *
@@ -95,11 +93,6 @@
           $gain += ((float)$row["price"] * $value)/100;
 
           //Show the new books inserted
-          $adding .= "<tr><td>"  . $row['soubject'] .
-                     "</td><td>" . $row['title']    .
-                     "</td><td>" . ((float)$row["price"] * $value)/100 .
-                     "</td><td>" . $row['volume']   . "</tr>";
-
           $current =  $row['soubject'] . "       " .
                       $row['title']    . "       " .
                       ((float)$row["price"] * $value)/100;
@@ -110,20 +103,25 @@
                                       FROM trades
                                       JOIN book
                                         ON (trades.book = book.ISBN)
-                                     WHERE seller = '". $client . "'")) {
+                                     WHERE seller = '$client'
+                                  ORDER BY soubject ")) {
           }else {
             printf("Error select all: %s\n", $conn->error);
           }
 
-          $older = "<table>
-                    <tr><th colspan='4'> Tutti </th></tr>
+          $stored = "<table>
                     <tr align='center'><b><td> Materia </td><td> Titolo </td><td> Prezzo </td><td> Volume </td></b></tr>";
 
           while ($row = mysqli_fetch_array($old)) {
-              $older .= "<tr><td>"  . $row['soubject'] .
-                        "</td><td>" . $row['title']    .
-                        "</td><td>" . ((float)$row["price"] * $value)/100 .
-                        "</td><td>" . $row['volume']   . "</tr>";
+            if ($row["state"] == 1) {
+              $value = 40;
+            } else {
+              $value = 50;
+            }
+              $stored .= "<tr><td>"  . $row['soubject'] .
+                         "</td><td>" . $row['title']    .
+                         "</td><td>" . ((float)$row["price"] * $value)/100 .
+                         "</td><td>" . $row['volume']   . "</tr>";
           }
 
 
@@ -145,7 +143,7 @@
               <input type="hidden" name="gain" value="<?php echo $gain; ?>">
               <input type="hidden" name="adding" value="<?php echo $adding; ?>">
               <input name="book" value="" autofocus><br>
-              Usurato?: <input type="radio" name="usury" value="true"><br>
+              Usurato?: <input type="radio" name="state" value="true"><br>
             </form>
           </div>
 
@@ -156,15 +154,8 @@
           </div>
 
           <div class="show">
-            <table>
-              <?php echo $adding ?>
-              <th colspan="4">Possibile guadagno: <?php echo $gain ?></th>
-            </table>
-
             <hr size="8px" color="red" style="width:98vw;'">
-            <hr size="8px" color="red" style="width:98vw;'">
-
-            <?php echo $older ?>
+            <?php echo $stored ?>
           </div>
 
         </body>

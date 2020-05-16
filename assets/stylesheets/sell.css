@@ -20,8 +20,8 @@
 table { width: 98vw; }
 
 .current {
-
-  width: 99vw;
+  margin: auto;
+  width: 60vw;
   height: 15vh;
   border: 1px solid red;
   font-size: 1.5em;

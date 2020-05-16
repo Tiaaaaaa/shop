@@ -10,7 +10,6 @@
 
   <?php
     include_once './assets/connection.php';
-    include("./assets/cf.class.php");
 
     $client = $_POST["client"];
 
@@ -28,7 +27,7 @@
     $gain = 0;
     while ($row = mysqli_fetch_array($result_to_sell)) {
 
-      if ($row['usury'] == 1) {
+      if ($row['state'] == 1) {
         $value_to_sell = 40;
         $value_to_buy = 50;
       } else {

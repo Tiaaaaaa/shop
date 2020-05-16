@@ -61,7 +61,7 @@
 
         $book = $_POST['book'];
 
-        $sql_in_adding = "SELECT *
+        $sql_to_storage = "SELECT *
                             FROM clients
                             JOIN trades
                               ON (clients.email = trades.seller)
@@ -76,7 +76,7 @@
 //Filter trougth class
         $class = $_POST['class'];
 
-        $sql_in_adding = "SELECT *
+        $sql_to_storage = "SELECT *
                             FROM clients
                             JOIN trades
                               ON (clients.email = trades.seller)
@@ -91,7 +91,7 @@
          //Filter trougth soubject and class
          if (isset($_POST['soubject']) and $_POST['soubject'] != "") {
            $soubject = "%" . $_POST['soubject'] . "%";
-           $sql_in_adding = "SELECT *
+           $sql_to_storage = "SELECT *
                                FROM clients
                                JOIN trades
                                  ON (clients.email = trades.seller)
@@ -109,7 +109,7 @@
 
     } else {
 
-      $sql_in_adding = "SELECT *
+      $sql_to_storage = "SELECT *
                           FROM clients
                           JOIN trades
                             ON (clients.email = trades.seller)
@@ -119,13 +119,14 @@
                            AND trades.seller != '$client';";
     }
 
-    $sql_to_storage= "SELECT *
+    $sql_in_adding= "SELECT *
                         FROM clients
                         JOIN trades
                           ON (clients.email = trades.seller)
                         JOIN book
                           ON (trades.book = book.ISBN)
-                       WHERE buyer IS NULL; ";
+                       WHERE buyer = '$client' 
+                         AND trades.seller != '$client';";
 
 
     if($storage_result = $conn->query($sql_to_storage)) {
@@ -134,19 +135,19 @@
     }
 
     $in_storage = "<table> <th colspan='9'> In Magazzino </th>
-            <tr><td>  Posizione
-            </td><td> Materia
-            </td><td> Titolo
-            </td><td> Prezzo
-            </td><td> Volume
-            </td><td> Nuova Adozione
-            </td><td> Da comprare
-            </td><td> Consigliato
-            </td><th> ACQUISTA </th></tr>";
+                    <tr>
+                      <td> Posizione      </td>
+                      <td> Materia        </td>
+                      <td> Titolo         </td>
+                      <td> Prezzo         </td>
+                      <td> Volume         </td>
+                      <td> Nuova Adozione </td>
+                      <td> Da comprare    </td>
+                      <td> Consigliato    </td>
+                      <th> ACQUISTA </th>
+                    </tr>";
 
     while ($row = mysqli_fetch_array($storage_result)) {
-
-      echo $row["price"] / 2;
 
       $form_id = "'buy" . $row['ISBN'] . $row['seller'] . $row['id'] . "'";
 
@@ -179,24 +180,24 @@
     }
 
     $in_adding = "<table> <th colspan='8'> In Aggiunta </th>
-            <tr><td>  Posizione
-            </td><td> Materia
-            </td><td> Titolo
-            </td><td> Prezzo
-            </td><td> Volume
-            </td><td> Nuova Adozione
-            </td><td> Da comprare
-            </td><td> Consigliato</tr>";
+                    <tr>
+                      <td> Posizione      </td>
+                      <td> Materia        </td>
+                      <td> Titolo         </td>
+                      <td> Prezzo         </td>
+                      <td> Volume         </td>
+                      <td> Nuova Adozione </td>
+                      <td> Da comprare    </td>
+                      <td> Consigliato    
+                    </tr>";
 
     while ($row = mysqli_fetch_array($adding_result)) {
 
-      echo $row['usury'];
-
-      if ($row['usury'] == 1) {
+      if ($row['state'] == 1) {
         $value = 50;
       }else{
         $value = 60;
-      }
+      } 
 
       $in_adding .= "<tr><td>"  . $row['position']                    .
                     "</td><td>" . $row['soubject']                    .
@@ -211,7 +212,7 @@
     $in_storage .= "</table>";
 
 
-    ?>
+  ?>
 
     <h1 class="title" align="center">COMPRA</h1>
 
@@ -228,13 +229,20 @@
         <input type="submit" name="search" value="Cerca">
       </form>
 
+      <?php 
+        if(isset($class)){
+        }else{
+          $class = "Seleziona";
+        }
+      ?>
+
       <form method="post">
         <input type="hidden" name="client" value="<?php echo $client; ?>">
         <input type="hidden" name="class" value="<?php echo $class ?>">
         <fieldset>
           <legend>Classe: </legend>
           <select name="class">
-            <option value="Seleziona  ">Seleziona</option>
+            <option value="<?php echo $class; ?>"><?php echo $class; ?></option>
             <option value="1ITIS">1ITIS</option>
             <option value="2ITIS">2ITIS</option>
             <option value="2ITIS Chimica">2ITIS Chimica</option>

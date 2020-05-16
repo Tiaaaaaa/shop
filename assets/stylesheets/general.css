@@ -86,3 +86,12 @@ th {
 tr:nth-child(even) {
   background-color: #dddddd;
 }
+
+.error{ 
+
+  color: red;
+  text-align: center;
+  font-size: 2em;
+  border: 3px solid #FF5555;
+
+}
