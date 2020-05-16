@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>Dati</title>
 
     <link rel="stylesheet" href="./assets/stylesheets/general.css">
     <link rel="stylesheet" href="./assets/stylesheets/data.css">

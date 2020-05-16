@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
-  <title></title>
+  <title>Vendita</title>
   <link rel="stylesheet" href="./assets/stylesheets/sell.css">
   <link rel="stylesheet" href="./assets/stylesheets/general.css">
 </head>
@@ -12,7 +12,7 @@
 
   include_once './assets/connection.php';
 
-  //Obtaining all POST infomations
+  //Obtaining all POST infomations---
   $client = $_POST["client"];
   if (isset($_POST["gain"])) {
     $gain = $_POST["gain"];
@@ -38,6 +38,8 @@
     $usury = "FALSE";
     $value = 50;
   }
+
+//-----------------------------------------
 
   $current = "Inserisci un libro!";
 

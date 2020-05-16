@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
-  <title></title>
+  <title>Comprare</title>
   <link rel="stylesheet" href="./assets/stylesheets/buy.css">
   <link rel="stylesheet" href="./assets/stylesheets/general.css">
 </head>
@@ -88,7 +88,7 @@
                              AND trades.seller != '$client'
                              AND classes.class = '$class';";
 
-         //Filter trougth soubject
+         //Filter trougth soubject and class
          if (isset($_POST['soubject']) and $_POST['soubject'] != "") {
            $soubject = "%" . $_POST['soubject'] . "%";
            $sql_in_adding = "SELECT *
@@ -120,7 +120,9 @@
     }
 
     $sql_to_storage= "SELECT *
-                        FROM trades
+                        FROM clients
+                        JOIN trades
+                          ON (clients.email = trades.seller)
                         JOIN book
                           ON (trades.book = book.ISBN)
                        WHERE buyer IS NULL; ";
@@ -144,6 +146,8 @@
 
     while ($row = mysqli_fetch_array($storage_result)) {
 
+      echo $row["price"] / 2;
+
       $form_id = "'buy" . $row['ISBN'] . $row['seller'] . $row['id'] . "'";
 
       $in_storage.= "<tr><td>"  . $row['position']                    .
@@ -158,7 +162,8 @@
                       <form id='. $form_id .' method="post">
                         <input type="hidden" name="client" value="' . $client .'">
                         <input type="hidden" name="book" value="' . $row['ISBN'] .'">
-                        <input type="hidden" name="key" value="' . $row['seller'] . $row['id'] . '">
+                        <input type="hidden" name="seller" value="' . $row['seller'] . '">
+                        <input type="hidden" name="id" value="'. $row['id'] .'">
                         <div class="buy" onclick="document.getElementById(' . $form_id .').submit()"> Acquista </div>
                       </form>
                     </tr>';
