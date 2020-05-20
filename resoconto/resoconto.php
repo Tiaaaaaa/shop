@@ -73,7 +73,7 @@
       <h1 align='center' class="title"> <?php echo $client ?> </h1>
 
 <!-- BACK -->
-      <div class="arrow" onclick="window.location.href = './index.html';"></div>
+      <div class="arrow" onclick="window.location.href = '../index.html';"></div>
 
       <div id="sell">
 

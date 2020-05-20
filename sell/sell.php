@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <title>Vendita</title>
-  <link rel="stylesheet" href="./assets/stylesheets/sell.css">
-  <link rel="stylesheet" href="./assets/stylesheets/general.css">
+  <link rel="stylesheet" href="./sell.css">
+  <link rel="stylesheet" href="../stylesheets/general.css">
 </head>
 <body>
 
   <?php
 
-  include_once './assets/connection.php';
+  include_once '../assets/connection.php';
 
   //Obtaining all POST infomations---
   $client = $_POST["client"];
@@ -130,7 +130,7 @@ if (isset($_POST["state"])) {
           <h1 class="title" align="center">VENDI</h1>
 
 <!-- BACK -->
-            <form id="back" method="post" action="resoconto.php">
+            <form id="back" method="post" action="../resoconto/resoconto.php">
               <input type="hidden" name="client" value="<?php echo $client; ?>">
               <div class="arrow" onclick="document.getElementById('back').submit();"></div>
             </form>

@@ -220,7 +220,6 @@
     $in_adding .= "<th colspan= '7'> Total:" . $total . " <th>
                   </table>";
 
-
   ?>
 
     <h1 class="title" align="center">COMPRA</h1>
