@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <title>Dati</title>
 
-    <link rel="stylesheet" href="./assets/stylesheets/general.css">
-    <link rel="stylesheet" href="./assets/stylesheets/data.css">
+    <link rel="stylesheet" href="../stylesheets/general.css">
+    <link rel="stylesheet" href="./data.css">
 
   </head>
   <body>
 
     <?php
-    include_once './assets/connection.php';
+    include_once '../assets/connection.php';
 
     $password = $_POST["password"];
 
@@ -51,7 +51,7 @@
 
     ?>
     <!-- BACK -->
-    <div class="arrow" onclick="window.location.href = './index.html';"></div>
+    <div class="arrow" onclick="window.location.href = '../index.html';"></div>
 
     <div class="container">
 

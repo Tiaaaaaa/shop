@@ -84,7 +84,8 @@
           <div class="coln">
             <p align="center">Possibile guadagno: <?php echo $gain . "€" ?></p>
             <form action="../sell/sell.php" method="post">
-              <input type="submit" class="button" name="client" value="<?php echo $client ?>"/>
+              <input type="submit" class="button"value="Vendi"/>
+              <input type="hidden"name="client" value="<?php echo $client ?>"/>
             </form>
           </div>
         </div>
@@ -100,7 +101,8 @@
           <div class="coln">
             <p align="center">Costo carrello: <?php echo $price . "€"?> </p>
             <form action="../buy/buy.php" method="post">
-              <input type="submit" class="button" name="client" value="<?php echo $client ?>"/>
+              <input type="submit" class="button" value="Acquista"/>
+              <input type="hidden"name="client" value="<?php echo $client ?>"/>
             </form>
           </div>
         </div>
