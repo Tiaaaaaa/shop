@@ -48,3 +48,14 @@
 .smaller_column {
     width: 10vw;
 }
+
+.active_filter {
+    position: absolute;
+    right: 2vw;
+    border: 2px solid red;
+    width: auto;
+}
+
+.active_filter tr:nth-child(even) {
+    background-color: #dddddd;
+}

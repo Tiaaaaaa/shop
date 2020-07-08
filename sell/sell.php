@@ -12,6 +12,10 @@
 
   include_once '../assets/connection.php';
 
+  foreach ($_POST as $key => $value) {
+    echo $key . "  " . $value . "<br>";
+  }
+
   //Obtaining all POST infomations---
   $client = $_POST["client"];
   if (isset($_POST["gain"])) {
@@ -60,7 +64,7 @@ if (isset($_POST["state"])) {
 
       if($sql_to_position = $conn -> query("SELECT position FROM clients WHERE CF = '$client'")){
         $position = mysqli_fetch_array($sql_to_position)["position"];
-        echo "<p align='center'>Pos: ". $position ." </p>";
+        echo "<p class='subtitle' align='center'>Pos: ". $position ." </p>";
       }
     }
     if ($selling = $conn->query("SELECT *
@@ -95,12 +99,11 @@ if (isset($_POST["state"])) {
           //Show the potential gain of the customer
           $row = $books -> fetch_assoc();
           $gain += ((float)$row["price"] * $value)/100;
-
           //Show the new books inserted
-          $current =  $row['subject'] . "       " .
-                      $row['title']    . "       " .
-                      ((float)$row["price"] * $value)/100;
-          }
+
+          $title = $row['title'];
+          $subject = $row['subject'];
+          $price = ((float)$row["price"] * $value)/100 . "€";
 
           //Show together new and old books stored
           if ($old = $conn ->query("SELECT *
@@ -144,7 +147,6 @@ if (isset($_POST["state"])) {
             <form method="post">
               <input type="hidden" name="client" value="<?php echo $client; ?>">
               <input type="hidden" name="gain" value="<?php echo $gain; ?>">
-              <input type="hidden" name="adding" value="<?php echo $adding; ?>">
               <input type="hidden" name="price" value="<?php echo $price; ?>">
               <input name="book" value="" autofocus><br>
               Usurato?: <input type="radio" name="state" value="true"><br>
@@ -152,9 +154,11 @@ if (isset($_POST["state"])) {
           </div>
 
           <div class="current">
-            <p align="center">
-              <?php echo $current; ?>
-            </p>
+            <p>titolo: <?php echo $title; ?> </p>
+            <hr>
+            <p> materia: <?php echo $subject; ?> </p>
+            <hr>
+            <p> prezzo di vendita: <?php echo $price; ?> </p>
           </div>
 
           <div class="show">

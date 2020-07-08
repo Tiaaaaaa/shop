@@ -1,29 +1,29 @@
 .flex {
-
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .show {
-
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  top: 50px;
-  width: 98vw;
-  margin: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    top: 50px;
+    width: 98vw;
+    margin: auto;
 }
 
-table { width: 98vw; }
+table {
+    width: 98vw;
+}
 
 .current {
-  margin: auto;
-  width: 60vw;
-  height: 15vh;
-  border: 1px solid red;
-  font-size: 1.5em;
-
+    margin: auto;
+    width: 60vw;
+    height: auto;
+    border: 1px solid red;
+    font-size: 1.3em;
+    padding: 5px;
 }

@@ -20,7 +20,6 @@
     $book = "";
 
     if (isset($_POST["subject"])) {
-      echo "ciao";
       $subject = $_POST["subject"];
     }else{
       $subject = "";
@@ -50,66 +49,54 @@
       }
     }
 
+    $sql_to_storage = "SELECT *
+                         FROM clients c, trades t, book b, classes cl
+                        WHERE c.CF   = t.seller
+                          AND t.book = b.ISBN
+                          AND t.buyer IS NULL
+                          AND t.seller != '$client'
+                          AND cl.book  = b.ISBN";
 
-//If there is a slected book in $_POST[] the table will be filtered by that book
     if (isset($_POST['search'])) {
+
       if (isset($_POST['book'])) {
+          echo "libri";
+          //Filter trougth ISBN 
+          $book = $_POST['book'];
 
-        $book = $_POST['book'];
+          $sql_to_storage .=" AND b.ISBN = '$book'";
 
-        $sql_to_storage = "SELECT *
-                             FROM clients c, trades t, book b 
-                            WHERE c.CF   = t.seller
-                              AND t.book = b.ISBN
-                              AND t.buyer IS NULL
-                              AND t.seller != '$client'
-                              AND b.ISBN = '$book'
-                         ORDER BY subject;";
-
-      } else if (isset($_POST['class'])) {
-
-        //Filter trougth class
-        $class = $_POST['class'];
-
-        $sql_to_storage = "SELECT *
-                             FROM clients c, trades t, book b, classes cl
-                            WHERE c.CF  = t.seller
-                              AND t.book = b.ISBN
-                              AND b.ISBN   = cl.book
-                              AND t.buyer IS NULL
-                              AND t.seller != '$client'
-                              AND cl.class = '$class'
-                         ORDER BY subject;";
-
-        //Filter trougth subject
-      }else if (isset($_POST["subject"])) {
-        $sql_to_storage = "SELECT *
-                             FROM clients c, trades t, book b, classes cl
-                            WHERE c.CF   = t.seller
-                              AND t.book = b.ISBN
-                              AND b.ISBN = cl.book
-                              AND t.buyer IS NULL
-                              AND t.seller != '$client'
-                              AND b.subject = '$subject'
-                         ORDER BY subject;";
-                         echo "subjeccto";
       }
-    } else {
+      
+      if (isset($_POST['class']) and $_POST["class"] != "") {
+        echo "classi";
 
-      $sql_to_storage = "SELECT *
-                           FROM clients c, trades t, book b
-                          WHERE c.CF   = t.seller
-                            AND t.book = b.ISBN
-                            AND t.buyer IS NULL
-                            AND t.seller != '$client'
-                       ORDER BY b.subject;";
-    }
+          //Filter trougth class
+          $class = $_POST['class'];
+
+          $sql_to_storage .= " AND cl.class = '$class'";
+
+      }
+      
+      if (isset($_POST["subject"]) and $_POST["subject"] != "") {
+
+        echo " materia";
+
+          //Filter trougth subject
+          
+          $sql_to_storage .= " AND b.subject = '$subject'";
+      }
+  }
+
+  
+  $sql_to_storage .= " ORDER BY b.subject;";
+  echo $sql_to_storage;
 
     $sql_in_adding= "SELECT *
                        FROM clients c, book b, trades t
                       WHERE c.CF = t.seller
                         AND t.book = b.ISBN
-                        AND t.buyer = '$client' 
+                        AND t.buyer = '$client'
                    ORDER BY b.subject;";
 
 
@@ -211,6 +198,46 @@
 
   ?>
 
+    <div class="active_filter">
+      
+      <?php 
+
+        if (isset($_POST["book"])) {
+          $book = $_POST["book"];
+        }else{
+          $book = "";
+        }
+        if (isset($_POST["class"])) {
+          $class = $_POST["class"];
+        }else {
+          $class="";
+        }
+        if (isset($_POST["subject"])) {
+          $subject = $_POST["subject"];
+        }else{
+          $subject = "";
+        }
+      ?>
+      <table>
+        <tr>
+          <th colspan="2">Filtri attivi</th>
+        </tr>
+        <tr>
+          <td>ISBN</td>
+          <td><?php echo $book; ?></td>
+        </tr>
+        <tr>
+          <td>classe</td>
+          <td><?php echo $class; ?></td>
+        </tr>
+        <tr>
+          <td>materia</td>
+          <td><?php echo $subject; ?></td>
+        </tr>
+      </table>
+
+    </div>
+
   <div class="container">
     <h1 class="title" align="center">COMPRA</h1>
 
@@ -275,8 +302,6 @@
 
       <!-- filter by class -->
       <form method="post">
-        <input type="hidden" name="client" value="<?php echo $client; ?>">
-        <input type="hidden" name="subject" value="<?php echo $subject; ?>">
         <fieldset>
           <legend>Classe:</legend>
           <select name="class">
@@ -284,13 +309,13 @@
             <?php echo $class_list; ?>
           </select>
           <input type="submit" name="search" value="Cerca">
+          <input type="hidden" name="client" value="<?php echo $client; ?>">
+          <input type="hidden" name="subject" value="<?php echo $subject; ?>">
         </fieldset>
       </form>
 
       <!-- filter by subject -->
       <form method="post">
-        <input type="hidden" name="client" value="<?php echo $client; ?>">
-        <input type="hidden" name="class" value="<?php echo $class; ?>">
         <fieldset>
           <legend>Materia:</legend>
           <select name="subject">
@@ -298,6 +323,8 @@
             <?php echo $subjects_list; ?>
           </select>
           <input type="submit" name="search" value="Cerca">
+          <input type="hidden" name="client" value="<?php echo $client; ?>">
+          <input type="hidden" name="class" value="<?php echo $class; ?>">
         </fieldset>
       </form>
 
