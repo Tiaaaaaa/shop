@@ -22,8 +22,12 @@
 
   if (isset($_POST["book"])) {
     $book = $_POST["book"];
-  }else{}
+  }
 
+  if (isset($_POST["price"])) {
+      $price = (float)$_POST["price"];
+  }
+  
 //Setting the state
 //(true means is shit)
 
@@ -54,7 +58,7 @@ if (isset($_POST["state"])) {
       echo "<p align='rigth'> Nuovo cliente! Pos: $position </p>";
     } else {
 
-      if($sql_to_position = $conn -> query("SELECT position FROM clients WHERE email = '$client'")){
+      if($sql_to_position = $conn -> query("SELECT position FROM clients WHERE CF = '$client'")){
         $position = mysqli_fetch_array($sql_to_position)["position"];
         echo "<p align='center'>Pos: ". $position ." </p>";
       }
@@ -76,10 +80,8 @@ if (isset($_POST["state"])) {
       //(true means is shit)
 
       //Doing the insert
-      
-
       if ($insert = $conn->query("INSERT INTO trades
-                                  VALUES (" . $id . ", '" . $_POST["book"] . "', '" . $client . "', NULL, $state, 0);")) {
+                                  VALUES (" . $id . ", '" . $_POST["book"] . "', '" . $client . "', NULL, $state, $price);")) {
 
         } else {
           printf("<p class='error'>Libro non presente </p>");
@@ -112,20 +114,19 @@ if (isset($_POST["state"])) {
           }
 
           $stored = "<table>
-                    <tr align='center'><b><td> Materia </td><td> Titolo </td><td> Prezzo </td><td> Volume </td></b></tr>";
+                    <tr align='center'><b><td> Materia </td><td> Titolo </td><td> Prezzo di vendita</td><td> Volume </td></b></tr>";
 
           while ($row = mysqli_fetch_array($old)) {
             if ($row["state"] == 1) {
-              $value = 40;
+              $price = ((float)$row["price"] * 40)/100;
             } else {
-              $value = 50;
+              $price = ((float)$row["price"] * 50)/100;
             }
               $stored .= "<tr><td>"  . $row['subject'] .
-                         "</td><td>" . $row['title']    .
-                         "</td><td>" . ((float)$row["price"] * $value)/100 .
-                         "</td><td>" . $row['volume']   . "</tr>";
+                         "</td><td>" . $row['title']   .
+                         "</td><td>" . $price          .
+                         "</td><td>" . $row['volume']  . "</tr>";
           }
-
 
         ?>
 
@@ -144,6 +145,7 @@ if (isset($_POST["state"])) {
               <input type="hidden" name="client" value="<?php echo $client; ?>">
               <input type="hidden" name="gain" value="<?php echo $gain; ?>">
               <input type="hidden" name="adding" value="<?php echo $adding; ?>">
+              <input type="hidden" name="price" value="<?php echo $price; ?>">
               <input name="book" value="" autofocus><br>
               Usurato?: <input type="radio" name="state" value="true"><br>
             </form>

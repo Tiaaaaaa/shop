@@ -64,7 +64,7 @@
         $sql_to_storage = "SELECT *
                             FROM clients
                             JOIN trades
-                              ON (clients.email = trades.seller)
+                              ON (clients.CF = trades.seller)
                             JOIN book
                               ON (trades.book = book.ISBN)
                            WHERE trades.buyer IS NULL
@@ -80,7 +80,7 @@
         $sql_to_storage = "SELECT *
                             FROM clients
                             JOIN trades
-                              ON (clients.email = trades.seller)
+                              ON (clients.CF = trades.seller)
                             JOIN book
                               ON (trades.book = book.ISBN)
                             JOIN classes
@@ -96,7 +96,7 @@
            $sql_to_storage = "SELECT *
                                FROM clients
                                JOIN trades
-                                 ON (clients.email = trades.seller)
+                                 ON (clients.CF = trades.seller)
                                JOIN book
                                  ON (trades.book = book.ISBN)
                                JOIN classes
@@ -113,25 +113,25 @@
     } else {
 
       $sql_to_storage = "SELECT *
-                          FROM clients
-                          JOIN trades
-                            ON (clients.email = trades.seller)
-                          JOIN book
-                            ON (trades.book = book.ISBN)
-                         WHERE buyer IS NULL
-                           AND trades.seller != '$client'
-                      ORDER BY subject;";
+                           FROM clients
+                           JOIN trades
+                             ON (clients.CF = trades.seller)
+                           JOIN book
+                             ON (trades.book = book.ISBN)
+                          WHERE buyer IS NULL
+                            AND trades.seller != '$client'
+                       ORDER BY subject;";
     }
 
     $sql_in_adding= "SELECT *
-                        FROM clients
-                        JOIN trades
-                          ON (clients.email = trades.seller)
-                        JOIN book
-                          ON (trades.book = book.ISBN)
-                       WHERE buyer = '$client' 
-                         AND trades.seller != '$client'
-                    ORDER BY subject;";
+                       FROM clients
+                       JOIN trades
+                         ON (clients.CF = trades.seller)
+                       JOIN book
+                         ON (trades.book = book.ISBN)
+                      WHERE buyer = '$client' 
+                        AND trades.seller != '$client'
+                   ORDER BY subject;";
 
 
     if($storage_result = $conn->query($sql_to_storage)) {
@@ -155,12 +155,8 @@
 
 //body of buyable books' table                  
     while ($row = mysqli_fetch_array($storage_result)) {
-
-      if ($row['state'] == 1) {
-        $value = 50;
-      }else{
-        $value = 60;
-      } 
+      echo "porcodio";
+      $row["price"] += $row["price"]/10;
 
       $form_id = "'buy" . $row['ISBN'] . $row['seller'] . $row['id'] . "'";
 
@@ -185,7 +181,7 @@
       printf("Error select trades: %s\n", $conn->error);
     }
 //header of adding table 
-    $in_adding = "<table> <th colspan='8'> In Aggiunta </th>
+    $in_adding = "<table> <th colspan='7'> In Aggiunta </th>
                     <tr>
                       <td> Posizione      </td>
                       <td> Materia        </td>
@@ -238,11 +234,26 @@
         <input type="submit" name="search" value="Cerca">
       </form>
 
-      <?php 
+      <?php
         if(isset($class)){
         }else{
           $class = "Seleziona";
         }
+
+        $sql_to_classes =" SELECT DISTINCT class
+                             FROM classes;";
+
+        if($classes_result = $conn->query($sql_to_classes)) {
+        } else {
+          printf("Error select storage: %s\n", $conn->error);
+        }
+
+        $list = "";
+
+        while ($row = mysqli_fetch_array($classes_result)) {
+          $list .= "<option value='". $row["class"] ."'>". $row["class"] ."</option>";
+        }
+
       ?>
 
       <form method="post">
@@ -252,31 +263,7 @@
           <legend>Classe: </legend>
           <select name="class">
             <option value="<?php echo $class; ?>"><?php echo $class; ?></option>
-            <option value="1ITIS">1ITIS</option>
-            <option value="2ITIS">2ITIS</option>
-            <option value="2ITIS Chimica">2ITIS Chimica</option>
-            <option value="3ITIS Automazione">3ITIS Automazione</option>
-            <option value="4ITIS Automazione">4ITIS Automazione</option>
-            <option value="3ITIS Chimca">3ITIS Chimca</option>
-            <option value="4ITIS Chimica">4ITIS Chimica</option>
-            <option value="5ITIS Chimica">5ITIS Chimica</option>
-            <option value="3ITIS Informatica">3ITIS Informatica</option>
-            <option value="4ITIS Informatica">4ITIS Informatica</option>
-            <option value="5ITIS Informatica">5ITIS Informatica</option>
-            <option value="3ITIS Meccainca">3ITIS Meccainca</option>
-            <option value="4ITIS Meccanica">4ITIS Meccanica</option>
-            <option value="5ITIS Meccanica">5ITIS Meccanica</option>
-            <option value="3ITIS Serale Meccanica">3ITI SSerale Meccanica</option>
-            <option value="4ITIS Serale Meccainca">4ITIS Meccanico Serale</option>
-            <option value="1leFP op Elettrico">1leFP op Elettrico</option>
-            <option value="2leFP op Elettrico">2leFP op Elettrico</option>
-            <option value="3leFP op Elettrico">3leFP op Elettrico</option>
-            <option value="1leFP op Meccanico">1leFP op Meccanico</option>
-            <option value="2leFP op Meccanico">2leFP op Meccanico</option>
-            <option value="3leFP op Meccanico">3leFP op Meccanico</option>
-            <option value="1leFP op Meccanico Serale">1leFP op Meccanico Serale</option>
-            <option value="2leFP op Meccanico Serale">2leFP op Meccanico Serale</option>
-            <option value="3leFP op Meccanico Serale">3leFP op Meccanico Serale</option>
+            <?php echo $list; ?>
           </select>
           <input type='text' name='subject'>
           <input type="submit" name="search" value="Cerca">

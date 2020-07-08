@@ -1,70 +1,71 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
 <head>
-  <meta charset="utf-8">
-  <title>Inserimento</title>
-  <link rel="stylesheet" href="./stylesheets/general.css">
-  <link rel="stylesheet" href="./stylesheets/index.css">
+    <meta charset="utf-8">
+    <title>Inserimento</title>
+    <link rel="stylesheet" href="./stylesheets/general.css">
+    <link rel="stylesheet" href="./stylesheets/index.css">
 
 </head>
+
 <body>
 
-  <button class="button" id="next" onclick="auth()">Visualizza statistiche</button>
-  <button class="button" id="back" onclick="back()">Visualizza inserimento</button>
+    <button class="button" id="next" onclick="auth()">Visualizza statistiche</button>
+    <button class="button" id="back" onclick="back()">Visualizza inserimento</button>
 
-  <div id="auth">
+    <div id="auth">
 
-    <p class="subtitle">Inserisci la password</p>
+        <p class="subtitle">Inserisci la password</p>
 
-    <form action="./data/data.php" method="post">
-      <input type="text" name="password" value="">
-    </form>
+        <form action="./data/data.php" method="post">
+            <input type="text" name="password" value="">
+        </form>
 
-  </div>
+    </div>
 
-  <div id="container">
+    <div id="container">
 
-    <p class="title">MercaLibro</p>
-    <p class="subtitle "id="date"></p>
+        <p class="title">MercaLibro</p>
+        <p class="subtitle " id="date"></p>
 
-    <p class="subtitle">Identificare il cliente qua sotto</p>
-    <form action="./resoconto/resoconto.php" method="post">
-      <input onchange="refresh()" type="email" name="client" autofocus placeholder="email"><br>
-    </form>
+        <p class="subtitle">Identificare il cliente qua sotto</p>
+        <form action="./resoconto/resoconto.php" method="post">
+            <input onchange="refresh()" type="text" name="client" autofocus placeholder="email"><br>
+        </form>
 
-  </div>
+    </div>
 
-  <script type="text/javascript">
+    <script type="text/javascript">
+        let a = new Date();
 
-    let a = new Date();
+        document.getElementById('date').innerHTML = "oggi è il <br> " + a.getDate() + "/" + a.getMonth() + "/" + a.getFullYear();
 
-    document.getElementById('date').innerHTML = "oggi è il <br> " + a.getDate() + "/" + a.getMonth() + "/" +  a.getFullYear();
+        function auth() {
 
-    function auth() {
+            document.getElementById('next').style.display = "none";
+            document.getElementById('back').style.display = "block";
 
-      document.getElementById('next').style.display = "none";
-      document.getElementById('back').style.display = "block";
+            document.getElementById('container').style.opacity = "0";
+            document.getElementById('auth').style.opacity = "100";
 
-      document.getElementById('container').style.opacity = "0";
-      document.getElementById('auth').style.opacity = "100";
+            document.getElementById('auth').style.zIndex = "2";
 
-      document.getElementById('auth').style.zIndex = "2";
+        }
 
-    }
+        function back() {
 
-    function back() {
+            document.getElementById('next').style.display = "block";
+            document.getElementById('back').style.display = "none";
 
-      document.getElementById('next').style.display = "block";
-      document.getElementById('back').style.display = "none";
+            document.getElementById('container').style.opacity = "100";
+            document.getElementById('auth').style.opacity = "0";
 
-      document.getElementById('container').style.opacity = "100";
-      document.getElementById('auth').style.opacity = "0";
+            document.getElementById('auth').style.zIndex = "-1";
 
-      document.getElementById('auth').style.zIndex = "-1";
-
-    }
-
-  </script>
+        }
+    </script>
 
 </body>
+
 </html>
