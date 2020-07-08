@@ -76,6 +76,8 @@ if (isset($_POST["state"])) {
       //(true means is shit)
 
       //Doing the insert
+      
+
       if ($insert = $conn->query("INSERT INTO trades
                                   VALUES (" . $id . ", '" . $_POST["book"] . "', '" . $client . "', NULL, $state, 0);")) {
 
