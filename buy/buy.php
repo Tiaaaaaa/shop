@@ -9,17 +9,23 @@
   <body>
 
     <?php
-/*
+
     foreach ($_POST as $key => $valore) {
       echo $key . "  " . $valore . " </br> ";
     }
-*/
+
     include_once '../assets/connection.php';
 
     $client = $_POST["client"];
     $book = "";
-    $select_subject = "";
 
+    if (isset($_POST["subject"])) {
+      echo "ciao";
+      $subject = $_POST["subject"];
+    }else{
+      $subject = "";
+    }
+    
 
 //  If a buy button has been pressed the "buyer" field in respective line
 //  will be updated
@@ -39,10 +45,8 @@
                         AND seller = '$seller'
                         AND id     = '$id';";
 
-      if ($conn -> query($sql_to_buy)) {
-
-      }else {
-
+      if (!$conn -> query($sql_to_buy)) {
+        die("<h1 class='error'>ERRORE</h1>");
       }
     }
 
@@ -54,15 +58,13 @@
         $book = $_POST['book'];
 
         $sql_to_storage = "SELECT *
-                            FROM clients
-                            JOIN trades
-                              ON (clients.CF = trades.seller)
-                            JOIN book
-                              ON (trades.book = book.ISBN)
-                           WHERE trades.buyer IS NULL
-                             AND trades.seller != '$client'
-                             AND book.ISBN = '$book'
-                        ORDER BY subject;";
+                             FROM clients c, trades t, book b 
+                            WHERE c.CF   = t.seller
+                              AND t.book = b.ISBN
+                              AND t.buyer IS NULL
+                              AND t.seller != '$client'
+                              AND b.ISBN = '$book'
+                         ORDER BY subject;";
 
       } else if (isset($_POST['class'])) {
 
@@ -70,60 +72,45 @@
         $class = $_POST['class'];
 
         $sql_to_storage = "SELECT *
-                            FROM clients
-                            JOIN trades
-                              ON (clients.CF = trades.seller)
-                            JOIN book
-                              ON (trades.book = book.ISBN)
-                            JOIN classes
-                              ON (book.ISBN = classes.book)
-                           WHERE trades.buyer IS NULL
-                             AND trades.seller != '$client'
-                             AND classes.class = '$class'
-                        ORDER BY subject;";
+                             FROM clients c, trades t, book b, classes cl
+                            WHERE c.CF  = t.seller
+                              AND t.book = b.ISBN
+                              AND b.ISBN   = cl.book
+                              AND t.buyer IS NULL
+                              AND t.seller != '$client'
+                              AND cl.class = '$class'
+                         ORDER BY subject;";
 
-         //Filter trougth subject and class
-         if (isset($_POST['subject']) and $_POST['subject'] != "") {
-           $subject = "%" . $_POST['subject'] . "%";
-           $sql_to_storage = "SELECT *
-                               FROM clients
-                               JOIN trades
-                                 ON (clients.CF = trades.seller)
-                               JOIN book
-                                 ON (trades.book = book.ISBN)
-                               JOIN classes
-                                 ON (book.ISBN = classes.book)
-                              WHERE trades.buyer IS NULL
-                                AND trades.seller != '$client'
-                                AND classes.class = '$class'
-                                AND book.subject LIKE '$subject'
-                           ORDER BY subject;";
-         }
-
+        //Filter trougth subject
+      }else if (isset($_POST["subject"])) {
+        $sql_to_storage = "SELECT *
+                             FROM clients c, trades t, book b, classes cl
+                            WHERE c.CF   = t.seller
+                              AND t.book = b.ISBN
+                              AND b.ISBN = cl.book
+                              AND t.buyer IS NULL
+                              AND t.seller != '$client'
+                              AND b.subject = '$subject'
+                         ORDER BY subject;";
+                         echo "subjeccto";
       }
-
     } else {
 
       $sql_to_storage = "SELECT *
-                           FROM clients
-                           JOIN trades
-                             ON (clients.CF = trades.seller)
-                           JOIN book
-                             ON (trades.book = book.ISBN)
-                          WHERE buyer IS NULL
-                            AND trades.seller != '$client'
-                       ORDER BY subject;";
+                           FROM clients c, trades t, book b
+                          WHERE c.CF   = t.seller
+                            AND t.book = b.ISBN
+                            AND t.buyer IS NULL
+                            AND t.seller != '$client'
+                       ORDER BY b.subject;";
     }
 
     $sql_in_adding= "SELECT *
-                       FROM clients
-                       JOIN trades
-                         ON (clients.CF = trades.seller)
-                       JOIN book
-                         ON (trades.book = book.ISBN)
-                      WHERE buyer = '$client' 
-                        AND trades.seller != '$client'
-                   ORDER BY subject;";
+                       FROM clients c, book b, trades t
+                      WHERE c.CF = t.seller
+                        AND t.book = b.ISBN
+                        AND t.buyer = '$client' 
+                   ORDER BY b.subject;";
 
 
     if($storage_result = $conn->query($sql_to_storage)) {
@@ -132,9 +119,10 @@
     }
 
 //header of stored books' table
-    $in_storage = "<table> <th colspan='9'> In Magazzino </th>
+    $in_storage = "<table> <th colspan='10'> In Magazzino </th>
                     <tr>
-                      <td> Posizione      </td>
+                      <td class='smaller_column'> Posizione </td>
+                      <td> ISBN           </td>
                       <td> Materia        </td>
                       <td> Titolo         </td>
                       <td> Prezzo         </td>
@@ -145,23 +133,36 @@
                       <th> ACQUISTA </th>
                     </tr>";
 
-//body of buyable books' table                  
+    //body of buyable books' table                  
     while ($row = mysqli_fetch_array($storage_result)) {
-      (float)$row["price"] = (float)$row["price"] + (float)$row["price"]/10;
 
-      $form_id = "'buy" . $row['ISBN'] . $row['seller'] . $row['id'] . "'";
+      if ($row['state'] == 1) {
+        $price = ((float)$row["price"] * 50)/100;
+      } else {
+        $price = ((float)$row["price"] * 60)/100;
+      }
 
-      $in_storage.= "<tr><td>"  . $row['position']    .
-                    "</td><td>" . $row['subject']     .
-                    "</td><td>" . $row['title']       .
-                    "</td><td>" . $row["price"]       .
-                    "</td><td>" . $row['volume']      .
-                    "</td><td>" . $row['newAdoption'] .
-                    "</td><td>" . $row['toBuy']       .
-                    "</td><td>" . $row['advised']       .
-                    '</td><td>  <button onclick="document.getElementById("confirm").style.display = "block"> Acquista </button>  
-                    
-                    </tr>';
+      $key = $row["seller"].$row["id"];
+
+      $button = "<form method='post'>
+                   <input type='hidden' name='client' value='$client'>
+                   <input type='hidden' name='key' value='$key'>
+                   <input type='hidden' name='book' value=' ". $row['book'] . "'>
+                   <input type='submit' name='' value='Acquista'>
+                 </form>";
+
+      $in_storage.= "<tr>
+                       <td>"  . $row['position']    . "</td>" .
+                       "<td>" . $row['ISBN']        . "</td>" .
+                       "<td>" . $row['subject']     . "</td>" .
+                       "<td>" . $row['title']       . "</td>" .
+                       "<td>" . $price              . "</td>" .
+                       "<td>" . $row['volume']      . "</td>" .
+                       "<td>" . $row['newAdoption'] . "</td>" .
+                       "<td>" . $row['toBuy']       . "</td>" .
+                       "<td>" . $row['advised']     . "</td>" .
+                       "<td>" . $button             . "</td> 
+                    </tr>";
       }
 
      $in_storage .= "</table>";
@@ -171,10 +172,10 @@
     } else {
       printf("Error select trades: %s\n", $conn->error);
     }
+
 //header of adding table 
-    $in_adding = "<table> <th colspan='8'> In Aggiunta </th>
+    $in_adding = "<table> <th colspan='7'> In Aggiunta </th>
                     <tr>
-                      <td> Posizione      </td>
                       <td> Materia        </td>
                       <td> Titolo         </td>
                       <td> Volume         </td>
@@ -187,13 +188,15 @@
 //body of adding table
     while ($row = mysqli_fetch_array($adding_result)) {
 
-      $in_adding .= "<tr><td>"  . $row['position']    .
-                    "</td><td>" . $row['subject']     .
-                    "</td><td>" . $row['title']       .
-                    "</td><td>" . $row['volume']      .
-                    "</td><td>" . $row['newAdoption'] .
-                    "</td><td>" . $row['toBuy']       .
-                    "</td><td>" . $row['advised'];
+      $in_adding .= "<tr>
+                      <td>"  . $row['position']    . "</td>" .
+                      "<td>" . $row['subject']     . "</td>" .
+                      "<td>" . $row['title']       . "</td>" .
+                      "<td>" . $row['volume']      . "</td>" .
+                      "<td>" . $row['newAdoption'] . "</td>" .
+                      "<td>" . $row['toBuy']       . "</td>" .
+                      "<td>" . $row['advised']     . "</td>
+                    </tr>";
       
       if (isset($_POST["price"])) {
         $total += (float)$_POST["price"];
@@ -208,6 +211,7 @@
 
   ?>
 
+  <div class="container">
     <h1 class="title" align="center">COMPRA</h1>
 
     <!-- BACK -->
@@ -226,9 +230,10 @@
       <?php 
         if(isset($class)){
         }else{
-          $class = "Seleziona";
+          $class = "";
         }
 
+        //dynamic selection of classes
         $sql_to_classes =" SELECT DISTINCT class
                              FROM classes;";
 
@@ -237,24 +242,61 @@
           printf("Error select storage: %s\n", $conn->error);
         }
 
-        $list = "";
+        $class_list = "";
 
         while ($row = mysqli_fetch_array($classes_result)) {
-          $list .= "<option value='". $row["class"] ."'>". $row["class"] ."</option>";
+          $class_list .= "<option value='". $row["class"] ."'>". $row["class"] ."</option>";
+        }
+
+        //dinamic selection of subjects 
+        
+        if(isset($subject)){
+        }else{
+          $subject = "";
+        }
+
+        $sql_to_subjects =" SELECT DISTINCT subject
+                              FROM book b, trades t
+                             WHERE b.ISBN = t.book
+                               AND t.seller != '$client';";
+
+        if($subjects_result = $conn->query($sql_to_subjects)) {
+        } else {
+          printf("Error select storage: %s\n", $conn->error);
+        }
+
+        $subjects_list = "";
+
+        while ($row = mysqli_fetch_array($subjects_result)) {
+          $subjects_list .= "<option value='". $row["subject"] ."'>". $row["subject"] ."</option>";
         }
 
       ?>
 
-      <form method="post" class="select">
+      <!-- filter by class -->
+      <form method="post">
         <input type="hidden" name="client" value="<?php echo $client; ?>">
-        <input type="hidden" name="class" value="<?php echo $class ?>">
+        <input type="hidden" name="subject" value="<?php echo $subject; ?>">
         <fieldset>
-          <legend>Classe e Materia:</legend>
-          <select name="class" onchange ="show()">
-            <option value="<?php echo $class; ?>"><?php echo $class; ?></option>
-            <?php echo $list; ?>
+          <legend>Classe:</legend>
+          <select name="class">
+            <option value="">Seleziona</option>
+            <?php echo $class_list; ?>
           </select>
-          <input type='text' name='subject' id="subject">
+          <input type="submit" name="search" value="Cerca">
+        </fieldset>
+      </form>
+
+      <!-- filter by subject -->
+      <form method="post">
+        <input type="hidden" name="client" value="<?php echo $client; ?>">
+        <input type="hidden" name="class" value="<?php echo $class; ?>">
+        <fieldset>
+          <legend>Materia:</legend>
+          <select name="subject">
+            <option value="">Seleziona</option>
+            <?php echo $subjects_list; ?>
+          </select>
           <input type="submit" name="search" value="Cerca">
         </fieldset>
       </form>
@@ -265,8 +307,15 @@
       </form>
     </div>
 
+    <?php
+     
+        
+    ?>
+
+
     <div id="confirm">
         <h1>Vuoi aggiungere</h1>
+        <?php echo $confirmation; ?>
 
     </div>  
 
@@ -275,8 +324,8 @@
 
     </div>
 
-    <hr size="8px" color="red" style="width:100vw;'">
-    <hr size="8px" color="red" style="width:100vw;'">
+    <hr size="8px" color="red" style="width:95vw;'">
+    <hr size="8px" color="red" style="width:95vw;'">
 
     <div class="adding">
 
@@ -284,12 +333,6 @@
 
     </div>
 
-    <script>
-      function show(){
-        document.getElementById("subject").style.display = "block";
-      }
-
-    </script>
-
+  </div>
   </body>
 </html>
