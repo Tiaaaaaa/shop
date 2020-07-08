@@ -1,97 +1,93 @@
 * {
+    color: navy;
+    font-family: monospace;
+    font-size: 1.05em;
+}
 
-  color: navy;
-  font-family: monospace;
-  font-size: 1.05em;
-
+body {
+    background-color: #ddd;
 }
 
 .title {
-
-  font-size: 5em;
-  font-weight: lighter;
-
+    font-size: 5em;
+    font-weight: lighter;
 }
 
-.subtitle{
-
-  font-size: 3em;
-
+.subtitle {
+    font-size: 3em;
 }
 
 .arrow {
-
-  position: absolute;
-  top: 50px;
-  left: 50px;
-  width: 0px;
-  height: 0px;
-  border-top: 50px solid transparent;
-  border-right: 60px solid red;
-  border-bottom: 50px solid transparent;
-
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    width: 0px;
+    height: 0px;
+    border-top: 50px solid transparent;
+    border-right: 60px solid red;
+    border-bottom: 50px solid transparent;
 }
 
 .arrow::after {
-
-  content: "";
-  position: absolute;
-  top: -50px;
-  left: 50px;
-  width: 0;
-  height: 0;
-  border-top: 50px solid transparent;
-  border-right: 60px solid red;
-  border-bottom: 50px solid transparent;
-
+    content: "";
+    position: absolute;
+    top: -50px;
+    left: 50px;
+    width: 0;
+    height: 0;
+    border-top: 50px solid transparent;
+    border-right: 60px solid red;
+    border-bottom: 50px solid transparent;
 }
 
 .arrow:hover {
-
-  animation-duration: 1.3s;
-  animation-name: back;
-
+    animation-duration: 1.3s;
+    animation-name: back;
 }
 
 @keyframes back {
-
-  0%   {left: 50px; }
-  25%  {left: 80px; }
-  50%  {left: 50px; }
-  75%  {left: 80px; }
-  100% {left: 50px; }
-
+    0% {
+        left: 50px;
+    }
+    25% {
+        left: 80px;
+    }
+    50% {
+        left: 50px;
+    }
+    75% {
+        left: 80px;
+    }
+    100% {
+        left: 50px;
+    }
 }
 
 table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
 }
 
 td {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
+    border: 1px solid #d65a5a;
+    text-align: left;
+    padding: 8px;
 }
 
 th {
-
-  border: 1px solid #dddddd;
-  text-align: center;
-  padding: 8px;
-
+    border: 1px solid #d65a5a;
+    text-align: center;
+    padding: 8px;
 }
 
 tr:nth-child(even) {
-  background-color: #dddddd;
+    background-color: #d65a5a;
 }
 
-.error{ 
-
-  color: red;
-  text-align: center;
-  font-size: 2em;
-  border: 3px solid #FF5555;
-
+.error {
+    color: red;
+    text-align: center;
+    font-size: 2em;
+    border: 3px solid #FF5555;
 }

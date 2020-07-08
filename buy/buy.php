@@ -5,15 +5,15 @@
   <title>Comprare</title>
   <link rel="stylesheet" href="./buy.css">
   <link rel="stylesheet" href="../stylesheets/general.css">
-</head>
+
   <body>
 
     <?php
-
+/*
     foreach ($_POST as $key => $valore) {
       echo $key . "  " . $valore . " </br> ";
     }
-
+*/
     include_once '../assets/connection.php';
 
     $client = $_POST["client"];
@@ -33,16 +33,8 @@
       echo "seller: " . $seller . "<br>";
       echo "id: " . $id;
 
-      $sql_to_find_gain = "SELECT price
-                             FROM book
-                            WHERE ISBN = '$book';";
-
-      $sql_gain = $conn -> query($sql_to_find_gain);
-
-      $gain = ((int)(mysqli_fetch_array($sql_gain)) * 10)/100;
-
       $sql_to_buy = "UPDATE trades
-                        SET buyer  = '$client', gain = '$gain'
+                        SET buyer  = '$client'
                       WHERE book   = '$book'
                         AND seller = '$seller'
                         AND id     = '$id';";
@@ -72,9 +64,9 @@
                              AND book.ISBN = '$book'
                         ORDER BY subject;";
 
-      } else if (isset($_POST['class']) and $_POST['class'] != "Seleziona") {
+      } else if (isset($_POST['class'])) {
 
-//Filter trougth class
+        //Filter trougth class
         $class = $_POST['class'];
 
         $sql_to_storage = "SELECT *
@@ -147,28 +139,27 @@
                       <td> Titolo         </td>
                       <td> Prezzo         </td>
                       <td> Volume         </td>
-                      <td> Nuova Adozione </td>
-                      <td> Da comprare    </td>
-                      <td> Consigliato    </td>
+                      <td class='smaller_column'> Nuova Adozione </td>
+                      <td class='smaller_column'> Da comprare    </td>
+                      <td class='smaller_column'> Consigliato    </td>
                       <th> ACQUISTA </th>
                     </tr>";
 
 //body of buyable books' table                  
     while ($row = mysqli_fetch_array($storage_result)) {
-      echo "porcodio";
-      $row["price"] += $row["price"]/10;
+      (float)$row["price"] = (float)$row["price"] + (float)$row["price"]/10;
 
       $form_id = "'buy" . $row['ISBN'] . $row['seller'] . $row['id'] . "'";
 
-      $in_storage.= "<tr><td>"  . $row['position']                    .
-                    "</td><td>" . $row['subject']                    .
-                    "</td><td>" . $row['title']                       .
-                    "</td><td>" . ($row["price"] * $value)/100        .  
-                    "</td><td>" . $row['volume']                      .
-                    "</td><td>" . $row['newAdoption']                 .
-                    "</td><td>" . $row['toBuy']                       .
-                    "</td><td>" . $row['advised']                     .
-                    '</td><td>  <button onclick="document.getElementById("confirm").style = "block"> Acquista </button>  
+      $in_storage.= "<tr><td>"  . $row['position']    .
+                    "</td><td>" . $row['subject']     .
+                    "</td><td>" . $row['title']       .
+                    "</td><td>" . $row["price"]       .
+                    "</td><td>" . $row['volume']      .
+                    "</td><td>" . $row['newAdoption'] .
+                    "</td><td>" . $row['toBuy']       .
+                    "</td><td>" . $row['advised']       .
+                    '</td><td>  <button onclick="document.getElementById("confirm").style.display = "block"> Acquista </button>  
                     
                     </tr>';
       }
@@ -181,15 +172,14 @@
       printf("Error select trades: %s\n", $conn->error);
     }
 //header of adding table 
-    $in_adding = "<table> <th colspan='7'> In Aggiunta </th>
+    $in_adding = "<table> <th colspan='8'> In Aggiunta </th>
                     <tr>
                       <td> Posizione      </td>
                       <td> Materia        </td>
                       <td> Titolo         </td>
                       <td> Volume         </td>
-                      <td> Nuova Adozione </td>
-                      <td> Da comprare    </td>
-                      <td> Consigliato    </td>
+                      <td class='smaller_column'> Nuova Adozione </td>
+                      <td class='smaller_column'> Da comprare    </td>
                     </tr>";
 
     $total = 0;
@@ -197,12 +187,12 @@
 //body of adding table
     while ($row = mysqli_fetch_array($adding_result)) {
 
-      $in_adding .= "<tr><td>"  . $row['position']                    .
-                    "</td><td>" . $row['subject']                    .
-                    "</td><td>" . $row['title']                       .
-                    "</td><td>" . $row['volume']                      .
-                    "</td><td>" . $row['newAdoption']                 .
-                    "</td><td>" . $row['toBuy']                       .
+      $in_adding .= "<tr><td>"  . $row['position']    .
+                    "</td><td>" . $row['subject']     .
+                    "</td><td>" . $row['title']       .
+                    "</td><td>" . $row['volume']      .
+                    "</td><td>" . $row['newAdoption'] .
+                    "</td><td>" . $row['toBuy']       .
                     "</td><td>" . $row['advised'];
       
       if (isset($_POST["price"])) {
@@ -213,7 +203,7 @@
      
     }
 
-    $in_adding .= "<th colspan= '7'> Total:" . $total . " <th>
+    $in_adding .= "<th colspan= '7'> Total:" . $total . " </th>
                   </table>";
 
   ?>
@@ -229,12 +219,11 @@
     <div class="filter">
       <form method="post">
         <input type="hidden" name="client" value="<?php echo $client; ?>">
-        <input type="hidden" name="price" value="<?php echo ((float)$row["price"] * $value)/100 ?>">
         Libro: <input type="text" name="book" value="">
         <input type="submit" name="search" value="Cerca">
       </form>
 
-      <?php
+      <?php 
         if(isset($class)){
         }else{
           $class = "Seleziona";
@@ -256,16 +245,16 @@
 
       ?>
 
-      <form method="post">
+      <form method="post" class="select">
         <input type="hidden" name="client" value="<?php echo $client; ?>">
         <input type="hidden" name="class" value="<?php echo $class ?>">
         <fieldset>
-          <legend>Classe: </legend>
-          <select name="class">
+          <legend>Classe e Materia:</legend>
+          <select name="class" onchange ="show()">
             <option value="<?php echo $class; ?>"><?php echo $class; ?></option>
             <?php echo $list; ?>
           </select>
-          <input type='text' name='subject'>
+          <input type='text' name='subject' id="subject">
           <input type="submit" name="search" value="Cerca">
         </fieldset>
       </form>
@@ -294,6 +283,13 @@
       <?php echo $in_adding ?>
 
     </div>
+
+    <script>
+      function show(){
+        document.getElementById("subject").style.display = "block";
+      }
+
+    </script>
 
   </body>
 </html>

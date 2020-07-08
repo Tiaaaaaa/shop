@@ -1,50 +1,48 @@
 .show_storage {
-
-  margin-top: 60px;
-  margin-bottom: 60px;
-  width: 99vw;
-
+    margin-top: 60px;
+    margin-bottom: 60px;
+    width: 99vw;
 }
 
 .filter {
-
-  display: flex;
-  padding: 20px;
-  justify-content: space-around;
-  width: 99vw;
-  border: 2px solid red;
-
+    display: flex;
+    padding: 20px;
+    justify-content: space-around;
+    width: 99vw;
+    border: 2px solid red;
 }
 
 .buy {
-
-  background-color: aquamarine;
-  height: 100%;
-  width: 100%;
-
+    background-color: aquamarine;
+    height: 100%;
+    width: 100%;
 }
 
 .buy:active {
-
-  background-color: bisque;
-
+    background-color: bisque;
 }
 
 .adding {
-  margin-top: 60px;
-  width: 99vw;
-
+    margin-top: 60px;
+    width: 99vw;
 }
 
 #confirm {
+    position: absolute;
+    display: none;
+    height: 45vh;
+    width: 40vw;
+    background-color: #fff;
+    border: 10px solid red;
+    margin-left: 30vw;
+    margin-right: 30vw;
+}
 
-  position: absolute;
-  display: none;
-  height: 45vh;
-  width: 40vw;
-  background-color: #fff;
-  border: 10px solid red;
-  margin-left: 30vw;
-  margin-right: 30vw;
+.smaller_column {
+    width: 10vw;
+}
 
+#subject {
+    position: absolute;
+    display: none;
 }
