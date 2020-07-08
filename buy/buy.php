@@ -10,15 +10,15 @@
 
     <?php
 
-    foreach ($_POST as $key => $value) {
-      echo $key . "  " . $value . " </br> ";
+    foreach ($_POST as $key => $valore) {
+      echo $key . "  " . $valore . " </br> ";
     }
 
     include_once '../assets/connection.php';
 
     $client = $_POST["client"];
     $book = "";
-    $select_soubject = "";
+    $select_subject = "";
 
 
 //  If a buy button has been pressed the "buyer" field in respective line
@@ -70,7 +70,7 @@
                            WHERE trades.buyer IS NULL
                              AND trades.seller != '$client'
                              AND book.ISBN = '$book'
-                        ORDER BY soubject;";
+                        ORDER BY subject;";
 
       } else if (isset($_POST['class']) and $_POST['class'] != "Seleziona") {
 
@@ -88,11 +88,11 @@
                            WHERE trades.buyer IS NULL
                              AND trades.seller != '$client'
                              AND classes.class = '$class'
-                        ORDER BY soubject;";
+                        ORDER BY subject;";
 
-         //Filter trougth soubject and class
-         if (isset($_POST['soubject']) and $_POST['soubject'] != "") {
-           $soubject = "%" . $_POST['soubject'] . "%";
+         //Filter trougth subject and class
+         if (isset($_POST['subject']) and $_POST['subject'] != "") {
+           $subject = "%" . $_POST['subject'] . "%";
            $sql_to_storage = "SELECT *
                                FROM clients
                                JOIN trades
@@ -104,8 +104,8 @@
                               WHERE trades.buyer IS NULL
                                 AND trades.seller != '$client'
                                 AND classes.class = '$class'
-                                AND book.soubject LIKE '$soubject'
-                           ORDER BY soubject;";
+                                AND book.subject LIKE '$subject'
+                           ORDER BY subject;";
          }
 
       }
@@ -120,7 +120,7 @@
                             ON (trades.book = book.ISBN)
                          WHERE buyer IS NULL
                            AND trades.seller != '$client'
-                      ORDER BY soubject;";
+                      ORDER BY subject;";
     }
 
     $sql_in_adding= "SELECT *
@@ -131,7 +131,7 @@
                           ON (trades.book = book.ISBN)
                        WHERE buyer = '$client' 
                          AND trades.seller != '$client'
-                    ORDER BY soubject;";
+                    ORDER BY subject;";
 
 
     if($storage_result = $conn->query($sql_to_storage)) {
@@ -165,7 +165,7 @@
       $form_id = "'buy" . $row['ISBN'] . $row['seller'] . $row['id'] . "'";
 
       $in_storage.= "<tr><td>"  . $row['position']                    .
-                    "</td><td>" . $row['soubject']                    .
+                    "</td><td>" . $row['subject']                    .
                     "</td><td>" . $row['title']                       .
                     "</td><td>" . ($row["price"] * $value)/100        .  
                     "</td><td>" . $row['volume']                      .
@@ -202,7 +202,7 @@
     while ($row = mysqli_fetch_array($adding_result)) {
 
       $in_adding .= "<tr><td>"  . $row['position']                    .
-                    "</td><td>" . $row['soubject']                    .
+                    "</td><td>" . $row['subject']                    .
                     "</td><td>" . $row['title']                       .
                     "</td><td>" . $row['volume']                      .
                     "</td><td>" . $row['newAdoption']                 .
@@ -278,7 +278,7 @@
             <option value="2leFP op Meccanico Serale">2leFP op Meccanico Serale</option>
             <option value="3leFP op Meccanico Serale">3leFP op Meccanico Serale</option>
           </select>
-          <input type='text' name='soubject'>
+          <input type='text' name='subject'>
           <input type="submit" name="search" value="Cerca">
         </fieldset>
       </form>

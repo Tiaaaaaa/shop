@@ -35,7 +35,7 @@
         $value_to_buy = 60;
       }
 
-      $to_sell .= "<tr><td>"  . $row['soubject'] .
+      $to_sell .= "<tr><td>"  . $row['subject'] .
                   "</td><td>" . $row['title']    .
                   "</td><td>" . ((float)$row["price"] * $value_to_sell)/100 . "</tr>";
 
@@ -59,7 +59,7 @@
       $price = 0;
 
       while ($row = mysqli_fetch_array($result_to_buy)) {
-        $to_buy .= "<tr><td>"  . $row['soubject'] .
+        $to_buy .= "<tr><td>"  . $row['subject'] .
                    "</td><td>" . $row['title']    .
                    "</td><td>" . ((float)$row["price"] * $value_to_buy)/100 . "</tr>";
 

@@ -93,7 +93,7 @@ if (isset($_POST["state"])) {
           $gain += ((float)$row["price"] * $value)/100;
 
           //Show the new books inserted
-          $current =  $row['soubject'] . "       " .
+          $current =  $row['subject'] . "       " .
                       $row['title']    . "       " .
                       ((float)$row["price"] * $value)/100;
           }
@@ -104,7 +104,7 @@ if (isset($_POST["state"])) {
                                       JOIN book
                                         ON (trades.book = book.ISBN)
                                      WHERE seller = '$client'
-                                  ORDER BY soubject ")) {
+                                  ORDER BY subject ")) {
           }else {
             printf("Error select all: %s\n", $conn->error);
           }
@@ -118,7 +118,7 @@ if (isset($_POST["state"])) {
             } else {
               $value = 50;
             }
-              $stored .= "<tr><td>"  . $row['soubject'] .
+              $stored .= "<tr><td>"  . $row['subject'] .
                          "</td><td>" . $row['title']    .
                          "</td><td>" . ((float)$row["price"] * $value)/100 .
                          "</td><td>" . $row['volume']   . "</tr>";
