@@ -1,5 +1,5 @@
 // Oggetto che definisce i libri 
-exports.book = {
+exports.Book = {
     isbn: Number,
     subject: String,
     title: String,
@@ -7,7 +7,7 @@ exports.book = {
     publisher: String,
     price: Number,
     section: String,
-    constructor(isbn, subject, title, volume, publisher, price, section) {
+    Book(isbn, subject, title, volume, publisher, price, section) {
         this.isbn = isbn;
         this.subject = subject;
         this.title = title;
@@ -19,24 +19,24 @@ exports.book = {
 }
 
 // Oggetto che definisce i clienti
-exports.user = {
+exports.User = {
     cf: String,
     id: Number,
-    constructor(cf) {
+    User(cf) {
         this.cf = cf;
     }
 
 }
 
 // Oggetto che definisce le entry del magazzino
-exports.storage = {
+exports.Storage = {
     book: this.book,
     seller: this.client,
     buyer: this.client,
     buyDate: Date,
     sellDate: Date,
     state: Boolean,
-    constructor(book, seller, buyDate, state) {
+    Storage (book, seller, buyDate, state) {
         this.book = book;
         this.buyDate = buyDate;
         this.seller = seller;

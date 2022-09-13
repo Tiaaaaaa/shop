@@ -1,3 +1,5 @@
+const dbMan = require("../../DB/management")
+
 /**
  * manda una lista di libri.
  * nel caso in cui sia presente nella richiesta 
@@ -26,4 +28,3 @@ app.get('/books', (req, res) => {
     }
 
 });
-

@@ -9,12 +9,20 @@
         {
             "isbn": 1,
             "title": "ciao",
-            "price": 2
+            "price": 2,
+            "subject": "math",
+            "volume": "1",
+            "publisher": "sto cazzo",
+            "section": "1 Chimica"
         },
         {
             "isbn": 2,
             "title": "ciao",
-            "price": 2
+            "price": 2,
+            "subject": "inglese",
+            "volume": "1",
+            "publisher": "sto cazzo",
+            "section": "2 Informatica"
         }
     ],
     "storage": [
