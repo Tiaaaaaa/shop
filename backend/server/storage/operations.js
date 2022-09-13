@@ -44,28 +44,36 @@ exports.getFromClass = (section) => {
  * @throws Error if and info is wrong
  */
 exports.addToStorage = (isbn, seller, state) => {
-    if (!check.cf(seller))
+        
+    if (!check.cf(seller)){
         throw new Error("id code not valid");
-    
-    if (!check.isbn(isbn))
-        throw new Error("isbn not valid");
-
-    if (!booksFun.isValid(isbn))
-        throw new Error("book not adopted");
-
+    }
+    if (!check.isbn(isbn)){
+        throw new Error("isbn not valido");
+    }
+  
     let book = booksFun.getBookFromIsbn(isbn)
 
-    if (!book)
+    if (!book){
         throw new Error("book not valid")
+    }
+    let user = usersFun.getUserFromCf(seller);
 
-    let user = usersFun.getUserFromCf(cf);
 
-    if (!user)
-        throw new Error("user not valid")
+    if (user === false){
+        user = usersFun.addUser(seller)
+    }
 
-    let toAdd = new ddl.Storage(book, user, Date.now(), state);
+    let toAdd = new ddl.Storage(book, user, new Date(Date.now()), state);
 
-    db.get("storage").push(toAdd);
+    console.log(new Date(Date.now()));
+
+    try {
+        db.get("storage").push(toAdd);
+        
+    } catch (error) {
+        console.error(error);
+    }
 
     db.save();
 

@@ -27,7 +27,7 @@ exports.Storage =  class{
         this.seller = seller;
         this.state = state;
         this.buyer = null;
-        this.buyDate = null;
+        this.sellDate = null;
     }
 }
 

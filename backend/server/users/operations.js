@@ -2,9 +2,10 @@ const ddl = require("../../DB/ddl")
 const check = require("../checkData")
 
 exports.exist = (cf) => {
+
     let user = db.get("users").value().filter(u => u.cf == cf)[0];
-   
-    if (user.length != undefined){
+    
+    if (user != undefined){
         return user;
     }else{
         return false;
@@ -23,7 +24,7 @@ exports.exist = (cf) => {
 exports.addUser = (cf) => {
 
     if(!check.cf(cf))
-        return false;
+        throw new Error("code inserted wrong");
 
     if (this.exist(cf))
         return false;
@@ -54,9 +55,9 @@ exports.addUser = (cf) => {
 exports.getUserFromCf = (cf) => {
 
     if(!check.cf(cf))
-        return false;
+        throw new Error("id code format wrong")
 
-    if (this.exist(cf))
+    if (!this.exist(cf))
         return false;
 
     return db.get("users").value().filter(u => u.cf == cf)[0];

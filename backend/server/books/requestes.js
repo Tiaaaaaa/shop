@@ -1,15 +1,12 @@
-const dbMan = require("../../DB/management")
+const booksFun = require("./operations")
 
 /**
- * manda una lista di libri.
- * nel caso in cui sia presente nella richiesta 
- * un isbn, allora si eseguirà la ricerca di quel libro,
- * altrimenti verranno mandati tutti quanti quelli 
- * adottati. 
+ * address for having a list of books,
+ * if the "isbn" field is in the request the books will be filtered
  */
 app.get('/books', (req, res) => {
 
-    dbMan.searchBook(req.query.book)
+    booksFun.isValid(req.query.book)
 
     let books = db.get("books").value();
 

@@ -1,4 +1,4 @@
-const check = require("../checkData")
+const check = require("../checkData");
 
 /**
  * checks in the db if the isbn of he book 
@@ -34,6 +34,37 @@ exports.getBookFromIsbn = (isbn) => {
         return false;
     }
 
-    return db.get("books").value().filter(b => b.isbn == isbn);
+    return db.get("books").value().filter(b => b.isbn == isbn)[0];
+
+}
+
+/**
+ * Add a new book into the db after checking
+ * if the book isn't altready into the db.
+ * 
+ * @param {Number} isbn 
+ * @param {String} subject 
+ * @param {String} volume 
+ * @param {String} publisher 
+ * @param {Numer} price 
+ * @param {String} section
+ * @returns false if the book is already into the db,
+ * 			the object of the book if inserted
+ */
+ exports.addBook = (isbn, subject, title, volume, publisher, price, section) => {
+
+	console.log(db.get("books").value().filter(b => b.isbn == isbn))
+
+	if (db.get("books").value().filter(b => b.isbn == isbn) != []){
+		return false;
+	}
+	
+	let newBook = new ddl.Book(isbn, subject, title, volume, publisher, price, section);
+
+	db.get("books").push(newBook);
+
+	db.save();
+
+	return newBook;
 
 }

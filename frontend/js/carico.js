@@ -3,7 +3,8 @@ let inputBox = document.getElementById("input");
 cfInput.focus();
 
 input.addEventListener("keydown", (event) => {
-    if (event.code != "Enter") {
+
+    if (!(event.code == "Enter" || event.code == "NumpadEnter")) {
         return
     }
     
@@ -19,6 +20,10 @@ input.addEventListener("keydown", (event) => {
         return
     }
 
+    getJSON("http://localhost:3000/get-id?cf=" + cf).then(data => {
+        document.getElementById("posizione").innerHTML = "posizione <br>" + data.id;
+    });
+
     getJSON("http://localhost:3000/given-from-cf?cf=" + cf).then(data => {
       addInfo(data);
     }).catch(error => {
@@ -29,7 +34,11 @@ input.addEventListener("keydown", (event) => {
     addInputRow();
 })
 
-// Aggiunge alla lista mostrata i libri già depositati
+/**
+ * Add a row for every book deposited sooner
+ * 
+ * @param {Array[Book]} data array containing the infos
+ */
 function addInfo(data) {
     
     data.forEach(element => {
@@ -94,12 +103,14 @@ function addInputRow() {
 }
 
 /**
- * Permette di aggiungere un libro ai libri in vendita 
- * del cliente passato mediante cf
+ * Makes the requestes at the server for the store of a new book
+ * 
+ * @param {Number} book the isbn of the book
+ * @param {String} seller the id code of the seller
+ * @param {Boolean} state the state of usury of the book
  */ 
 function addBook(book, seller, state) {
 
-    
     getJSON("http://localhost:3000/books?book=" + book).then(data => {
         
         let toAdd = {
@@ -116,7 +127,7 @@ function addBook(book, seller, state) {
                 'Content-Type':'application/json'
             },
             body: JSON.stringify(toAdd)
-        }).then( ()=> {});
+        });
         
     }).catch(error => {
         console.error(error);

@@ -36,6 +36,7 @@ app.get('/given-from-cf', (req, res) => {
         qRes.push(stored.book);
     });
 
+
     res.send(qRes);
 
 });
@@ -53,6 +54,7 @@ app.get('/given-from-cf', (req, res) => {
 
  */
 app.put('/add-to-storage', jsonParser, (req, res) => {
+
 
     // Controlla se il codice fiscale è valido
     if (!check.cf(req.body.seller)) {
@@ -72,7 +74,8 @@ app.put('/add-to-storage', jsonParser, (req, res) => {
     try {
         storageFun.addToStorage(req.body.book, req.body.seller, req.body.state);
     } catch (error) {
-        res.status(400).send(error.message);
+        console.log(error);
+        res.status(400).send(error);
     }
 
 });
