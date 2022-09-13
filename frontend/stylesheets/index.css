@@ -1,0 +1,36 @@
+#main{
+    top: 10vh;
+    height: 80vh;
+    width: 80vw;
+    left: 10vw;
+    flex-direction: column;
+}
+
+#upper-buttons{
+    position: relative;
+    padding: 10%;
+    background: #CAFAE1;
+    width: 50vw;
+}
+
+#lower-buttons{
+    position: relative;
+    width: 50vw;
+}
+
+#menù {
+    position: fixed;
+    left: 0;
+    top: 10vh;
+    margin-left: 1vw;
+    height: 88vh;
+    width: 15vw;
+    background-color: #A5FA6E;
+    font-family: Montserrat;
+}
+
+.menù-element{
+    height: 3vh;
+    background-color: var(--color);
+
+}

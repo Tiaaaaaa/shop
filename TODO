@@ -1,0 +1,34 @@
+Refactoring
+    - Splittare il server
+        - Le varie funzionalità e richieste
+        - BE / FE
+
+Index
+    pulsanti funzionanti
+    trovare un modo per mettere gli altri pulsanti
+
+Carico
+    prendere e salvare le informazioni dal db
+    - rimozione del libro caricato (qua o in un'altra pagina?)
+
+Scarico
+    - Ricerca per libro/classe
+    - Mostrare in qualche modo i libri fetchati
+    - eseguire l'acquisto
+
+GRAFICA
+
+NTH
+Resoconto generale
+    - Calcolo della monetanza
+    - Calcolo dei libri venduti/invenduti
+
+Resoconto personale
+    - Calcolo della monetanza
+    - Calcolo dei libri venduti/invenduti
+
+Visualizzazione libri
+    - Semplice visualizzazione 
+    - filtro
+
+GRAFICA

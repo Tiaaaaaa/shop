@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Carico</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/res/stylesheets/main.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/res/stylesheets/carico.css'>
+	<script src="/res/js/index.js"></script>
+	
+	
+</head>
+<body>
+	
+	<div class="title">
+		<div class="home" onclick="window.location='http://localhost:3000'">
+            home
+        </div>
+        <div id="text">
+			Carico libri
+        </div>
+    </div>
+	
+    <div class="container" id="main">
+		<div id="input" class="container">
+			<div id="input-title">Qui il codice fiscale</div>
+			<input type="text" id="cf-input">
+			
+			<div id="dovuto">
+
+			</div>			
+		</div>
+
+		<div class="container" id="book-list">
+			<table id="book-table">
+				<th colspan="3"> 
+					<p>Libri inseriti</p>
+				</th>
+				<tbody id="tbody">
+					<tr>
+						<td>
+							<p>ISBN</p>
+						</td>
+						<td>
+							<p>Titolo</p>
+						</td>
+						<td>
+							<p>Prezzo</p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+
+    </div>
+    
+	<!-- qua perchè sennò non prende gli elementi-->
+	<script src="/res/js/carico.js"></script>
+
+</body>
+</html>

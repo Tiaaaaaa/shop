@@ -1,0 +1,1 @@
+{"users":[{"cf":"RRGMTT01P22F119U","id":0}],"books":[{"isbn":1,"title":"ciao","price":2},{"isbn":2,"title":"ciao","price":2}],"storage":[{"book":{"isbn":1,"title":"ciao","price":2},"seller":{"cf":"RRGMTT01P22F119U","id":0},"buyer":null,"buyDate":"2022-08-01T22:00:00.000Z","sellDate":null,"state":true}]}

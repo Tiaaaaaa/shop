@@ -1,0 +1,45 @@
+#main {
+    top: 10vh;
+    flex-direction: column;
+}
+
+#input {
+    justify-content: space-around;
+    border: 1px solid black;
+    width: 60vw;
+}
+
+#isbn-input {
+    border: 0;
+}
+
+#book-list {
+    width: 60vw;
+}
+
+.error {
+    background-color: red;
+    color: blue;
+}
+
+.state {
+    cursor: pointer;
+    transition: all 0.1s linear;
+    border: 0;
+    background-color: #fff;
+    height: 100%;
+    width: 100%;
+    border: 1px solid blue;
+}
+
+.state:hover {
+    background-color: red;
+}
+
+.state:active {
+    background-color: aqua;
+}
+
+.ruined {
+    background-color:#EB7F77;
+}

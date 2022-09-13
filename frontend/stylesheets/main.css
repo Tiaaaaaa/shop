@@ -1,0 +1,87 @@
+@font-face {
+    font-family: 'Montserrat';
+    src: local('Montserrat'),
+         url('../assets/fonts/Montserrat-Light.ttf') format('truetype'),
+}
+
+body{
+    font-family: Montserrat;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+.title{
+    position: fixed;
+    left: 0;
+    margin-left: 1vw;
+    margin-right: 1vw;
+    width: 98vw;
+    height: 5vh;
+    text-align: center;
+    font-family: Montserrat;
+    font-size: 2em;
+    background-color: #78F498;
+    z-index: 3;
+}
+
+.home {
+    position: absolute;
+    width: 5vh;
+    height: 5vh;
+    background-color: blue;
+}
+
+.container {
+    position: relative;
+    padding-left: 1vw;
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+    display: flex;
+    margin: 0.5vh;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.big-button {
+    height: 15vh;
+    width: 20vw;
+    background-color: #67DE62;
+    text-align: center;
+}
+
+p{
+    position: relative;
+    color: red;
+    font-family: Montserrat;
+    text-align: center;
+}
+
+.big-button p{
+    font-size: 2em;
+}
+
+.small-button {
+    height: 10vh;
+    width: 15vw;
+    background-color: #A5FA6E;
+    text-align: center;
+}
+
+.small-button p{
+    font-size: 1em;
+}
+
+table {
+    width: 80%;
+    border: 1px solid blue;
+}
+
+th {
+    border: 1px solid blue;
+}
+
+td {
+    border: 1px solid blue;
+}
