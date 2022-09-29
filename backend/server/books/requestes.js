@@ -1,27 +1,52 @@
 const booksFun = require("./operations")
 
 /**
- * address for having a list of books,
- * if the "isbn" field is in the request the books will be filtered
+ * address for having a list of books.
+ * if any information is passed the search will be filtered.
  */
 app.get('/books', (req, res) => {
-
-    booksFun.isValid(req.query.book)
 
     let books = db.get("books").value();
 
     if (req.query.book) {
-        let filBooks = books.filter(b => b.isbn == req.query.book);
-
-        if (filBooks.length == 0) {
-            res.status(404).send("Libro non presente");
+        try {
+            booksFun.isValid(req.query.book)
+        } catch (error) {
+            res.status(400).send(error);
             return;
         }
 
-        res.send(filBooks);
-
-    } else {
-        res.send(books);
+        books = books.filter(b => b.isbn == req.query.book);
     }
+
+    if (req.query.section) {
+        books = books.filter(b => b.section == req.query.section);
+    }
+
+    if (req.query.subject) {
+        books = books.filter(b => b.subject == req.query.subject);
+    }
+
+    if (books.length == 0) {
+        res.status(404).send("Libro non presente");
+        return;
+    }
+
+    res.send(books);
+
+});
+
+app.get('/classes', (req, res) => {
+    let books = db.get("books").value();
+
+    let classes = [];
+
+    books.forEach(element => {
+        if (!classes.includes(element.section)) {
+            classes.push(element.section);
+        }
+    });
+
+    res.send(classes);
 
 });

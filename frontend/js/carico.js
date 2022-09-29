@@ -7,14 +7,14 @@ input.addEventListener("keydown", (event) => {
     if (!(event.code == "Enter" || event.code == "NumpadEnter")) {
         return
     }
-    
+
     const cf = cfInput.value;
 
     // check the cf
     if (cfRegEx.test(cf)) {
         inputBox.classList.remove("error");
         document.getElementById("input-title").innerHTML = "Codice fiscale inserito";
-    }else{
+    } else {
         inputBox.classList.add("error");
         document.getElementById("input-title").innerHTML = "codice fiscale errato";
         return
@@ -25,9 +25,13 @@ input.addEventListener("keydown", (event) => {
     });
 
     getJSON("http://localhost:3000/given-from-cf?cf=" + cf).then(data => {
-      addInfo(data);
+        addInfo(data);
     }).catch(error => {
-      console.error(error);
+        setTimeout(() => {
+            document.getElementById("notice").backgroundColor = "#FE715E";
+        }, 500);
+        document.getElementById("notice").backgroundColor = "white";
+
     });
 
     cfInput.disabled = true;
@@ -40,7 +44,7 @@ input.addEventListener("keydown", (event) => {
  * @param {Array[Book]} data array containing the infos
  */
 function addInfo(data) {
-    
+
     data.forEach(element => {
         addRow(element);
     });
@@ -54,8 +58,8 @@ function addInfo(data) {
 function addInputRow() {
     let tab = document.getElementById("book-table");
 
-    let row = document.createElement("tr") ;  
-    
+    let row = document.createElement("tr");
+
     let input = document.createElement("input")
     input.type = "text";
     input.id = "isbn-input";
@@ -66,25 +70,25 @@ function addInputRow() {
     inputTd.append(input);
 
     row.append(inputTd);
-    
+
     row.append(document.createElement("td"));
     row.append(document.createElement("td"));
-        
+
     let stateTd = document.createElement("td");
     stateTd.classList.add("state");
     stateTd.innerHTML = "ususrato";
-   
-    let state = false; 
+
+    let state = false;
 
     stateTd.addEventListener("mousedown", (event) => {
         if (stateTd.classList.contains("ruined")) {
             stateTd.classList.remove("ruined");
             state = false;
-        }else{
+        } else {
             state = true;
             stateTd.classList.add("ruined");
         }
-        
+
 
     })
 
@@ -95,10 +99,10 @@ function addInputRow() {
     input.addEventListener("keydown", (event) => {
         if (event.code != "Enter")
             return
-        
-        addBook(input.value,document.getElementById('cf-input').value,state);
-       
-    });    
+
+        addBook(input.value, document.getElementById('cf-input').value, state);
+
+    });
 
 }
 
@@ -108,11 +112,11 @@ function addInputRow() {
  * @param {Number} book the isbn of the book
  * @param {String} seller the id code of the seller
  * @param {Boolean} state the state of usury of the book
- */ 
+ */
 function addBook(book, seller, state) {
 
     getJSON("http://localhost:3000/books?book=" + book).then(data => {
-        
+
         let toAdd = {
             book: book,
             seller: seller,
@@ -121,16 +125,31 @@ function addBook(book, seller, state) {
 
         addRow(data[0]);
 
-        fetch("http://localhost:3000/add-to-storage",{
+        fetch("http://localhost:3000/add-to-storage", {
             method: 'PUT',
-            headers:{
-                'Content-Type':'application/json'
+            headers: {
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(toAdd)
+        }).then(a => {
+            
+            console.log(a.status);
+
+            document.getElementById("notice").classList.add("good");
+            document.getElementById("notice").innerHTML = "Libro inserito"
+            setTimeout(() => {
+                document.getElementById("notice").classList.remove("good");
+                document.getElementById("notice").innerHTML = "";
+            }, 3000);
         });
-        
+
     }).catch(error => {
-        console.error(error);
+        document.getElementById("notice").classList.add("bad");
+        document.getElementById("notice").innerHTML = "Formato ISBN sbagliato"
+        setTimeout(() => {
+            document.getElementById("notice").classList.remove("bad");
+            document.getElementById("notice").innerHTML = "";
+        }, 3000);
     });
 
 }

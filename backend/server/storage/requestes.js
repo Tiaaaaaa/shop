@@ -73,6 +73,7 @@ app.put('/add-to-storage', jsonParser, (req, res) => {
 
     try {
         storageFun.addToStorage(req.body.book, req.body.seller, req.body.state);
+        res.status(200).send("book added");
     } catch (error) {
         console.log(error);
         res.status(400).send(error);

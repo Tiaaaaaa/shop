@@ -22,7 +22,7 @@ exports.cf = (code) => {
  * @returns true if valid, false otherwise
  */
 exports.isbn = (isbn) => {
-    if (isbn.toString().length == 13) {
+    if (isbn.toString().length == 13 && !isNaN(isbn)) {
         return true;
     }else{
         return false;

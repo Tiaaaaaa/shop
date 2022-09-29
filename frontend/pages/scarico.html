@@ -8,6 +8,7 @@
     <link rel='stylesheet' type='text/css' media='screen' href='/res/stylesheets/main.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='/res/stylesheets/scarico.css'>
 	<script src="/res/js/index.js"></script>
+	<script src="/res/js/scarico.js"></script>
 
 
 </head>
@@ -22,9 +23,14 @@
         </div>
     </div>
 
-    <div id="search">
-        <input type="text" id="isbn">
-        <input type="text" id="class">
+    <div class="container" id="main">        
+        <div id="search">
+            <input type="text" id="isbn">
+            <select id="class" >
+                <option>Seleziona la classe da ricercare</option>
+            </select>
+            <input type="text" id="subject">
+        </div>
     </div>
 </body>
 </html>

@@ -7,7 +7,7 @@ exports.Book = class {
         this.volume = volume;
         this.publisher = publisher;
         this.price = price;
-        this.section = section;   
+        this.section = section;
     }
 }
 
