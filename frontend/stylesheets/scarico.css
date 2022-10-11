@@ -1,4 +1,19 @@
-#search {
+#main {
     position: relative;
     top: 10vh;
+}
+
+#infos {
+    position: relative;
+    top: 10vh;
+}
+
+#cart {
+    position: relative;
+    top: 10vh;
+}
+
+#buy {
+    position: relative;
+    background-color: green;
 }

@@ -2,6 +2,8 @@ const bodyParser = require('body-parser')
 const usersFun = require("../users/operations")
 const storageFun = require("./operations")
 const check = require("../checkData")
+const fs = require("fs")
+const path = require("path")
 
 // create application/json parser
 let jsonParser = bodyParser.json()
@@ -12,7 +14,7 @@ let jsonParser = bodyParser.json()
  * 
  * @param {String} cf the id code
  */
-app.get('/given-from-cf', (req, res) => {
+app.get('/storage/given-from-cf', (req, res) => {
 
     let cf = req.query.cf;
 
@@ -53,7 +55,7 @@ app.get('/given-from-cf', (req, res) => {
  * @error 400 if the infos are not complete.
 
  */
-app.put('/add-to-storage', jsonParser, (req, res) => {
+app.put('/storage/add-to-storage', jsonParser, (req, res) => {
 
 
     // Controlla se il codice fiscale è valido
@@ -90,19 +92,45 @@ app.put('/add-to-storage', jsonParser, (req, res) => {
  * 
  * @error 400 if there are not infos.
  */
-app.get('/search-in-storage', (req, res) => {
+app.get('/storage/search-in-storage', (req, res) => {
 
-    let qRes;
+    let inStorage = db.get("storage").value();
 
     if (req.query.book) {
-        qRes = db.get("storage").value().filter(s => s.book.isbn == req.query.isbn);
-    } else if (req.query.class) {
-        qRes = db.get("storage").value().filter(s => s.book.class == req.query.class);
-    } else {
-        res.status(400).send("inviare una richiesta idonea");
+        try {
+            inStorageFun.isValid(req.query.book)
+        } catch (error) {
+            res.status(400).send(error);
+            return;
+        }
+
+        inStorage = inStorage.filter(b => b.book.isbn == req.query.book);
+    }
+
+    if (req.query.section) {
+        inStorage = inStorage.filter(b => b.book.section == req.query.section);
+    }
+
+    if (req.query.subject) {
+        inStorage = inStorage.filter(b => b.book.subject == req.query.subject);
+    }
+
+    if (req.query.inSale) {
+        inStorage = inStorage.filter(b => b.buyer == null);
+    }
+
+    if (inStorage.length == 0) {
+        res.status(404).send("Nessun libro presente");
         return;
     }
 
-    res.send(qRes);
+    res.send(inStorage);
 
 });
+
+
+app.put('/storage/buy', jsonParser, (req, res) => {
+    
+
+
+})

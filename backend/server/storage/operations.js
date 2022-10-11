@@ -24,17 +24,6 @@ exports.getFromCf = (cf) => {
 }
 
 /**
- * returns an array of books present in the storage
- * making a search starting from the class in witch 
- * are adopted the books
- * 
- * @param {String} section the class used for doing the search in the db 
- */
-exports.getFromClass = (section) => {
-    return db.get("storage").value().filter(s => s.class)
-}
-
-/**
  * add a book to the storage after checking
  * all the infos passed
  * 
@@ -77,4 +66,8 @@ exports.addToStorage = (isbn, seller, state) => {
 
     db.save();
 
+}
+
+exports.buy = () => {
+    
 }

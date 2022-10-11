@@ -3,7 +3,6 @@
         + Le varie funzionalità e richieste <br>
         + BE / FE <br>
 
-
 > Index <br>
     pulsanti funzionanti <br>
     trovare un modo per mettere gli altri pulsanti <br>
@@ -11,10 +10,12 @@
 > Carico <br>
     + prendere e salvare le informazioni dal db <br>
     - rimozione del libro caricato (qua o in un'altra pagina?) <br>
+    - chiedere se il carico inserito è sensato
+    DA FARE => LA FUNZIONE PER AGGIUNGERE LA RIGA DI INPUT PD
 
 > Scarico <br>
-    - Ricerca per libro/classe <br>
-    - Mostrare in qualche modo i libri fetchati <br>
+    + Ricerca per libro/classe <br>
+    + Mostrare in qualche modo i libri fetchati <br>
     - eseguire l'acquisto <br>
 
 > GRAFICA
@@ -29,5 +30,7 @@ Resoconto personale<br>
 Visualizzazione libri <br>
     - Semplice visualizzazione <br> 
     - filtro <br>
+Scarico <br>
+    - Invio ricevuta per mail
 Importazione libri automatica <br>
 Ricerca dei libri con filtri combinati

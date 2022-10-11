@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,30 +8,48 @@
     <title>Document</title>
     <link rel='stylesheet' type='text/css' media='screen' href='/res/stylesheets/main.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='/res/stylesheets/scarico.css'>
-	<script src="/res/js/index.js"></script>
-	<script src="/res/js/scarico.js"></script>
+    <script src="/res/js/index.js"></script>
 
 
 </head>
+
 <body>
 
     <div class="title">
-		<div class="home" onclick="window.location='http://localhost:3000'">
+        <div class="home" onclick="window.location=host">
             home
         </div>
         <div id="text">
-			Scarico libri
+            Scarico libri
         </div>
     </div>
 
-    <div class="container" id="main">        
+    <div class="container" id="main">
+        <div id="notice"></div>
+
         <div id="search">
-            <input type="text" id="isbn">
-            <select id="class" >
+
+            Libro: <input type="text" id="isbn" name="isbn">
+            <select id="class" name="class">
                 <option>Seleziona la classe da ricercare</option>
             </select>
-            <input type="text" id="subject">
+            Materia: <input type="text" id="subject" name="subject">
+            <input type="submit" value="Cerca" id="submit">
+
         </div>
+
     </div>
+
+
+    <div class="container" id="infos">
+
+    </div>
+
+    <div id="cart" class="container">
+        <div id="tot">0</div>
+        <div id="buy" onclick="buy()">Acquista</div>
+    </div>
+    <script src="/res/js/scarico.js"></script>
 </body>
+
 </html>

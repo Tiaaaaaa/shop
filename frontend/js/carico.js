@@ -12,51 +12,42 @@ input.addEventListener("keydown", (event) => {
 
     // check the cf
     if (cfRegEx.test(cf)) {
-        inputBox.classList.remove("error");
+        notice("Codice fiscale inserito", true);
+        
         document.getElementById("input-title").innerHTML = "Codice fiscale inserito";
+
+
     } else {
-        inputBox.classList.add("error");
+        notice("codice fiscale errato", false);
+
         document.getElementById("input-title").innerHTML = "codice fiscale errato";
         return
     }
 
-    getJSON("http://localhost:3000/get-id?cf=" + cf).then(data => {
+    getJSON(host + "/users/get-id?cf=" + cf).then(data => {
         document.getElementById("posizione").innerHTML = "posizione <br>" + data.id;
     });
 
-    getJSON("http://localhost:3000/given-from-cf?cf=" + cf).then(data => {
-        addInfo(data);
+    let tab;
+
+    getJSON(host + "/storage/given-from-cf?cf=" + cf).then(data => {
+        tab = createTable(data, "Libri depositati");
+        addInputRow(tab);
+        document.getElementById("book-list").append(tab)
+        cfInput.disabled = true;
     }).catch(error => {
-        setTimeout(() => {
-            document.getElementById("notice").backgroundColor = "#FE715E";
-        }, 500);
-        document.getElementById("notice").backgroundColor = "white";
-
+        notice(error.message, false);
     });
 
-    cfInput.disabled = true;
-    addInputRow();
 })
-
-/**
- * Add a row for every book deposited sooner
- * 
- * @param {Array[Book]} data array containing the infos
- */
-function addInfo(data) {
-
-    data.forEach(element => {
-        addRow(element);
-    });
-
-}
 
 /**
  * Aggiunge una riga vuota alla lista che contiene un input 
  * per aggiungere un libro
+ * 
+ * 
  */
-function addInputRow() {
-    let tab = document.getElementById("book-table");
+function addInputRow(tab) {
 
     let row = document.createElement("tr");
 
@@ -88,12 +79,10 @@ function addInputRow() {
             state = true;
             stateTd.classList.add("ruined");
         }
-
-
     })
 
     row.append(stateTd);
-    tab.append(row);
+    tab.appendChild(row);
 
     input.focus();
     input.addEventListener("keydown", (event) => {
@@ -115,7 +104,7 @@ function addInputRow() {
  */
 function addBook(book, seller, state) {
 
-    getJSON("http://localhost:3000/books?book=" + book).then(data => {
+    getJSON(host + "/books/get-books?book=" + book).then(data => {
 
         let toAdd = {
             book: book,
@@ -125,31 +114,21 @@ function addBook(book, seller, state) {
 
         addRow(data[0]);
 
-        fetch("http://localhost:3000/add-to-storage", {
+        fetch(host + "/storage/add-to-storage", {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(toAdd)
         }).then(a => {
-            
+
             console.log(a.status);
 
-            document.getElementById("notice").classList.add("good");
-            document.getElementById("notice").innerHTML = "Libro inserito"
-            setTimeout(() => {
-                document.getElementById("notice").classList.remove("good");
-                document.getElementById("notice").innerHTML = "";
-            }, 3000);
+            notice("libro inserito", true);
         });
 
     }).catch(error => {
-        document.getElementById("notice").classList.add("bad");
-        document.getElementById("notice").innerHTML = "Formato ISBN sbagliato"
-        setTimeout(() => {
-            document.getElementById("notice").classList.remove("bad");
-            document.getElementById("notice").innerHTML = "";
-        }, 3000);
+        notice("formato ISBN sbagliato", false)
     });
 
 }

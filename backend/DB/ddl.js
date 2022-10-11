@@ -12,15 +12,20 @@ exports.Book = class {
 }
 
 // Oggetto che definisce i clienti
-exports.User = class{
-    constructor(cf) {
+exports.User = class {
+    constructor(cf, id) {
         this.cf = cf;
-        this.id = undefined; 
+        
+        if (id == undefined) {
+            this.id = undefined;
+        } else {
+            this.id = id;
+        }
     }
 }
 
 // Oggetto che definisce le entry del magazzino
-exports.Storage =  class{
+exports.Storage = class {
     constructor(book, seller, buyDate, state) {
         this.book = book;
         this.buyDate = buyDate;

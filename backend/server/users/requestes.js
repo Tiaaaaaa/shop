@@ -6,7 +6,7 @@ const usersFun = require("./operations")
  * 
  * @param {String} cf the code of the customer
  */
-app.get('/get-id', (req, res) => {
+app.get('/users/get-id', (req, res) => {
     if (!check.cf(req.query.cf)){
         res.sendStatus(400);
         return;
@@ -20,7 +20,7 @@ app.get('/get-id', (req, res) => {
 
 });
 
-app.put('/add-user', (req, res) => {
+app.put('/users/add-user', (req, res) => {
     if (!check.cf(req.body.cf)){
         res.status(400).send("code format wrong");
         return;

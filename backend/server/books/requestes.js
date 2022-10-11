@@ -4,7 +4,7 @@ const booksFun = require("./operations")
  * address for having a list of books.
  * if any information is passed the search will be filtered.
  */
-app.get('/books', (req, res) => {
+app.get('/books/get-books', (req, res) => {
 
     let books = db.get("books").value();
 
@@ -36,7 +36,7 @@ app.get('/books', (req, res) => {
 
 });
 
-app.get('/classes', (req, res) => {
+app.get('/books/classes', (req, res) => {
     let books = db.get("books").value();
 
     let classes = [];
