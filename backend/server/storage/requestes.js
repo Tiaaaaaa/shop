@@ -2,8 +2,8 @@ const bodyParser = require('body-parser')
 const usersFun = require("../users/operations")
 const storageFun = require("./operations")
 const check = require("../checkData")
-const fs = require("fs")
 const path = require("path")
+const recFun = require("../../receipts/createReceipt")
 
 // create application/json parser
 let jsonParser = bodyParser.json()
@@ -26,7 +26,7 @@ app.get('/storage/given-from-cf', (req, res) => {
 
     let guest = usersFun.exist(cf);
 
-    if(!guest) {
+    if (!guest) {
         guest = usersFun.addUser(cf);
     }
 
@@ -129,8 +129,39 @@ app.get('/storage/search-in-storage', (req, res) => {
 });
 
 
-app.put('/storage/buy', jsonParser, (req, res) => {
-    
+app.get('/storage/buy', jsonParser, (req, res) => {
 
+    data = {
+        cf: req.query.cf,
+        cart:
+            [
+                {
+                    "isbn": 1234567890123,
+                    "subject": "math",
+                    "title": "ciao",
+                    "volume": "1",
+                    "publisher": "sto cazzo",
+                    "price": 2,
+                    "section": "1 Chimica"
+                },
+                {
+                    "isbn": 2123456789012,
+                    "subject": "inglese",
+                    "title": "ciao",
+                    "volume": "U",
+                    "publisher": "sto cazzo",
+                    "price": 2,
+                    "section": "2 Informatica"
+                }
+            ],
 
+    }
+
+    data.cart.forEach(element => {
+        data.price += Number(element.price);
+    });
+
+    recFun.create(data);
+
+    res.sendFile(path.join(__dirname, "../../receipts/prova.pdf"))
 })
