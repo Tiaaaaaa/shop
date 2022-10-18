@@ -8,6 +8,7 @@ setRoutes(app);
 require("./backend/server/storage/requestes");
 require("./backend/server/books/requestes");
 require("./backend/server/users/requestes");
+require("./backend/receipts/requestes");
 
 const ddl = require("./backend/DB/ddl")
 

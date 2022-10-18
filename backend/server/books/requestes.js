@@ -50,3 +50,18 @@ app.get('/books/classes', (req, res) => {
     res.send(classes);
 
 });
+
+app.get('/books/subjects', (req, res) => {
+    let books = db.get("books").value();
+
+    let subjects = [];
+
+    books.forEach(element => {
+        if (!subjects.includes(element.subject)) {
+            subjects.push(element.subject);
+        }
+    });
+
+    res.send(subjects);
+
+});

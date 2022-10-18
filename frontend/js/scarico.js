@@ -1,4 +1,7 @@
 let cart = [];
+let cfInput = document.getElementById("cf");
+let searchBtn = document.getElementById("submit");
+let buyBtn = document.getElementById("buy-infos");
 
 getJSON(host + "/books/classes").then(data => {
 
@@ -11,19 +14,44 @@ getJSON(host + "/books/classes").then(data => {
 
 });
 
+getJSON(host + "/books/subjects").then(data => {
 
-document.getElementById("submit").addEventListener("click", (event) => {
+    data.forEach(element => {
+        let tmp = document.createElement("option");
+        tmp.innerHTML = element;
+
+        document.getElementById("subject").appendChild(tmp);
+    });
+
+});
+
+
+searchBtn.disabled = true;
+cfInput.addEventListener("input", (event) => {
+
+    if (cfRegEx.test(cfInput.value)) {
+        searchBtn.disabled = false;
+    } else {
+        searchBtn.disabled = true;
+    }
+});
+
+searchBtn.addEventListener("click", (event) => {
 
     if (document.getElementById("info-table")) {
         document.getElementById("info-table").remove();
     }
 
     let isbn = document.getElementById("isbn").value;
+
     let section = document.getElementById("class").value;
     if (section == "Seleziona la classe da ricercare")
         section = "";
 
     let subject = document.getElementById("subject").value;
+
+    if (subject == "Seleziona la materia da ricercare")
+        subject = "";
 
     getJSON(host + "/storage/search-in-storage?book=" + isbn + "&section=" + section + "&subject=" + subject + "&inSale=true").then((data) => {
 
@@ -31,7 +59,6 @@ document.getElementById("submit").addEventListener("click", (event) => {
 
             let addBtn = document.createElement("button");
             addBtn.addEventListener("click", (event) => {
-
                 addToCart(data[i], event.path[2]);
             });
 
@@ -48,12 +75,15 @@ document.getElementById("submit").addEventListener("click", (event) => {
             delete data[i].buyer;
             delete data[i].sellDate;
             delete data[i].buyDate;
+            delete data[i].state;
         }
 
-        document.getElementById("infos").append(createTable(data, "in deposito"));
+        document.getElementById("books").append(createTable(data, "in deposito"));
     }).catch(error => {
         notice(error.message, false)
     });
+
+    buyBtn.style.display = "flex";
 
 });
 
@@ -80,6 +110,11 @@ function addToCart(data, row) {
 
     row.remove();
 
+    if (!buyBtn.classList.contains("clickable")) {
+        buyBtn.classList.add("clickable");
+        buyBtn.onclick = buy
+    }
+
 }
 
 /**
@@ -87,34 +122,29 @@ function addToCart(data, row) {
  * Makes a request to the api server "buy" 
  */
 function buy() {
-    // Eseguire richiesta, ora solo lato client (animazione tutte cose)
 
-    let div = document.getElementById("buy");
+    let cf = cfInput.value;
 
-    div.innerHTML = "sicuro?";
+    cart.push(cf);
+    fetch(host + "/storage/buy", {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(cart)
+    }).then(a => {
+        notice("Acquisto eseguito", true);
+        document.getElementById("cart-table").remove();
 
-    div.onclick = () => {
-        fetch(host + "/storage/buy", {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(cart)
-        }).then(a => {
-            notice("Acquisto eseguito", true);
-        });
-    }
+        buyBtn.classList.remove("clickable");
+        buyBtn.onclick = null;
 
-    let str = "";
+        document.getElementById("tot").innerHTML = "0"
 
-    cart.forEach(element => {
-        Object.keys(element).forEach(el => {
-            str += el + "<br>";
-        });
-        str += "<br>"
+        cart = []
+        console.log(cart);
+
     });
 
-    
-    
 
 }

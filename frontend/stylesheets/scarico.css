@@ -1,4 +1,4 @@
-#main {
+#search-div {
     position: relative;
     top: 10vh;
 }
@@ -6,14 +6,41 @@
 #infos {
     position: relative;
     top: 10vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+#books {
+    position: relative;
+    height: 20vh;
 }
 
 #cart {
     position: relative;
-    top: 10vh;
 }
 
-#buy {
+#buy-infos{
     position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    border: 1px solid red;
+    padding: 2vw;
+    border-radius: 10px;
+    width: 20vw;
+    height: 10vh;
+    transition: 0.2s all;
+}
+
+#buy-infos.clickable{
+    border: 1px solid green;
+}
+
+#buy-infos.clickable:hover{
     background-color: green;
 }
+

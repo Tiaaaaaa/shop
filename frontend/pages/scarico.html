@@ -24,32 +24,38 @@
         </div>
     </div>
 
-    <div class="container" id="main">
+    <div class="container" id="search-div">
         <div id="notice"></div>
 
         <div id="search">
 
-            Libro: <input type="text" id="isbn" name="isbn">
+            Codice Fiscale: <input type="text" id="cf" name="cf" maxlength="16"><br>
+            Libro: <input type="text" id="isbn" name="isbn" maxlength="13">
             <select id="class" name="class">
                 <option>Seleziona la classe da ricercare</option>
             </select>
-            Materia: <input type="text" id="subject" name="subject">
+            <select id="subject" name="subject">
+                <option>Seleziona la materia da ricercare</option>
+            </select>
             <input type="submit" value="Cerca" id="submit">
 
         </div>
 
     </div>
 
+    <div id="infos">
 
-    <div class="container" id="infos">
-
+        <div class="container" id="books"> </div>
+        
+        <div id="buy-infos">
+            <p>Clicca per procedere all'acquisto</p>
+            Prezzo:<div id="tot">0</div>
+        </div>
+        
+        <div id="cart" class="container"> </div>
+        <script src="/res/js/scarico.js"></script>
+    
     </div>
-
-    <div id="cart" class="container">
-        <div id="tot">0</div>
-        <div id="buy" onclick="buy()">Acquista</div>
-    </div>
-    <script src="/res/js/scarico.js"></script>
 </body>
 
 </html>

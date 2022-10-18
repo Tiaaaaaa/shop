@@ -13,15 +13,14 @@ input.addEventListener("keydown", (event) => {
     // check the cf
     if (cfRegEx.test(cf)) {
         notice("Codice fiscale inserito", true);
-        
+
         document.getElementById("input-title").innerHTML = "Codice fiscale inserito";
 
 
     } else {
         notice("codice fiscale errato", false);
 
-        document.getElementById("input-title").innerHTML = "codice fiscale errato";
-        return
+        return;
     }
 
     getJSON(host + "/users/get-id?cf=" + cf).then(data => {

@@ -4,19 +4,23 @@
         + BE / FE <br>
 
 > Index <br>
-    pulsanti funzionanti <br>
-    trovare un modo per mettere gli altri pulsanti <br>
+    + pulsanti funzionanti <br>
+    +- trovare un modo per mettere gli altri pulsanti <br>
 
 > Carico <br>
     + prendere e salvare le informazioni dal db <br>
     - rimozione del libro caricato (qua o in un'altra pagina?) <br>
-    - chiedere se il carico inserito è sensato
+    - chiedere se il carico inserito è sensato <br>
     DA FARE => LA FUNZIONE PER AGGIUNGERE LA RIGA DI INPUT PD
 
 > Scarico <br>
     + Ricerca per libro/classe <br>
     + Mostrare in qualche modo i libri fetchati <br>
     - eseguire l'acquisto <br>
+
+> Ricevute <br>
+    + da implementare una memorizzazione delle ricevute
+    + farle decenti, informative e un filo belle.
 
 > GRAFICA
 

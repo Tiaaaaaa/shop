@@ -55,8 +55,6 @@ exports.addToStorage = (isbn, seller, state) => {
 
     let toAdd = new ddl.Storage(book, user, new Date(Date.now()), state);
 
-    console.log(new Date(Date.now()));
-
     try {
         db.get("storage").push(toAdd);
         
