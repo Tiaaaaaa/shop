@@ -1,4 +1,4 @@
-const jsPDF = require("jspdf");
+const { jsPDF } = require("jspdf");
 const fs = require("fs");
 const path = require("path");
 
@@ -15,10 +15,10 @@ exports.create = (data) => {
 
     doc.line(5, 25, 205, 25);
 
-    doc.text("Libri depositati:", 15, 30)
+    doc.setFontSize(10);
+    doc.text("Libri depositati:", 15, 35)
 
     let i = 0;
-    doc.setFontSize(10);
     data.forEach(row => {
         let j = 0;
 
@@ -62,8 +62,8 @@ exports.create = (data) => {
 
     doc.setFontSize(20);
 
-    doc.text(data.price.toString() + "€", 185, 285);
-    doc.save("./backend/receipts/past/" + cf + "_" + +".pdf")
+    doc.text(data.price + "€", 185, 285);
+    doc.save("./backend/receipts/past/" + cf + ".pdf")
 
     return doc;
 }
@@ -74,16 +74,10 @@ exports.get = (cf) => {
 
     const prom = new Promise((resolve, reject) => {
 
-        fs.readdir(path.join(__dirname, "past"), (err, files) => {
-            
-            files = files.filter(f => f.includes(cf));
-            
+        fs.readdir(path.join(__dirname, "past"), { withFileTypes: false }, (err, files) => {
             resolve(files);
-        },{
-            withFileTypes: true
         });
     });
 
     return prom;
-
 }

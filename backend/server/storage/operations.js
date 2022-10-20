@@ -15,7 +15,7 @@ exports.getFromCf = (cf) => {
 
     if (!check.cf(cf))
         throw new Error("id code not valid");
-    
+
     let storage = db.get("storage").value();
 
     let filtredStorage = storage.filter(s => s.seller.cf == cf);
@@ -33,23 +33,23 @@ exports.getFromCf = (cf) => {
  * @throws Error if and info is wrong
  */
 exports.addToStorage = (isbn, seller, state) => {
-        
-    if (!check.cf(seller)){
+
+    if (!check.cf(seller)) {
         throw new Error("id code not valid");
     }
-    if (!check.isbn(isbn)){
+    if (!check.isbn(isbn)) {
         throw new Error("isbn not valido");
     }
-  
+
     let book = booksFun.getBookFromIsbn(isbn)
 
-    if (!book){
+    if (!book) {
         throw new Error("book not valid")
     }
     let user = usersFun.getUserFromCf(seller);
 
 
-    if (user === false){
+    if (user === false) {
         user = usersFun.addUser(seller)
     }
 
@@ -57,7 +57,7 @@ exports.addToStorage = (isbn, seller, state) => {
 
     try {
         db.get("storage").push(toAdd);
-        
+
     } catch (error) {
         console.error(error);
     }
@@ -66,6 +66,23 @@ exports.addToStorage = (isbn, seller, state) => {
 
 }
 
-exports.buy = () => {
-    
+/**
+ * "Buy a book", with the isbn passed at the position passed
+ * by the buyer passed
+ * 
+ * @param {String} buyer the cf of the buyer
+ * @param {Number} isbn the isbn of the book
+ * @param {Number} position the position in witch the book is
+ * @return {Promise} a promise that resolve if the db is updated, reject otherwise
+ */
+exports.buy = (buyer, isbn, position) => {
+
+    const prom = new Promise((resolve, reject) => {
+        storageFil = db.get("storage").filter(s => s.book.isbn == isbn && s.user.position == position);
+        console.log(storageFil);
+        console.log("--------------------");
+        storageFil.get(0).get("buyer").set(usersFun.getUserFromCf(buyer));
+        db.save();
+        resolve();
+    });
 }

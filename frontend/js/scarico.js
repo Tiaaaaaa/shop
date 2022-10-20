@@ -125,7 +125,7 @@ function buy() {
 
     let cf = cfInput.value;
 
-    cart.push(cf);
+    cart.push(cf);  
     fetch(host + "/storage/buy", {
         method: 'PUT',
         headers: {
