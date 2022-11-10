@@ -30,10 +30,11 @@ db.default({
         new ddl.Book(2123456789012,"inglese","ciao","U","sto cazzo",2, "2 Informatica")
     ],
     "storage": [
-        new ddl.Storage(new ddl.Book(1234567890123,"math","ciao","1","sto cazzo",2,"1 Chimica"),new ddl.User("RRGMTT01P22F119U", 0), new Date("August 2, 2022"), true),
-        new ddl.Storage(new ddl.Book(2123456789012,"inglese","ciao","U","sto cazzo",2, "2 Informatica"),new ddl.User("RRGMTT01P22F119U", 0), new Date("August 2, 2022"), true),
-        new ddl.Storage(new ddl.Book(1234567890123,"math","ciao","1","sto cazzo",2,"1 Chimica"),new ddl.User("RRGMTT01P22F119U", 0), new Date("August 2, 2022"), true),
-    ]
+        new ddl.Storage(new ddl.Book(1234567890123,"math","ciao","1","sto cazzo",2,"1 Chimica"),new ddl.User("RRGMTT01P22F119U", 0), new Date("August 2, 2022"), true, 0),
+        new ddl.Storage(new ddl.Book(2123456789012,"inglese","ciao","U","sto cazzo",2, "2 Informatica"),new ddl.User("RRGMTT01P22F119U", 0), new Date("August 2, 2022"), true,1),
+        new ddl.Storage(new ddl.Book(1234567890123,"math","ciao","1","sto cazzo",2,"1 Chimica"),new ddl.User("RRGMTT01P22F119U", 0), new Date("August 2, 2022"), true,2),
+    ],
+    "sold": []
 })
 
 

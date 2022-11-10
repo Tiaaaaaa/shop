@@ -48,12 +48,13 @@ exports.addToStorage = (isbn, seller, state) => {
     }
     let user = usersFun.getUserFromCf(seller);
 
-
     if (user === false) {
         user = usersFun.addUser(seller)
     }
 
-    let toAdd = new ddl.Storage(book, user, new Date(Date.now()), state);
+    id = db.get("storage").value().at(-1).id;
+
+    let toAdd = new ddl.Storage(book, user, new Date(Date.now()), state, id + 1);
 
     try {
         db.get("storage").push(toAdd);
@@ -68,20 +69,28 @@ exports.addToStorage = (isbn, seller, state) => {
 
 /**
  * "Buy a book", with the isbn passed at the position passed
- * by the buyer passed
+ * by the buyer passed.
+ * It modifies the db.
  * 
  * @param {String} buyer the cf of the buyer
  * @param {Number} isbn the isbn of the book
  * @param {Number} position the position in witch the book is
  * @return {Promise} a promise that resolve if the db is updated, reject otherwise
  */
-exports.buy = (buyer, isbn, position) => {
+exports.buy = (buyer, id) => {
 
     const prom = new Promise((resolve, reject) => {
-        storageFil = db.get("storage").filter(s => s.book.isbn == isbn && s.user.position == position);
+        storageFil = db.get("storage").value().filter(s => s.id = id);
+        
+        console.log("in buy " + id);
         console.log(storageFil);
-        console.log("--------------------");
-        storageFil.get(0).get("buyer").set(usersFun.getUserFromCf(buyer));
+
+        toInsert = new ddl.Sold(storageFil.book,buyer,storageFil.seller,new Date(Date.now()));
+
+        console.log(toInsert)
+
+        db.get("sold").push(toInsert);
+
         db.save();
         resolve();
     });

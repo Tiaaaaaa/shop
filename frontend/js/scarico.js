@@ -57,9 +57,12 @@ searchBtn.addEventListener("click", (event) => {
 
         for (let i = 0; i < data.length; i++) {
 
+            console.log("on loading the books");
+            console.log(data[i]);
+
             let addBtn = document.createElement("button");
             addBtn.addEventListener("click", (event) => {
-                addToCart(data[i], event.path[2]);
+                addToCart(data[i], event.path[2], data[i].id);
             });
 
             addBtn.innerHTML = "acquista";
@@ -76,6 +79,7 @@ searchBtn.addEventListener("click", (event) => {
             delete data[i].sellDate;
             delete data[i].buyDate;
             delete data[i].state;
+            delete data[i].id;
         }
 
         document.getElementById("books").append(createTable(data, "in deposito"));
@@ -87,13 +91,18 @@ searchBtn.addEventListener("click", (event) => {
 
 });
 
-function addToCart(data, row) {
+function addToCart(data, row, id) {
 
     if (document.getElementById("cart-table")) {
         document.getElementById("cart-table").remove();
     }
 
     delete data.add;
+    data.id = id;
+
+    console.log("add to cart client");
+    console.log(data);
+
     cart.push(data);
 
     if (document.getElementById("cart-table"))
@@ -125,7 +134,10 @@ function buy() {
 
     let cf = cfInput.value;
 
-    cart.push(cf);  
+    cart.push(cf);
+
+    console.log("in buy scarico client");
+    console.log(cart);
     fetch(host + "/storage/buy", {
         method: 'PUT',
         headers: {
@@ -142,7 +154,6 @@ function buy() {
         document.getElementById("tot").innerHTML = "0"
 
         cart = []
-        console.log(cart);
 
     });
 

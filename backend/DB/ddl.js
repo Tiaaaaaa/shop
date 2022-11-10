@@ -26,13 +26,21 @@ exports.User = class {
 
 // Oggetto che definisce le entry del magazzino
 exports.Storage = class {
-    constructor(book, seller, buyDate, state) {
+    constructor(book, seller, buyDate, state, id) {
         this.book = book;
         this.buyDate = buyDate;
         this.seller = seller;
         this.state = state;
-        this.buyer = null;
-        this.sellDate = null;
+        this.id = id;
     }
 }
 
+exports.Sold = class{
+    constructor(book, buyer, seller, sellDate){
+        //this.id = id;
+        this.book = book;
+        this.buyer = buyer;
+        this.seller = seller;
+        this.sellDate = sellDate;
+    }
+}

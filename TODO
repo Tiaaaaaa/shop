@@ -11,7 +11,7 @@
     + prendere e salvare le informazioni dal db <br>
     - rimozione del libro caricato (qua o in un'altra pagina?) <br>
     - chiedere se il carico inserito è sensato <br>
-    DA FARE => LA FUNZIONE PER AGGIUNGERE LA RIGA DI INPUT PD
+    + DA FARE => LA FUNZIONE PER AGGIUNGERE LA RIGA DI INPUT PD
 
 > Scarico <br>
     + Ricerca per libro/classe <br>
@@ -19,7 +19,7 @@
     - eseguire l'acquisto <br>
 
 > Ricevute <br>
-    - da implementare una memorizzazione delle ricevute
+    - da implementare una memorizzazione delle ricevute 
     - farle decenti, informative e un filo belle.
 
 > GRAFICA
@@ -37,4 +37,3 @@ Visualizzazione libri <br>
 Scarico <br>
     - Invio ricevuta per mail
 Importazione libri automatica <br>
-Ricerca dei libri con filtri combinati

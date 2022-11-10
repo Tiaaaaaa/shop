@@ -53,7 +53,7 @@ exports.getBookFromIsbn = (isbn) => {
  */
  exports.addBook = (isbn, subject, title, volume, publisher, price, section) => {
 
-	console.log(db.get("books").value().filter(b => b.isbn == isbn))
+	db.get("books").value().filter(b => b.isbn == isbn);
 
 	if (db.get("books").value().filter(b => b.isbn == isbn) != []){
 		return false;
