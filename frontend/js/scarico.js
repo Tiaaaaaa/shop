@@ -1,4 +1,5 @@
 let cart = [];
+let fetched = [];
 let cfInput = document.getElementById("cf");
 let searchBtn = document.getElementById("submit");
 let buyBtn = document.getElementById("buy-infos");
@@ -55,6 +56,8 @@ searchBtn.addEventListener("click", (event) => {
 
     getJSON(host + "/storage/search-in-storage?book=" + isbn + "&section=" + section + "&subject=" + subject + "&inSale=true").then((data) => {
 
+        fetched = data;
+
         for (let i = 0; i < data.length; i++) {
 
             console.log("on loading the books");
@@ -91,14 +94,24 @@ searchBtn.addEventListener("click", (event) => {
 
 });
 
-function addToCart(data, row, id) {
+function addToCart(row, id) {
 
     if (document.getElementById("cart-table")) {
         document.getElementById("cart-table").remove();
     }
 
-    delete data.add;
-    data.id = id;
+    fetched.forEach(element => {
+        if(element.id == id){
+            data = element;
+        }
+    });
+
+    if(data === undefined){
+        console.log("PROBLEMI, PROBLEMI, PROBLEMI");
+        return;
+    }else{
+        console.log(data);
+    }
 
     console.log("add to cart client");
     console.log(data);

@@ -137,17 +137,22 @@ app.put('/storage/buy', jsonParser, (req, res) => {
 
     console.log(data);
 
-    buyer = data[data.length - 1];
+    buyer = data.pop();
+
+    console.log(data);
+
 
     // FARE LA BUY CHE FUNZIONA, CI HAI MESSO UNA PROMISE, VEDI SE TENERLA
     // VEDI SE HA SENSO CERCARE COSÌ I LIBRI (buyer, isbn, position). 
 
-    req.body.forEach(element => {
+    data.forEach(element => {
         data.price += Number(element.price);
-        storageFun.buy(buyer, element.id)
+        storageFun.buy(buyer, element.id).catch((err) => {
+            
+        })
     });
 
-    recFun.create(data);
+    recFun.create(data, buyer);
 
     res.status(200).send("Acquisto eseguito");
 

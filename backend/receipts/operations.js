@@ -2,14 +2,14 @@ const { jsPDF } = require("jspdf");
 const fs = require("fs");
 const path = require("path");
 
-exports.create = (data) => {
+exports.create = (data, buyer) => {
     var doc = new jsPDF();
 
     let imgStr = doc.loadImageFile("./backend/receipts/logo.png");
 
-    cf = data.pop().toUpperCase();
+    buyer.toUpperCase();
 
-    doc.text("Utente: " + cf, 70, 15)
+    doc.text("Utente: " + buyer, 70, 15)
 
     doc.addImage(imgStr, "PNG", 10, 10, 10, 10);
 
@@ -63,7 +63,7 @@ exports.create = (data) => {
     doc.setFontSize(20);
 
     doc.text(data.price + "€", 185, 285);
-    doc.save("./backend/receipts/past/" + cf + ".pdf")
+    doc.save("./backend/receipts/past/" + buyer + ".pdf")
 
     return doc;
 }
@@ -75,6 +75,11 @@ exports.get = (cf) => {
     const prom = new Promise((resolve, reject) => {
 
         fs.readdir(path.join(__dirname, "past"), { withFileTypes: false }, (err, files) => {
+            
+            if (err) {
+                reject("File not found");
+            }
+            
             resolve(files);
         });
     });

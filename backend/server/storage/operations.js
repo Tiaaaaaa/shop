@@ -80,18 +80,20 @@ exports.addToStorage = (isbn, seller, state) => {
 exports.buy = (buyer, id) => {
 
     const prom = new Promise((resolve, reject) => {
-        storageFil = db.get("storage").value().filter(s => s.id = id);
-        
-        console.log("in buy " + id);
+
+        storageFil = db.get("storage").filter(s => s.id = id).value();
+
+        if(storageFil.length == 0) reject("non ci sono libri con questo id");
+
+        console.log("storageFil");
         console.log(storageFil);
 
-        toInsert = new ddl.Sold(storageFil.book,buyer,storageFil.seller,new Date(Date.now()));
-
+        toInsert = new ddl.Sold(storageFil.book, buyer, storageFil.seller, new Date(Date.now()));
         console.log(toInsert)
-
         db.get("sold").push(toInsert);
-
+        
         db.save();
+
         resolve();
     });
 }
