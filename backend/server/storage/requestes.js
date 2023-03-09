@@ -4,6 +4,7 @@ const storageFun = require("./operations")
 const check = require("../checkData")
 const path = require("path")
 const recFun = require("../../receipts/operations")
+const { log } = require('console')
 
 // create application/json parser
 let jsonParser = bodyParser.json()
@@ -124,6 +125,7 @@ app.get('/storage/search-in-storage', (req, res) => {
         return;
     }
 
+
     res.send(inStorage);
 
 });
@@ -133,23 +135,12 @@ app.put('/storage/buy', jsonParser, (req, res) => {
 
     data = req.body;
 
-    console.log("rischiesta fatta a /storage/buy");
-
-    console.log(data);
-
     buyer = data.pop();
 
-    console.log(data);
-
-
-    // FARE LA BUY CHE FUNZIONA, CI HAI MESSO UNA PROMISE, VEDI SE TENERLA
-    // VEDI SE HA SENSO CERCARE COSÌ I LIBRI (buyer, isbn, position). 
-
     data.forEach(element => {
+        console.log(element);
         data.price += Number(element.price);
-        storageFun.buy(buyer, element.id).catch((err) => {
-            
-        })
+        storageFun.buy(buyer, element.id);
     });
 
     recFun.create(data, buyer);

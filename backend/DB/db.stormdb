@@ -1,1 +1,35 @@
-{"users":[{"cf":"RRGMTT01P22F119U","id":0}],"books":[{"isbn":1234567890123,"subject":"math","title":"ciao","volume":"1","publisher":"sto cazzo","price":2,"section":"1 Chimica"},{"isbn":2123456789012,"subject":"inglese","title":"ciao","volume":"U","publisher":"sto cazzo","price":2,"section":"2 Informatica"}],"storage":[],"sold":[{"buyer":"RRGMTT01P22F119U","sellDate":"2022-11-10T10:58:41.876Z"}]}
+{
+    "users": [
+        {
+            "cf": "RRGMTT01P22F119U",
+            "id": 0
+        }
+    ],
+    "books": [
+        {
+            "isbn": 1234567890123,
+            "subject": "math",
+            "title": "ciao",
+            "volume": "1",
+            "publisher": "sto cazzo",
+            "price": 2,
+            "section": "1 Chimica"
+        },
+        {
+            "isbn": 2123456789012,
+            "subject": "inglese",
+            "title": "ciao",
+            "volume": "U",
+            "publisher": "sto cazzo",
+            "price": 2,
+            "section": "2 Informatica"
+        }
+    ],
+    "storage": [],
+    "sold": [
+        {
+            "buyer": "RRGMTT01P22F119I",
+            "sellDate": "2022-11-21T11:20:21.584Z"
+        }
+    ]
+}
