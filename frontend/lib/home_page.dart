@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop/scarico_page.dart';
 import 'package:shop/variables.dart';
 
 import 'carico_page.dart';
@@ -24,7 +25,7 @@ class HomePage extends StatelessWidget {
           InkWell(
               onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => CaricoPage()),
+                  MaterialPageRoute(builder: (context) => const CaricoPage()),
                 );
               },
               child: Container(
@@ -39,14 +40,20 @@ class HomePage extends StatelessWidget {
                   style: defaultTextStyle,
                 ),
               )),
-          Container(
-              decoration: BoxDecoration(
-                  color: primaryColor,
-                  border: Border.all(color: secundaryColor, width: 2)),
-              alignment: Alignment.center,
-              height: 200,
-              width: 200,
-              child: Text("Scarico", style: defaultTextStyle))
+          InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const ScaricoPage()),
+                );
+              },
+              child: Container(
+                  decoration: BoxDecoration(
+                      color: primaryColor,
+                      border: Border.all(color: secundaryColor, width: 2)),
+                  alignment: Alignment.center,
+                  height: 200,
+                  width: 200,
+                  child: Text("Scarico", style: defaultTextStyle)))
         ],
       )),
     );
