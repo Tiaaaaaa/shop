@@ -165,11 +165,21 @@ class _FilterZoneState extends State<FilerZone> {
   String grade = "";
   String subject = "";
   String title = "";
+  String isbn = "";
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: const [DropdownButtonMenu(), TextField(), TextField()],
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: const [
+        DropdownButtonMenu(),
+        Text("Titolo"),
+        TextField(),
+        Text("ISBN"),
+        TextField(),
+        Text("Materia"),
+        TextField()
+      ],
     );
   }
 }
