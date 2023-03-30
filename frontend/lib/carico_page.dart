@@ -3,7 +3,9 @@ import 'package:shop/footer.dart';
 import 'package:shop/variables.dart';
 
 class CaricoPage extends StatelessWidget {
-  const CaricoPage({super.key});
+  CaricoPage(this.id, {super.key});
+
+  String id;
 
   @override
   Widget build(BuildContext context) {
