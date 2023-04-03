@@ -48,7 +48,7 @@ class Footer extends StatelessWidget {
             InkWell(
                 onTap: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const CaricoPage()),
+                    MaterialPageRoute(builder: (context) => CaricoPage("ciao")),
                   );
                 },
                 child: Icon(
@@ -69,7 +69,7 @@ class Footer extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (context) => const ScaricoPage()),
+                        builder: (context) => ScaricoPage("ciao")),
                   );
                 },
                 child: Icon(

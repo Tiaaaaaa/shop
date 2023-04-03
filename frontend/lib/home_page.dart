@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop/resoconto_cliente.dart';
 import 'package:shop/variables.dart';
 
 import 'carico_page.dart';
@@ -33,6 +34,50 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
+            Expanded(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Inserisci qua il codice fiscale",
+                  style: titleTextStyle,
+                ),
+                TextField(
+                  textAlign: TextAlign.center,
+                  autofocus: true,
+                  cursorColor: secundaryColor,
+                  decoration: InputDecoration(
+                    suffixIcon: Icon(
+                      Icons.person,
+                      color: primaryColor,
+                      size: 30,
+                    ),
+                  ),
+                  style: const TextStyle(
+                      fontSize: 30, color: Color.fromRGBO(133, 148, 74, 1)),
+                  onSubmitted: (value) => {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => GuestReportPage(value)),
+                    )
+                  },
+                ),
+                /* TextButton(
+                  style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(secundaryColor),
+                      backgroundColor: MaterialStateProperty.all(primaryColor),
+                      textStyle: MaterialStateProperty.all(titleTextStyle)),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => CaricoPage("ciao")),
+                    );
+                  },
+                  child: const Text('Cerca'),
+                )*/
+              ],
+            )),
             SizedBox(
               width: 500,
               child: Column(
@@ -52,22 +97,10 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class IdForm extends StatefulWidget {
-  const IdForm({super.key});
+class IdForm extends StatelessWidget {
+  IdForm({super.key});
 
-  @override
-  State<IdForm> createState() => _IdFormState();
-}
-
-class _IdFormState extends State<IdForm> {
   final controller = TextEditingController();
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {

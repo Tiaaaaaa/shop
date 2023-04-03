@@ -3,9 +3,9 @@ import 'package:shop/footer.dart';
 import 'package:shop/variables.dart';
 
 class CaricoPage extends StatelessWidget {
-  CaricoPage(this.id, {super.key});
+  CaricoPage(this.guest, {super.key});
 
-  String id;
+  String guest;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class CaricoPage extends StatelessWidget {
           backgroundColor: primaryColor,
           centerTitle: true,
           title: Text(
-            "Carico",
+            "Carico di $guest",
             style: defaultTextStyle,
           )),
       body: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [

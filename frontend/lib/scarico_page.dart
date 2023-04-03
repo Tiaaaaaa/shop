@@ -3,7 +3,9 @@ import 'package:shop/footer.dart';
 import 'package:shop/variables.dart';
 
 class ScaricoPage extends StatelessWidget {
-  const ScaricoPage({super.key});
+  ScaricoPage(this.guest, {super.key});
+
+  String guest;
 
   @override
   Widget build(BuildContext context) {
