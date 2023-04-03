@@ -1,5 +1,8 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:shop/variables.dart';
 
@@ -92,7 +95,7 @@ class CaricoPage extends StatelessWidget {
                       ),
                     ),
                     style: TextStyle(fontSize: 30, color: secundaryColor),
-                    onChanged: (value) => {},
+                    onChanged: (value) => {getHttp()},
                   )),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
@@ -118,5 +121,22 @@ class CaricoPage extends StatelessWidget {
         ),
       ]),
     );
+  }
+
+// 'http://127.0.0.1:3000/books/get-books'
+
+  void getHttp() async {
+    try {
+      final response =
+          await http.get(Uri.http("127.0.0.1:3000", "/books/get-books"));
+
+      var parsed = jsonDecode(response.body);
+
+      for (var element in parsed) {
+        print(element);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }

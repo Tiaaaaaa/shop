@@ -16,6 +16,15 @@
             "section": "1 Chimica"
         },
         {
+            "isbn": 1597532584565,
+            "subject": "Figologia",
+            "title": "la figa",
+            "volume": "1",
+            "publisher": "Michela Murgia",
+            "price": 10,
+            "section": "5 Informatica"
+        },
+        {
             "isbn": 2123456789012,
             "subject": "inglese",
             "title": "ciao",
