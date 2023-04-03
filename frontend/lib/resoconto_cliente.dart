@@ -15,8 +15,12 @@ class GuestReportPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Resoconto di $guest"),
-        backgroundColor: secundaryColor,
+        title: Text(
+          "Resoconto di $guest",
+          style: defaultTextStyle,
+        ),
+        backgroundColor: primaryColor,
+        centerTitle: true,
       ),
       body: Row(
         children: [
@@ -32,7 +36,7 @@ class GuestReportPage extends StatelessWidget {
                             children: const [
                               Text("Aquistati  "),
                               Icon(
-                                Icons.arrow_upward_rounded,
+                                Icons.euro_rounded,
                                 color: Colors.white,
                                 size: 25,
                               )

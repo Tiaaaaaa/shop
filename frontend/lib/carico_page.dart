@@ -68,10 +68,31 @@ class CaricoPage extends StatelessWidget {
           child: CustomScrollView(
             slivers: [
               SliverAppBar(
-                  title: const Text("Dati dal cliente"),
+                  title: const Text(
+                    "Ricerca nei libri disponibili: ",
+                  ),
                   pinned: true,
                   backgroundColor: secundaryColor,
                   automaticallyImplyLeading: false),
+              SliverAppBar(
+                  backgroundColor: Colors.white,
+                  title: TextField(
+                    textAlign: TextAlign.center,
+                    autofocus: true,
+                    cursorColor: primaryColor,
+                    decoration: InputDecoration(
+                      hintText: "Inserisci qua l'ISBN da ricercare",
+                      hintStyle: defaultTextStyle,
+                      border: InputBorder.none,
+                      suffixIcon: Icon(
+                        Icons.menu_book_rounded,
+                        color: secundaryColor,
+                        size: 30,
+                      ),
+                    ),
+                    style: TextStyle(fontSize: 30, color: secundaryColor),
+                    onChanged: (value) => {},
+                  )),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
@@ -95,7 +116,6 @@ class CaricoPage extends StatelessWidget {
           ),
         ),
       ]),
-      bottomNavigationBar: Footer(0),
     );
   }
 }
