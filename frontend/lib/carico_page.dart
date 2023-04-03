@@ -15,7 +15,7 @@ class CaricoPage extends StatelessWidget {
           backgroundColor: primaryColor,
           centerTitle: true,
           title: Text(
-            "Carico di $guest",
+            "Deposito di $guest",
             style: defaultTextStyle,
           )),
       body: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [

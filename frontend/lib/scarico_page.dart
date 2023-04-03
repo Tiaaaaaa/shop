@@ -14,7 +14,7 @@ class ScaricoPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Scarico",
+          "Acquisti di $guest",
           style: defaultTextStyle,
         ),
         centerTitle: true,
