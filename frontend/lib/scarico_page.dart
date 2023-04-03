@@ -111,10 +111,19 @@ class ScaricoPage extends StatelessWidget {
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
-                          Text("titolo"),
-                          Text("materia"),
-                          Text("prezzo")
+                        children: [
+                          Text(
+                            "titolo",
+                            style: defaultTextStyle,
+                          ),
+                          Text(
+                            "materia",
+                            style: defaultTextStyle,
+                          ),
+                          Text(
+                            "prezzo",
+                            style: defaultTextStyle,
+                          )
                         ],
                       ));
                 }, childCount: 20),
@@ -175,13 +184,22 @@ class _FilterZoneState extends State<FilerZone> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: const [
+      children: [
         DropdownButtonMenu(),
-        Text("Titolo"),
+        Text(
+          "Titolo",
+          style: defaultTextStyle,
+        ),
         TextField(),
-        Text("ISBN"),
+        Text(
+          "ISBN",
+          style: defaultTextStyle,
+        ),
         TextField(),
-        Text("Materia"),
+        Text(
+          "Materia",
+          style: defaultTextStyle,
+        ),
         TextField()
       ],
     );
