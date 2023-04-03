@@ -111,18 +111,15 @@ class ScaricoPage extends StatelessWidget {
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
+                        children: const [
                           Text(
                             "titolo",
-                            style: defaultTextStyle,
                           ),
                           Text(
                             "materia",
-                            style: defaultTextStyle,
                           ),
                           Text(
                             "prezzo",
-                            style: defaultTextStyle,
                           )
                         ],
                       ));
@@ -185,22 +182,40 @@ class _FilterZoneState extends State<FilerZone> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        DropdownButtonMenu(),
+        const DropdownButtonMenu(),
         Text(
           "Titolo",
           style: defaultTextStyle,
         ),
-        TextField(),
+        TextField(
+          decoration: InputDecoration(
+              border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: secundaryColor, width: 2))),
+          textAlign: TextAlign.center,
+          cursorColor: secundaryColor,
+        ),
         Text(
           "ISBN",
           style: defaultTextStyle,
         ),
-        TextField(),
+        TextField(
+          decoration: InputDecoration(
+              border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: secundaryColor, width: 2))),
+          textAlign: TextAlign.center,
+          cursorColor: secundaryColor,
+        ),
         Text(
           "Materia",
           style: defaultTextStyle,
         ),
-        TextField()
+        TextField(
+          decoration: InputDecoration(
+              border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: secundaryColor, width: 2))),
+          textAlign: TextAlign.center,
+          cursorColor: secundaryColor,
+        ),
       ],
     );
   }
