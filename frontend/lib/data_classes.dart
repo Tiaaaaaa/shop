@@ -1,12 +1,31 @@
 class Book {
-  Book(this.isbn, this.subject, this.title, this.volume, this.publisher,
-      this.price, this.section);
+  final int isbn;
+  final String subject;
+  final String title;
+  final String volume;
+  final String publisher;
+  final int price;
+  final String section;
 
-  int isbn;
-  String subject;
-  String title;
-  String volume;
-  String publisher;
-  int price;
-  String section;
+  const Book({
+    required this.isbn,
+    required this.subject,
+    required this.title,
+    required this.volume,
+    required this.publisher,
+    required this.price,
+    required this.section,
+  });
+
+  factory Book.fromJson(Map<String, dynamic> json) {
+    return Book(
+      isbn: json['isbn'] as int,
+      subject: json['subject'] as String,
+      title: json['title'] as String,
+      volume: json['volume'] as String,
+      publisher: json['publisher'] as String,
+      price: json['price'] as int,
+      section: json['section'] as String,
+    );
+  }
 }

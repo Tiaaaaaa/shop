@@ -1,10 +1,12 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, no_logic_in_create_state
 
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:shop/variables.dart';
+
+import 'data_classes.dart';
 
 class CaricoPage extends StatelessWidget {
   CaricoPage(this.guest, {super.key});
@@ -13,6 +15,8 @@ class CaricoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BooksList booksDisplayer = BooksList();
+
     return Scaffold(
       appBar: AppBar(
           backgroundColor: primaryColor,
@@ -69,7 +73,17 @@ class CaricoPage extends StatelessWidget {
                   ))),
         ),
         Expanded(
-          child: CustomScrollView(
+          child: Scaffold(
+              appBar: AppBar(
+                  backgroundColor: secundaryColor,
+                  automaticallyImplyLeading: false,
+                  title: const Text(
+                    "Ricerca libri disponibili",
+                  )),
+              body: booksDisplayer),
+        ),
+
+        /*CustomScrollView(
             slivers: [
               SliverAppBar(
                   title: const Text(
@@ -95,7 +109,7 @@ class CaricoPage extends StatelessWidget {
                       ),
                     ),
                     style: TextStyle(fontSize: 30, color: secundaryColor),
-                    onChanged: (value) => {getHttp()},
+                    onChanged: (value) => {},
                   )),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
@@ -115,28 +129,119 @@ class CaricoPage extends StatelessWidget {
                         ],
                       ));
                 }, childCount: 20),
-              )
+              ),
+              
             ],
           ),
         ),
+              */
       ]),
     );
   }
-
+}
 // 'http://127.0.0.1:3000/books/get-books'
 
-  void getHttp() async {
-    try {
-      final response =
-          await http.get(Uri.http("127.0.0.1:3000", "/books/get-books"));
+class BooksList extends StatefulWidget {
+  late String isbn = "";
 
-      var parsed = jsonDecode(response.body);
+  BooksList({super.key});
 
-      for (var element in parsed) {
-        print(element);
-      }
-    } catch (e) {
-      print(e);
+  @override
+  State<BooksList> createState() {
+    return _BooksListState();
+  }
+}
+
+class _BooksListState extends State<BooksList> {
+  late Future<List<Book>> _books = fetchBooks("");
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+            color: Colors.white,
+            child: TextField(
+              maxLength: 13,
+              textAlign: TextAlign.center,
+              autofocus: true,
+              cursorColor: primaryColor,
+              decoration: InputDecoration(
+                counterText: "",
+                hintText: "Inserisci qua l'ISBN da ricercare",
+                hintStyle: defaultTextStyle,
+                border: InputBorder.none,
+                suffixIcon: Icon(
+                  Icons.menu_book_rounded,
+                  color: secundaryColor,
+                  size: 30,
+                ),
+              ),
+              style: TextStyle(fontSize: 30, color: secundaryColor),
+              onChanged: (value) {
+                updateList(value);
+              },
+            )),
+        Expanded(
+            child: FutureBuilder<List<Book>>(
+                future: _books,
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                    case ConnectionState.waiting:
+                      return const Text('loading...');
+                    default:
+                      return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                              height: 30,
+                              margin: const EdgeInsets.only(bottom: 5),
+                              decoration: BoxDecoration(
+                                color: primaryColor,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(snapshot.data![index].title.toString()),
+                                  Text(
+                                      snapshot.data![index].subject.toString()),
+                                  Text(snapshot.data![index].price.toString()),
+                                  Text(snapshot.data![index].section.toString())
+                                ],
+                              ));
+                        },
+                      );
+                  }
+                }))
+      ],
+    );
+  }
+
+  void updateList(String isbn) {
+    setState(() {
+      _books = fetchBooks(isbn);
+    });
+  }
+
+  Future<List<Book>> fetchBooks(String isbn) async {
+    var url = Uri.http("127.0.0.1:3000", "/books/get-books", {"book": isbn});
+
+    var res = await http.get(url);
+
+    // Use the compute function to run parseBooks in a separate isolate.
+    return parseBooks(res.body);
+  }
+
+  // A function that converts a response body into a List<Book>.
+  List<Book> parseBooks(String responseBody) {
+    if (responseBody.length == 2) {
+      return <Book>[];
     }
+
+    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+
+    return parsed.map<Book>((json) => Book.fromJson(json)).toList();
   }
 }
