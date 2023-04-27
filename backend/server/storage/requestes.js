@@ -79,7 +79,7 @@ app.put('/storage/add-to-storage', jsonParser, (req, res) => {
         res.status(200).send("book added");
     } catch (error) {
         console.log(error);
-        res.status(400).send(error);
+        res.status(500).send(error);
     }
 
 });
@@ -126,7 +126,7 @@ app.get('/storage/search-in-storage', (req, res) => {
     }
 
 
-    res.send(inStorage);
+    res.json(inStorage);
 
 });
 

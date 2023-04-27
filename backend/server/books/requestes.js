@@ -32,7 +32,7 @@ app.get('/books/get-books', (req, res) => {
         return;
     }
 
-    res.send(books);
+    res.json(books);
 
 });
 
@@ -47,7 +47,7 @@ app.get('/books/classes', (req, res) => {
         }
     });
 
-    res.send(classes);
+    res.json(classes);
 
 });
 
@@ -62,6 +62,6 @@ app.get('/books/subjects', (req, res) => {
         }
     });
 
-    res.send(subjects);
+    res.json(subjects);
 
 });

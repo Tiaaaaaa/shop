@@ -13,9 +13,9 @@ app.get('/users/get-id', (req, res) => {
     }
     
     if(usersFun.exist(req.query.cf)){
-        res.send({id : db.get("users").value().filter(u => u.cf == req.query.cf)[0].id}); 
+        res.json({id : db.get("users").value().filter(u => u.cf == req.query.cf)[0].id}); 
     }else{
-        res.send({id : usersFun.addUser(req.query.cf).id});
+        res.json({id : usersFun.addUser(req.query.cf).id});
     }
 
 });
@@ -31,6 +31,6 @@ app.put('/users/add-user', (req, res) => {
         return;
     }
 
-    res.send(usersFun.addUser(req.body.cf));
+    res.json(usersFun.addUser(req.body.cf));
 
 })

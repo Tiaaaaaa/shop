@@ -8,3 +8,5 @@ TextStyle defaultTextStyle =
 
 TextStyle titleTextStyle =
     TextStyle(color: secundaryColor, fontFamily: "Helvetica", fontSize: 30);
+
+String host = "127.0.0.1:3000";
