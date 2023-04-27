@@ -4,10 +4,10 @@ const check = require("../checkData")
 exports.exist = (cf) => {
 
     let user = db.get("users").value().filter(u => u.cf == cf)[0];
-    
-    if (user != undefined){
+
+    if (user != undefined) {
         return user;
-    }else{
+    } else {
         return false;
     }
 }
@@ -17,30 +17,31 @@ exports.exist = (cf) => {
  * the id code is the one passed, 
  * the id number is iserted progressively 
  * 
- * @param {String} cf the id code
+ * @param {String} id the id code
  * @returns the new user if the id code is valid and new into the db, 
  *          false otherwise.
  */
-exports.addUser = (cf) => {
+exports.addUser = (id) => {
 
-    if(!check.cf(cf))
+    if (!check.id(id))
         throw new Error("code inserted wrong");
 
-    if (this.exist(cf))
+    if (this.exist(id))
         return false;
 
-    let newUser = new ddl.User(cf);
+    let newUser = new ddl.User(id);
 
-	db.get("users").sort((a, b) => b.id - a.id);
-	let id = db.get("users").get(0).get("id").value() + 1;
+    db.get("users").sort((a, b) => b.id - a.id);
+    let idNumber = db.get("users").get(0).get("id").value() + 1;
 
-	newUser.id = id;
+    newUser.id = idNumber;
 
-	db.get("users").push(newUser);
+    db.get("users").push(newUser);
 
-	db.save();
+    db.save();
 
-	return newUser;
+    console.log("utente " + id + " inserito");
+    return newUser;
 
 }
 
@@ -54,7 +55,7 @@ exports.addUser = (cf) => {
  */
 exports.getUserFromCf = (cf) => {
 
-    if(!check.cf(cf))
+    if (!check.cf(cf))
         throw new Error("id code format wrong")
 
     if (!this.exist(cf))

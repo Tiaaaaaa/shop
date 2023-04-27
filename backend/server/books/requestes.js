@@ -1,7 +1,7 @@
 const booksFun = require("./operations")
 
 /**
- * address for having a list of books.
+ * get address for the valid books fetch.
  * if any information is passed the search will be filtered.
  */
 app.get('/books/get-books', (req, res) => {
@@ -9,14 +9,7 @@ app.get('/books/get-books', (req, res) => {
     let books = db.get("books").value();
 
     if (req.query.book) {
-        try {
-            booksFun.isValid(req.query.book)
-        } catch (error) {
-            res.status(400).send(error);
-            return;
-        }
-
-        books = books.filter(b => b.isbn == req.query.book);
+        books = books.filter(b => b.isbn.toString().includes(req.query.book));
     }
 
     if (req.query.section) {

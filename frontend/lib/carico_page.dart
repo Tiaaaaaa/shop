@@ -15,7 +15,7 @@ class CaricoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BooksList booksDisplayer = BooksList();
+    BooksList booksDisplayer = BooksList(guest);
 
     return Scaffold(
       appBar: AppBar(
@@ -33,20 +33,27 @@ class CaricoPage extends StatelessWidget {
 // 'http://127.0.0.1:3000/books/get-books'
 
 class BooksList extends StatefulWidget {
-  BooksList({super.key});
+  BooksList(this.guest, {super.key});
+
+  String guest;
 
   @override
   State<BooksList> createState() {
-    return _BooksListState();
+    return _BooksListState(guest);
   }
 }
 
 class _BooksListState extends State<BooksList> {
-  late Future<List<Book>> _books = fetchBooks("");
+  _BooksListState(this.guest);
+
+  String guest;
+  late Future<List<Book>> _books = fetchValidBooks("");
   late List<Book> _cart = [];
+  Color submitColor = Colors.white;
 
   @override
   Widget build(BuildContext context) {
+    fetchDepositedBooks(guest);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -116,7 +123,8 @@ class _BooksListState extends State<BooksList> {
                                                     addToCart(
                                                         snapshot.data![index]);
                                                   },
-                                                  child: Text("aggiungi")),
+                                                  child:
+                                                      const Text("aggiungi")),
                                               Text(snapshot.data![index].title
                                                   .toString()),
                                               Text(snapshot.data![index].subject
@@ -152,7 +160,7 @@ class _BooksListState extends State<BooksList> {
                                     onPressed: () {
                                       removeToCart(_cart[index]);
                                     },
-                                    child: Text("rimuovimi")),
+                                    child: const Text("rimuovimi")),
                                 Text(_cart[index].title.toString()),
                                 Text(_cart[index].subject.toString()),
                                 Text(_cart[index].price.toString()),
@@ -167,16 +175,20 @@ class _BooksListState extends State<BooksList> {
         InkWell(
             onTap: () {
               for (var book in _cart) {
-                var url = Uri.http("127.0.0.1:3000", "/storage/add-to-storage",
+                var url = Uri.http(host, "/storage/add-to-storage",
                     {"book": book.isbn.toString()});
 
                 var res = http.put(url);
-                res.then((value) => const AlertDialog(
-                      title: Text("Carico confermato"),
-                    ));
+                res.then((value) {
+                  setState(() {
+                    submitColor = primaryColor;
+                  });
+                });
 
                 res.onError((error, stackTrace) {
-                  print(error);
+                  setState(() {
+                    submitColor = errorColor;
+                  });
                   return res;
                 });
               }
@@ -185,6 +197,7 @@ class _BooksListState extends State<BooksList> {
               width: 1000,
               height: 70,
               decoration: BoxDecoration(
+                  color: submitColor,
                   border: Border(
                       top: BorderSide(color: secundaryColor, width: 5),
                       left: BorderSide(color: secundaryColor, width: 5),
@@ -200,18 +213,9 @@ class _BooksListState extends State<BooksList> {
     );
   }
 
-  /*var url = Uri.http("127.0.0.1:3000",
-                                            "/storage/add-to-storage", {
-                                          "book": snapshot.data![index].isbn
-                                              .toString()
-                                        });
-
-                                        var res = http.put(url);
-                                      */
-
   void updateList(String isbn) {
     setState(() {
-      _books = fetchBooks(isbn);
+      _books = fetchValidBooks(isbn);
     });
   }
 
@@ -227,7 +231,21 @@ class _BooksListState extends State<BooksList> {
     });
   }
 
-  Future<List<Book>> fetchBooks(String isbn) async {
+  void fetchDepositedBooks(String isbn) async {
+    try {
+      var url = Uri.http(host, "/storage/given-from-cf", {"id": guest});
+
+      var res = await http.get(url);
+
+      setState(() {
+        _cart.addAll(parseBooks(res.body));
+      });
+    } catch (e) {
+      _cart = [];
+    }
+  }
+
+  Future<List<Book>> fetchValidBooks(String isbn) async {
     try {
       var url = Uri.http(host, "/books/get-books", {"book": isbn});
 

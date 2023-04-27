@@ -13,25 +13,25 @@ let jsonParser = bodyParser.json()
  * address to get the list of books
  * deposied by a customer from the id code
  * 
- * @param {String} cf the id code
+ * @param {String} id the id code
  */
-app.get('/storage/given-from-cf', (req, res) => {
+app.get('/storage/given-from-id', (req, res) => {
 
-    let cf = req.query.cf;
+    let id = req.query.id;
 
-    if (!cf)
-        res.status(400).send("cf mancante");
+    if (!id)
+        res.status(400).send("id mancante");
 
-    if (!check.cf(cf))
-        res.status(400).send("cf errato");
+    if (!check.cf(id))
+        res.status(400).send("id errato");
 
-    let guest = usersFun.exist(cf);
+    let guest = usersFun.exist(id);
 
     if (!guest) {
-        guest = usersFun.addUser(cf);
+        guest = usersFun.addUser(id);
     }
 
-    storage = storageFun.getFromCf(cf);
+    storage = storageFun.getFromId(id);
 
     let qRes = [];
 
