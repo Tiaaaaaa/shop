@@ -8,7 +8,7 @@ const recFun = require("../../receipts/operations")
 let jsonParser = bodyParser.json()
 
 /**
- * address to get the list of books
+ * request address to get the list of books
  * deposied by a customer from the id code
  * 
  * @param {String} id the id code
@@ -37,6 +37,41 @@ app.get('/storage/given-from-id', (req, res) => {
         qRes.push(stored.book);
     });
 
+
+    res.json(qRes);
+
+});
+
+
+/**
+ * request address to get the list of books
+ * bougth by a customer from the id code
+ * 
+ * @param {String} id the id code
+ */
+app.get('/storage/bougth-from-id', (req, res) => {
+
+    let id = req.query.id;
+
+    if (!id)
+        res.status(400).send("id mancante");
+
+    if (!check.cf(id))
+        res.status(400).send("cf errato");
+
+    let guest = usersFun.exist(id);
+
+    if (!guest) {
+        res.status(404).send("Utente richiesto non trovato");
+    }
+
+    bougth = storageFun.bougthFromId(id);
+
+    let qRes = [];
+
+    bougth.forEach(book => {
+        qRes.push(book.book);
+    });
 
     res.send(qRes);
 
@@ -136,3 +171,4 @@ app.put('/storage/buy', jsonParser, (req, res) => {
     res.status(200).send("Acquisto eseguito");
 
 })
+

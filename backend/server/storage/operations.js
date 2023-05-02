@@ -11,7 +11,7 @@ const usersFun = require("../users/operations")
  * @returns an array of books
  * @throws error if the id code is not valid
  */
-exports.getFromCf = (cf) => {
+exports.getFromId = (cf) => {
 
     if (!check.cf(cf))
         throw new Error("id code not valid");
@@ -21,6 +21,18 @@ exports.getFromCf = (cf) => {
     let filtredStorage = storage.filter(s => s.seller.cf == cf);
 
     return filtredStorage;
+}
+
+exports.bougthFromId = (cf) => {
+
+    if (!check.cf(cf))
+        throw new Error("id code not valid");
+
+    let books = db.get("sold").value();
+
+    let filtredBooks = books.filter(s => s.buyer.cf == cf);
+
+    return filtredBooks;
 }
 
 /**

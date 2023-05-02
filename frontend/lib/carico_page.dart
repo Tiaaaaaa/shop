@@ -246,7 +246,7 @@ class _BooksListState extends State<BooksList> {
 
   Future<List<Book>> fetchDepositedBooks() async {
     try {
-      var url = Uri.http(host, "/storage/given-from-cf", {"id": guest});
+      var url = Uri.http(host, "/storage/given-from-id", {"id": guest});
 
       var res = await http.get(url);
 
