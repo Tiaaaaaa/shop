@@ -46,19 +46,23 @@ exports.addToStorage = (isbn, seller, state) => {
     if (!book) {
         throw new Error("book not valid")
     }
+
     let user = usersFun.getUserFromCf(seller);
 
-    if (user === false) {
+    if (!user) {
         user = usersFun.addUser(seller)
     }
 
-    id = db.get("storage").value().at(-1).id;
+    var id;
 
-    let toAdd = new ddl.Storage(book, user, new Date(Date.now()), state, id + 1);
+    if (db.get("storage").value().length == 0) {
+        id = 0;
+    } else {
+        id = db.get("storage").value().slice(-1)[0].id + 1;
+    }
 
     try {
-        db.get("storage").push(toAdd);
-
+        db.get("storage").push(new ddl.Storage(book, user, new Date(Date.now()), state, id));
     } catch (error) {
         console.error(error);
     }
@@ -83,15 +87,15 @@ exports.buy = (buyer, id) => {
 
         storageFil = db.get("storage").filter(s => s.id = id).value();
 
-        if(storageFil.length == 0) reject("non ci sono libri con questo id");
+        if (storageFil.length == 0) reject("non ci sono libri con questo id");
 
-        console.log("storageFil id: "+ id );
+        console.log("storageFil id: " + id);
         console.log(storageFil);
 
         toInsert = new ddl.Sold(storageFil.book, buyer, storageFil.seller, new Date(Date.now()));
         console.log(toInsert)
         db.get("sold").push(toInsert);
-        
+
         db.save();
 
         resolve();

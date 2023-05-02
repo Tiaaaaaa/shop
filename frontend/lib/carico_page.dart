@@ -53,7 +53,10 @@ class _BooksListState extends State<BooksList> {
 
   @override
   Widget build(BuildContext context) {
-    fetchDepositedBooks(guest);
+    if (_cart.isEmpty) {
+      fetchDepositedBooks().then((value) => _cart = value);
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -175,11 +178,19 @@ class _BooksListState extends State<BooksList> {
         InkWell(
             onTap: () {
               for (var book in _cart) {
-                var url = Uri.http(host, "/storage/add-to-storage",
-                    {"book": book.isbn.toString()});
+                var res = http.put(
+                  Uri.http(host, "/storage/add-to-storage"),
+                  headers: <String, String>{
+                    'Content-Type': 'application/json; charset=UTF-8',
+                  },
+                  body: jsonEncode(<String, String>{
+                    "book": book.isbn.toString(),
+                    "seller": guest
+                  }),
+                );
 
-                var res = http.put(url);
                 res.then((value) {
+                  print(value.body);
                   setState(() {
                     submitColor = primaryColor;
                   });
@@ -222,26 +233,26 @@ class _BooksListState extends State<BooksList> {
   void addToCart(Book book) {
     setState(() {
       _cart.add(book);
+      submitColor = Colors.white;
     });
   }
 
   void removeToCart(Book book) {
     setState(() {
       _cart.remove(book);
+      submitColor = Colors.white;
     });
   }
 
-  void fetchDepositedBooks(String isbn) async {
+  Future<List<Book>> fetchDepositedBooks() async {
     try {
       var url = Uri.http(host, "/storage/given-from-cf", {"id": guest});
 
       var res = await http.get(url);
 
-      setState(() {
-        _cart.addAll(parseBooks(res.body));
-      });
+      return parseBooks(res.body);
     } catch (e) {
-      _cart = [];
+      return [];
     }
   }
 

@@ -2,9 +2,7 @@ const bodyParser = require('body-parser')
 const usersFun = require("../users/operations")
 const storageFun = require("./operations")
 const check = require("../checkData")
-const path = require("path")
 const recFun = require("../../receipts/operations")
-const { log } = require('console')
 
 // create application/json parser
 let jsonParser = bodyParser.json()
@@ -54,24 +52,14 @@ app.get('/storage/given-from-id', (req, res) => {
  * @param {Boolean} state the state of usury of the book
  * 
  * @error 400 if the infos are not complete.
-
+ * @error 500 if the server can't add the books in the storage.
  */
 app.put('/storage/add-to-storage', jsonParser, (req, res) => {
 
-
     // Controlla se il codice fiscale è valido
     if (!check.cf(req.body.seller)) {
-        res.status(400).send("codice fiscale inviato non valido");
+        res.status(400).send("codice fiscale inviato non valido: " + req.body.seller + " " + req.body.book);
         return;
-    }
-
-    // Definizione dello stato d'usura
-    let state;
-
-    if (req.body.state == 1) {
-        state = true;
-    } else {
-        state = false;
     }
 
     try {

@@ -15,12 +15,7 @@ exports.Book = class {
 exports.User = class {
     constructor(cf, id) {
         this.cf = cf;
-        
-        if (id == undefined) {
-            this.id = undefined;
-        } else {
-            this.id = id;
-        }
+        this.id = id;
     }
 }
 

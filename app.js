@@ -20,18 +20,69 @@ db = new StormDB(engine);
 // Definizione di default (come si presenta il file json in caso di db vuoto)
 db.default({
     "users": [
-        new ddl.User("RRGMTT01P22F119U", 0)
+        {
+            "cf": "RRGMTT01P22F119U",
+            "id": 0
+        },
+        {
+            "cf": "ciao",
+            "id": 1
+        }
     ],
     "books": [
-        new ddl.Book(1234567890123,"math","ciao","1","sto cazzo",2,"1 Chimica"),
-        new ddl.Book(2123456789012,"inglese","ciao","U","sto cazzo",2, "2 Informatica")
+        {
+            "isbn": 1234567890123,
+            "subject": "math",
+            "title": "ciao",
+            "volume": "1",
+            "publisher": "sto cazzo",
+            "price": 2,
+            "section": "1 Chimica"
+        },
+        {
+            "isbn": 1597532584565,
+            "subject": "Figologia",
+            "title": "la figa di tua madre",
+            "volume": "1",
+            "publisher": "Michela Murgia",
+            "price": 10,
+            "section": "5 Informatica"
+        },
+        {
+            "isbn": 2123456789012,
+            "subject": "inglese",
+            "title": "ciao",
+            "volume": "U",
+            "publisher": "sto cazzo",
+            "price": 2,
+            "section": "2 Informatica"
+        }
     ],
     "storage": [
-        new ddl.Storage(new ddl.Book(1234567890123,"math","ciao","1","sto cazzo",2,"1 Chimica"),new ddl.User("RRGMTT01P22F119U", 0), new Date("August 2, 2022"), true, 0),
-        new ddl.Storage(new ddl.Book(2123456789012,"inglese","ciao","U","sto cazzo",2, "2 Informatica"),new ddl.User("RRGMTT01P22F119U", 0), new Date("August 2, 2022"), true,1),
-        new ddl.Storage(new ddl.Book(1234567890123,"math","ciao","1","sto cazzo",2,"1 Chimica"),new ddl.User("RRGMTT01P22F119U", 0), new Date("August 2, 2022"), true,2),
+        {
+            "book": {
+                "isbn": 1597532584565,
+                "subject": "Figologia",
+                "title": "la figa di tua madre",
+                "volume": "1",
+                "publisher": "Michela Murgia",
+                "price": 10,
+                "section": "5 Informatica"
+            },
+            "buyDate": "2023-05-02T09:38:38.818Z",
+            "seller": {
+                "cf": "RRGMTT01P22F119U",
+                "id": 0
+            },
+            "id": 1
+        }
     ],
-    "sold": []
+    "sold": [
+        {
+            "buyer": "RRGMTT01P22F119I",
+            "sellDate": "2022-11-21T11:20:21.584Z"
+        }
+    ]
 })
 
 
