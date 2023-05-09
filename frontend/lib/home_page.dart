@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
                   Container(
                     width: 200,
                     height: 200,
-                    decoration: BoxDecoration(color: secundaryColor),
+                    decoration: BoxDecoration(color: secondaryColor),
                     child: const Center(child: Text("Resoconto finanziario")),
                   ),
                 ],
@@ -45,7 +45,7 @@ class HomePage extends StatelessWidget {
                 TextField(
                   textAlign: TextAlign.center,
                   autofocus: true,
-                  cursorColor: secundaryColor,
+                  cursorColor: secondaryColor,
                   decoration: InputDecoration(
                     suffixIcon: Icon(
                       Icons.person,
@@ -58,14 +58,15 @@ class HomePage extends StatelessWidget {
                   onSubmitted: (value) => {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                          builder: (context) => GuestReportPage(value)),
+                          builder: (context) =>
+                              GuestReportPage(value.toUpperCase())),
                     )
                   },
                 ),
                 /* TextButton(
                   style: ButtonStyle(
                       foregroundColor:
-                          MaterialStateProperty.all<Color>(secundaryColor),
+                          MaterialStateProperty.all<Color>(secondaryColor),
                       backgroundColor: MaterialStateProperty.all(primaryColor),
                       textStyle: MaterialStateProperty.all(titleTextStyle)),
                   onPressed: () {
@@ -86,7 +87,7 @@ class HomePage extends StatelessWidget {
                   Container(
                     width: 200,
                     height: 200,
-                    decoration: BoxDecoration(color: secundaryColor),
+                    decoration: BoxDecoration(color: secondaryColor),
                     child: const Center(child: Text("Magazzino")),
                   )
                 ],
@@ -115,7 +116,8 @@ class IdForm extends StatelessWidget {
         TextField(
           controller: controller,
           autofocus: true,
-          cursorColor: secundaryColor,
+          cursorColor: secondaryColor,
+          textCapitalization: TextCapitalization.characters,
           decoration: InputDecoration(
               icon: Icon(
             Icons.person,
@@ -127,13 +129,14 @@ class IdForm extends StatelessWidget {
         ),
         TextButton(
           style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(secundaryColor),
+              foregroundColor: MaterialStateProperty.all<Color>(secondaryColor),
               backgroundColor: MaterialStateProperty.all(primaryColor),
               textStyle: MaterialStateProperty.all(titleTextStyle)),
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                  builder: (context) => CaricoPage(controller.text)),
+                  builder: (context) =>
+                      CaricoPage(controller.text.toUpperCase())),
             );
           },
           child: const Text('Cerca'),

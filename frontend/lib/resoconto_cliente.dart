@@ -1,8 +1,9 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, prefer_final_fields
 
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:shop/home_page.dart';
 import 'package:shop/scarico_page.dart';
 import 'package:shop/variables.dart';
 import 'package:http/http.dart' as http;
@@ -22,6 +23,17 @@ class GuestReportPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
+          leading: TextButton(
+              onPressed: () => {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const HomePage()),
+                    )
+                  },
+              child: const Icon(
+                Icons.arrow_back_rounded,
+                color: Colors.white,
+              )),
           title: Text(
             "Resoconto di $guest",
             style: defaultTextStyle,
@@ -34,12 +46,12 @@ class GuestReportPage extends StatelessWidget {
               child: Container(
             decoration: BoxDecoration(
                 border: Border(
-                    right: BorderSide(color: secundaryColor, width: 10))),
+                    right: BorderSide(color: secondaryColor, width: 10))),
             child: Expanded(
                 child: Column(
               children: [
                 AppBar(
-                  backgroundColor: secundaryColor,
+                  backgroundColor: secondaryColor,
                   automaticallyImplyLeading: false,
                   title: Row(
                     children: const [
@@ -56,7 +68,7 @@ class GuestReportPage extends StatelessWidget {
                   height: 40,
                   decoration: BoxDecoration(
                       border: Border(
-                          bottom: BorderSide(color: secundaryColor, width: 3))),
+                          bottom: BorderSide(color: secondaryColor, width: 3))),
                   child: TextButton(
                     onPressed: () {
                       Navigator.of(context).push(
@@ -114,7 +126,7 @@ class GuestReportPage extends StatelessWidget {
               child: Column(
             children: [
               AppBar(
-                backgroundColor: secundaryColor,
+                backgroundColor: secondaryColor,
                 automaticallyImplyLeading: false,
                 title: Row(
                   children: const [
@@ -131,7 +143,7 @@ class GuestReportPage extends StatelessWidget {
                 height: 40,
                 decoration: BoxDecoration(
                     border: Border(
-                        bottom: BorderSide(color: secundaryColor, width: 3))),
+                        bottom: BorderSide(color: secondaryColor, width: 3))),
                 child: TextButton(
                   onPressed: () {
                     Navigator.of(context).push(

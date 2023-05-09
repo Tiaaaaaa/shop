@@ -1,1 +1,118 @@
-{"users":[{"cf":"RRGMTT01P22F119U","id":0},{"cf":"ciao","id":1}],"books":[{"isbn":1234567890123,"subject":"math","title":"ciao","volume":"1","publisher":"sto cazzo","price":2,"section":"1 Chimica"},{"isbn":1597532584565,"subject":"Figologia","title":"la figa di tua madre","volume":"1","publisher":"Michela Murgia","price":10,"section":"5 Informatica"},{"isbn":2123456789012,"subject":"inglese","title":"ciao","volume":"U","publisher":"sto cazzo","price":2,"section":"2 Informatica"}],"storage":[{"book":{"isbn":1597532584565,"subject":"Figologia","title":"la figa di tua madre","volume":"1","publisher":"Michela Murgia","price":10,"section":"5 Informatica"},"buyDate":"2023-05-02T10:30:17.942Z","seller":{"cf":"RRGMTT01P22F119U","id":0},"id":0},{"book":{"isbn":1597532584565,"subject":"Figologia","title":"la figa di tua madre","volume":"1","publisher":"Michela Murgia","price":10,"section":"5 Informatica"},"buyDate":"2023-05-02T10:32:22.821Z","seller":{"cf":"RRGMTT01P22F119U","id":0},"id":1},{"book":{"isbn":1597532584565,"subject":"Figologia","title":"la figa di tua madre","volume":"1","publisher":"Michela Murgia","price":10,"section":"5 Informatica"},"buyDate":"2023-05-02T10:32:36.822Z","seller":{"cf":"RRGMTT01P22F119U","id":0},"id":2}],"sold":[{"buyer":"RRGMTT01P22F119I","sellDate":"2022-11-21T11:20:21.584Z"}]}
+{
+    "users": [
+        {
+            "cf": "ciao",
+            "id": 1
+        },
+        {
+            "cf": "RRGMTT01P22F119U",
+            "id": 0
+        },
+        {
+            "cf": "RRGMTT01P22F119W",
+            "id": 2
+        }
+    ],
+    "books": [
+        {
+            "isbn": 1234567890123,
+            "subject": "math",
+            "title": "ciao",
+            "volume": "1",
+            "publisher": "sto cazzo",
+            "price": 2,
+            "section": "1 Chimica"
+        },
+        {
+            "isbn": 1597532584565,
+            "subject": "Figologia",
+            "title": "la figa di tua madre",
+            "volume": "1",
+            "publisher": "Michela Murgia",
+            "price": 10,
+            "section": "5 Informatica"
+        },
+        {
+            "isbn": 2123456789012,
+            "subject": "inglese",
+            "title": "ciao",
+            "volume": "U",
+            "publisher": "sto cazzo",
+            "price": 2,
+            "section": "2 Informatica"
+        }
+    ],
+    "storage": [
+        {
+            "book": {
+                "isbn": 1597532584565,
+                "subject": "Figologia",
+                "title": "la figa di tua madre",
+                "volume": "1",
+                "publisher": "Michela Murgia",
+                "price": 10,
+                "section": "5 Informatica"
+            },
+            "buyDate": "2023-05-02T09:38:38.818Z",
+            "seller": {
+                "cf": "RRGMTT01P22F119U",
+                "id": 0
+            },
+            "id": 1,
+            "stashed": true
+        },
+        {
+            "book": {
+                "isbn": 1234567890123,
+                "subject": "math",
+                "title": "ciao",
+                "volume": "1",
+                "publisher": "sto cazzo",
+                "price": 2,
+                "section": "1 Chimica"
+            },
+            "buyDate": "2023-05-09T12:36:24.292Z",
+            "seller": {
+                "cf": "RRGMTT01P22F119W",
+                "id": 2
+            },
+            "id": 2,
+            "stashed": true
+        },
+        {
+            "book": {
+                "isbn": 1234567890123,
+                "subject": "math",
+                "title": "ciao",
+                "volume": "1",
+                "publisher": "sto cazzo",
+                "price": 2,
+                "section": "1 Chimica"
+            },
+            "buyDate": "2023-05-09T12:36:24.297Z",
+            "seller": {
+                "cf": "RRGMTT01P22F119W",
+                "id": 2
+            },
+            "id": 3
+        },
+        {
+            "book": {
+                "isbn": 1234567890123,
+                "subject": "math",
+                "title": "ciao",
+                "volume": "1",
+                "publisher": "sto cazzo",
+                "price": 2,
+                "section": "1 Chimica"
+            },
+            "buyDate": "2023-05-09T12:36:24.299Z",
+            "seller": {
+                "cf": "RRGMTT01P22F119W",
+                "id": 2
+            },
+            "id": 4
+        }
+    ],
+    "sold": []
+}

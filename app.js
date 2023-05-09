@@ -74,14 +74,10 @@ db.default({
                 "cf": "RRGMTT01P22F119U",
                 "id": 0
             },
-            "id": 1
+            "id": 1,
         }
     ],
     "sold": [
-        {
-            "buyer": "RRGMTT01P22F119I",
-            "sellDate": "2022-11-21T11:20:21.584Z"
-        }
     ]
 })
 

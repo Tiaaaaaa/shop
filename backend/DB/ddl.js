@@ -32,7 +32,7 @@ exports.Storage = class {
 
 exports.Sold = class{
     constructor(book, buyer, seller, sellDate){
-        //this.id = id;
+        this.id = id;
         this.book = book;
         this.buyer = buyer;
         this.seller = seller;

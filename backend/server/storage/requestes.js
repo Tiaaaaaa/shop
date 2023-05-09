@@ -53,16 +53,21 @@ app.get('/storage/bougth-from-id', (req, res) => {
 
     let id = req.query.id;
 
-    if (!id)
+    if (!id) {
         res.status(400).send("id mancante");
+        return;
+    }
 
-    if (!check.cf(id))
+    if (!check.cf(id)) {
         res.status(400).send("cf errato");
+        return;
 
+    }
     let guest = usersFun.exist(id);
 
     if (!guest) {
         res.status(404).send("Utente richiesto non trovato");
+        return;
     }
 
     bougth = storageFun.bougthFromId(id);
@@ -114,12 +119,11 @@ app.put('/storage/add-to-storage', jsonParser, (req, res) => {
  * @param {Number} isbn the isbn of the book that is searched
  * @param {String} class the class in witch the book ar adopted
  * 
- * @error 400 if there are not infos.
+ * @error 404 if there are not infos.
  */
 app.get('/storage/search-in-storage', (req, res) => {
 
     let inStorage = db.get("storage").value();
-
     if (req.query.book) {
         try {
             inStorageFun.isValid(req.query.book)
@@ -128,19 +132,24 @@ app.get('/storage/search-in-storage', (req, res) => {
             return;
         }
 
-        inStorage = inStorage.filter(b => b.book.isbn == req.query.book);
+        inStorage = inStorage.filter(b => b.book.isbn.toString().includes(req.query.book));
     }
 
     if (req.query.section) {
-        inStorage = inStorage.filter(b => b.book.section == req.query.section);
+        inStorage = inStorage.filter(b => b.book.section.toString().includes(req.query.section));
+    }
+
+    if (req.query.title) {
+        inStorage = inStorage.filter(b => b.book.title.toString().includes(req.query.title));
     }
 
     if (req.query.subject) {
-        inStorage = inStorage.filter(b => b.book.subject == req.query.subject);
+        inStorage = inStorage.filter(b => b.book.subject.toString().includes(req.query.subject));
     }
 
     if (req.query.inSale) {
         inStorage = inStorage.filter(b => b.buyer == null);
+        inStorage = inStorage.filter(b => b.seller.cf != req.query.seller);
     }
 
     if (inStorage.length == 0) {
@@ -148,11 +157,28 @@ app.get('/storage/search-in-storage', (req, res) => {
         return;
     }
 
+    inStorage = inStorage.filter(b => !b.stashed)
 
-    res.json(inStorage);
+    res.send(inStorage);
 
 });
 
+app.put('/storage/stash-book', jsonParser, (req, res) => {
+    data = req.body;
+
+    console.log(data);
+
+    if(!data.id) res.status(400).send("not well formed request");
+
+    try {
+        storageFun.stash(data.id)
+    } catch (error) {
+        res.status(400).send(err);
+    }
+
+    res.status(200).send();
+
+});
 
 app.put('/storage/buy', jsonParser, (req, res) => {
 
@@ -161,7 +187,6 @@ app.put('/storage/buy', jsonParser, (req, res) => {
     buyer = data.pop();
 
     data.forEach(element => {
-        console.log(element);
         data.price += Number(element.price);
         storageFun.buy(buyer, element.id);
     });

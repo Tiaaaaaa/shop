@@ -23,7 +23,7 @@ exports.exist = (cf) => {
  */
 exports.addUser = (id) => {
 
-    if (!check.id(id))
+    if (!check.cf(id))
         throw new Error("code inserted wrong");
 
     if (this.exist(id))

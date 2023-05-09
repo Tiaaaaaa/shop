@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:shop/resoconto_cliente.dart';
 import 'package:shop/variables.dart';
 
 import 'data_classes.dart';
@@ -21,6 +22,18 @@ class CaricoPage extends StatelessWidget {
       appBar: AppBar(
           backgroundColor: primaryColor,
           centerTitle: true,
+          automaticallyImplyLeading: false,
+          leading: TextButton(
+              onPressed: () => {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => GuestReportPage(guest)),
+                    )
+                  },
+              child: const Icon(
+                Icons.arrow_back_rounded,
+                color: Colors.white,
+              )),
           title: Text(
             "Deposito di $guest",
             style: defaultTextStyle,
@@ -48,15 +61,11 @@ class _BooksListState extends State<BooksList> {
 
   String guest;
   late Future<List<Book>> _books = fetchValidBooks("");
-  late List<Book> _cart = [];
+  late List<Book> _depositing = [];
   Color submitColor = Colors.white;
 
   @override
   Widget build(BuildContext context) {
-    if (_cart.isEmpty) {
-      fetchDepositedBooks().then((value) => _cart = value);
-    }
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -74,11 +83,11 @@ class _BooksListState extends State<BooksList> {
                 border: InputBorder.none,
                 suffixIcon: Icon(
                   Icons.menu_book_rounded,
-                  color: secundaryColor,
+                  color: secondaryColor,
                   size: 30,
                 ),
               ),
-              style: TextStyle(fontSize: 30, color: secundaryColor),
+              style: TextStyle(fontSize: 30, color: secondaryColor),
               onChanged: (value) {
                 updateList(value);
               },
@@ -91,11 +100,11 @@ class _BooksListState extends State<BooksList> {
                     decoration: BoxDecoration(
                         border: Border(
                             right:
-                                BorderSide(color: secundaryColor, width: 5))),
+                                BorderSide(color: secondaryColor, width: 5))),
                     child: Scaffold(
                         appBar: AppBar(
                             title: const Text("In lista"),
-                            backgroundColor: secundaryColor,
+                            backgroundColor: secondaryColor,
                             automaticallyImplyLeading: false),
                         body: FutureBuilder<List<Book>>(
                             future: _books,
@@ -146,7 +155,7 @@ class _BooksListState extends State<BooksList> {
                 child: Scaffold(
                     appBar: AppBar(
                         title: const Text("Depositati"),
-                        backgroundColor: secundaryColor,
+                        backgroundColor: secondaryColor,
                         automaticallyImplyLeading: false),
                     body: ListView.builder(
                       itemBuilder: (context, index) {
@@ -161,23 +170,23 @@ class _BooksListState extends State<BooksList> {
                               children: [
                                 TextButton(
                                     onPressed: () {
-                                      removeToCart(_cart[index]);
+                                      removeToCart(_depositing[index]);
                                     },
                                     child: const Text("rimuovimi")),
-                                Text(_cart[index].title.toString()),
-                                Text(_cart[index].subject.toString()),
-                                Text(_cart[index].price.toString()),
-                                Text(_cart[index].section.toString())
+                                Text(_depositing[index].title.toString()),
+                                Text(_depositing[index].subject.toString()),
+                                Text(_depositing[index].price.toString()),
+                                Text(_depositing[index].section.toString())
                               ],
                             ));
                       },
-                      itemCount: _cart.length,
+                      itemCount: _depositing.length,
                     )))
           ],
         )),
         InkWell(
             onTap: () {
-              for (var book in _cart) {
+              for (var book in _depositing) {
                 var res = http.put(
                   Uri.http(host, "/storage/add-to-storage"),
                   headers: <String, String>{
@@ -210,9 +219,9 @@ class _BooksListState extends State<BooksList> {
               decoration: BoxDecoration(
                   color: submitColor,
                   border: Border(
-                      top: BorderSide(color: secundaryColor, width: 5),
-                      left: BorderSide(color: secundaryColor, width: 5),
-                      right: BorderSide(color: secundaryColor, width: 5))),
+                      top: BorderSide(color: secondaryColor, width: 5),
+                      left: BorderSide(color: secondaryColor, width: 5),
+                      right: BorderSide(color: secondaryColor, width: 5))),
               child: Center(
                 child: Text(
                   "Conferma",
@@ -232,14 +241,14 @@ class _BooksListState extends State<BooksList> {
 
   void addToCart(Book book) {
     setState(() {
-      _cart.add(book);
+      _depositing.add(book);
       submitColor = Colors.white;
     });
   }
 
   void removeToCart(Book book) {
     setState(() {
-      _cart.remove(book);
+      _depositing.remove(book);
       submitColor = Colors.white;
     });
   }
@@ -248,7 +257,7 @@ class _BooksListState extends State<BooksList> {
     try {
       var url = Uri.http(host, "/storage/given-from-id", {"id": guest});
 
-      var res = await http.get(url);
+      var res = await http.get(url);  
 
       return parseBooks(res.body);
     } catch (e) {
@@ -262,7 +271,6 @@ class _BooksListState extends State<BooksList> {
 
       var res = await http.get(url);
 
-      // Use the compute function to run parseBooks in a separate isolate.
       return parseBooks(res.body);
     } catch (e) {
       return [];
