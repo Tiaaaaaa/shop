@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, prefer_final_fields
+// ignore_for_file: must_be_immutable, prefer_final_fields, no_logic_in_create_state
 
 import 'dart:convert';
 
@@ -11,9 +11,6 @@ import 'data_classes.dart';
 
 class ScaricoPage extends StatelessWidget {
   ScaricoPage(this.guest, {super.key});
-
-  List<Book> _cart = [];
-  late Future<List<Storage>> _available = fetchFromStorage("", "", "", "");
 
   String guest;
 
@@ -40,162 +37,218 @@ class ScaricoPage extends StatelessWidget {
           centerTitle: true,
           backgroundColor: primaryColor,
         ),
-        body: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Container(
-              width: 400,
-              decoration: BoxDecoration(
-                  border: Border(
-                right: BorderSide(color: secondaryColor, width: 7),
-              )),
-              child: Scaffold(
-                appBar: AppBar(
-                  automaticallyImplyLeading: false,
-                  title: const Text(
-                    "Filtri ricerca",
-                  ),
-                  backgroundColor: secondaryColor,
-                  shadowColor: const Color(0x00000000),
-                ),
-                body: const FilerZone(),
-              )),
-          Expanded(
-              child: Column(children: [
-            SizedBox(
-                height: 55,
-                child: AppBar(
-                  backgroundColor: secondaryColor,
-                  automaticallyImplyLeading: false,
-                  title: Row(
-                    children: const [
-                      Text("Disponibili  "),
-                      Icon(
-                        Icons.warehouse_rounded,
-                        color: Colors.white,
-                        size: 25,
-                      )
-                    ],
-                  ),
-                )),
-            Container(
-                height: 300,
-                child: FutureBuilder<List<Storage>>(
-                    future: _available,
-                    builder: (context, snapshot) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.none:
-                          return const Text('Connessione non disponibile');
-                        case ConnectionState.waiting:
-                          return const Text('loading...');
-                        default:
-                          return ListView.builder(
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                  height: 30,
-                                  margin: const EdgeInsets.only(bottom: 5),
-                                  decoration: BoxDecoration(
-                                    color: primaryColor,
+        body: Display(guest));
+  }
+}
+
+class Display extends StatefulWidget {
+  Display(this.guest, {super.key});
+
+  String guest;
+
+  @override
+  State<Display> createState() {
+    return _DisplayState(guest);
+  }
+}
+
+class _DisplayState extends State<Display> {
+  _DisplayState(this.guest);
+
+  String guest;
+
+  late List<Storage> _cart = [];
+  late Future<List<Storage>> _available = fetchFromStorage("", "", "", "");
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Container(
+          width: 400,
+          decoration: BoxDecoration(
+              border: Border(
+            right: BorderSide(color: secondaryColor, width: 7),
+          )),
+          child: Scaffold(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: const Text(
+                "Filtri ricerca",
+              ),
+              backgroundColor: secondaryColor,
+              shadowColor: const Color(0x00000000),
+            ),
+            body: const FilerZone(),
+          )),
+      Expanded(
+          child: Column(children: [
+        SizedBox(
+            height: 55,
+            child: AppBar(
+              backgroundColor: secondaryColor,
+              automaticallyImplyLeading: false,
+              title: Row(
+                children: const [
+                  Text("Disponibili  "),
+                  Icon(
+                    Icons.warehouse_rounded,
+                    color: Colors.white,
+                    size: 25,
+                  )
+                ],
+              ),
+            )),
+        Container(
+            height: 300,
+            child: FutureBuilder<List<Storage>>(
+                future: _available,
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                      return const Text('Connessione non disponibile');
+                    case ConnectionState.waiting:
+                      return const Text('loading...');
+                    case ConnectionState.active:
+                      return const Text("active");
+                    default:
+                      return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                              height: 30,
+                              margin: const EdgeInsets.only(bottom: 5),
+                              decoration: BoxDecoration(
+                                color: primaryColor,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Expanded(
+                                    child: Text(snapshot.data![index].book.title
+                                        .toString()),
                                   ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Expanded(
-                                        child: Text(snapshot
-                                            .data![index].book.title
-                                            .toString()),
-                                      ),
-                                      Expanded(
-                                        child: Text(snapshot
-                                            .data![index].book.subject
-                                            .toString()),
-                                      ),
-                                      Expanded(
-                                        child: Text(snapshot
-                                            .data![index].book.price
-                                            .toString()),
-                                      ),
-                                      Expanded(
-                                        child: Text(snapshot
-                                            .data![index].book.section
-                                            .toString()),
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                            "Posizione: ${snapshot.data![index].seller.id.toString()}"),
-                                      ),
-                                      Expanded(
-                                          child: TextButton(
-                                        onPressed: () {
-                                          stash(snapshot.data![index].id);
-                                        },
-                                        child: Text(
-                                          "aggiungi al carrello",
-                                          style: defaultTextStyle,
-                                        ),
-                                      ))
-                                    ],
-                                  ));
-                            },
-                          );
-                      }
-                    }))
-          ])),
-          Container(
-            width: 400,
-            decoration: BoxDecoration(
-                border:
-                    Border(left: BorderSide(color: secondaryColor, width: 8))),
-            child: Scaffold(
-                appBar: AppBar(
-                    title: Row(
-                      children: const [
-                        Text("Carrello "),
-                        Icon(
-                          Icons.shopping_cart_outlined,
-                          color: Colors.white,
-                        )
-                      ],
-                    ),
-                    backgroundColor: secondaryColor,
-                    automaticallyImplyLeading: false),
-                body: Container(
-                    height: 300,
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        return Container(
-                            height: 30,
-                            margin: const EdgeInsets.only(bottom: 5),
-                            decoration: BoxDecoration(
-                              color: primaryColor,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(_cart[index].title.toString()),
-                                Text(_cart[index].subject.toString()),
-                                Text(_cart[index].price.toString()),
-                                Text(_cart[index].section.toString())
-                              ],
-                            ));
-                      },
-                      itemCount: _cart.length,
-                    ))),
-          )
-        ]));
+                                  Expanded(
+                                    child: Text(snapshot
+                                        .data![index].book.subject
+                                        .toString()),
+                                  ),
+                                  Expanded(
+                                    child: Text(snapshot.data![index].book.price
+                                        .toString()),
+                                  ),
+                                  Expanded(
+                                    child: Text(snapshot
+                                        .data![index].book.section
+                                        .toString()),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                        "Posizione: ${snapshot.data![index].seller.id.toString()}"),
+                                  ),
+                                  Expanded(
+                                      child: TextButton(
+                                    onPressed: () {
+                                      addToCart(snapshot.data![index]);
+                                    },
+                                    child: Text(
+                                      "aggiungi al carrello",
+                                      style: defaultTextStyle,
+                                    ),
+                                  ))
+                                ],
+                              ));
+                        },
+                      );
+                  }
+                }))
+      ])),
+      Container(
+        width: 400,
+        decoration: BoxDecoration(
+            border: Border(left: BorderSide(color: secondaryColor, width: 8))),
+        child: Scaffold(
+            appBar: AppBar(
+                title: Row(
+                  children: const [
+                    Text("Carrello "),
+                    Icon(
+                      Icons.shopping_cart_outlined,
+                      color: Colors.white,
+                    )
+                  ],
+                ),
+                backgroundColor: secondaryColor,
+                automaticallyImplyLeading: false),
+            body: SizedBox(
+                height: 300,
+                child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    return Container(
+                        height: 30,
+                        margin: const EdgeInsets.only(bottom: 5),
+                        decoration: BoxDecoration(
+                          color: primaryColor,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(_cart[index].book.title.toString()),
+                            Text(_cart[index].book.subject.toString()),
+                            Text(_cart[index].book.price.toString()),
+                            TextButton(
+                                onPressed: () {
+                                  removeFromCart(_cart[index]);
+                                },
+                                child: const Text("Rimuovi"))
+                          ],
+                        ));
+                  },
+                  itemCount: _cart.length,
+                ))),
+      )
+    ]);
+  }
+
+  void addToCart(Storage item) {
+    setState(() {
+      stash(item.id);
+      _cart.add(item);
+      _available = fetchFromStorage("", "", "", "");
+    });
+  }
+
+  void removeFromCart(Storage item) {
+    setState(() {
+      unstash(item.id);
+      _cart.remove(item);
+      _available = fetchFromStorage("", "", "", "");
+    });
   }
 
   Future<void> stash(int id) async {
     try {
-      final response = await http.put(Uri.http(host, "/storage/stash-book"),
+      await http.put(Uri.http(host, "/storage/stash-book"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: jsonEncode(<String, int>{
             "id": id,
           }));
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
-      print(response.statusCode);
+  Future<void> unstash(int id) async {
+    try {
+      await http.put(Uri.http(host, "/storage/unstash-book"),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, int>{
+            "id": id,
+          }));
     } catch (e) {
       print(e.toString());
     }

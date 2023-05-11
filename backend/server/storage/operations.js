@@ -94,9 +94,9 @@ exports.addToStorage = (isbn, seller, state) => {
  */
 exports.buy = (buyer, id) => {
 
-    const prom = new Promise((resolve, reject) => {
+    Promise((resolve, reject) => {
         try {
-            storageFil = db.get("storage").filter(s => s.id = id).value();
+            storageFil = db.get("storage").filter(s => s.id != id).value();
 
             if (storageFil.length == 0) reject("non ci sono libri con questo id");
 
@@ -118,25 +118,53 @@ exports.buy = (buyer, id) => {
 
 exports.stash = (id) => {
 
-    const prom = new Promise((resolve, reject) => {
+    new Promise((resolve, reject) => {
 
         storage = db.get("storage").value();
 
-        var pos = 0; 
+        var pos = -1;
 
         for (let i = 0; i < storage.length; i++) {
             const element = storage[i];
 
-            if(element.id == id){
+            if (element.id == id) {
                 pos = i;
-                 break;
+                break;
             }
         }
 
+        if (pos == -1) reject("id not found");
+
         db.get("storage").get(pos).get("stashed").set(true);
 
-        console.log("storage id: " + id);
-        console.log(storage);
+        db.save();
+
+        resolve();
+
+    });
+}
+
+
+exports.unstash = (id) => {
+
+    new Promise((resolve, reject) => {
+
+        storage = db.get("storage").value();
+
+        var pos = -1;
+
+        for (let i = 0; i < storage.length; i++) {
+            const element = storage[i];
+
+            if (element.id == id) {
+                pos = i;
+                break;
+            }
+        }
+
+        if (pos == -1) reject("id not found");
+
+        db.get("storage").get(pos).get("stashed").delete();
 
         db.save();
 

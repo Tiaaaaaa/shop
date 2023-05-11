@@ -166,12 +166,26 @@ app.get('/storage/search-in-storage', (req, res) => {
 app.put('/storage/stash-book', jsonParser, (req, res) => {
     data = req.body;
 
-    console.log(data);
-
-    if(!data.id) res.status(400).send("not well formed request");
+    if (!data.id) res.status(400).send("not well formed request");
 
     try {
         storageFun.stash(data.id)
+    } catch (error) {
+        res.status(400).send(err);
+    }
+
+    res.status(200).send();
+
+});
+
+app.put('/storage/unstash-book', jsonParser, (req, res) => {
+    data = req.body;
+
+
+    if (!data.id) res.status(400).send("not well formed request");
+
+    try {
+        storageFun.unstash(data.id)
     } catch (error) {
         res.status(400).send(err);
     }
@@ -187,7 +201,7 @@ app.put('/storage/buy', jsonParser, (req, res) => {
     buyer = data.pop();
 
     data.forEach(element => {
-        data.price += Number(element.price);
+        data.book.price += Number(element.price);
         storageFun.buy(buyer, element.id);
     });
 

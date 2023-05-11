@@ -43,7 +43,6 @@ class CaricoPage extends StatelessWidget {
   }
 }
 
-// 'http://127.0.0.1:3000/books/get-books'
 
 class BooksList extends StatefulWidget {
   BooksList(this.guest, {super.key});
@@ -132,7 +131,7 @@ class _BooksListState extends State<BooksList> {
                                             children: [
                                               TextButton(
                                                   onPressed: () {
-                                                    addToCart(
+                                                    addToDepositing(
                                                         snapshot.data![index]);
                                                   },
                                                   child:
@@ -239,7 +238,7 @@ class _BooksListState extends State<BooksList> {
     });
   }
 
-  void addToCart(Book book) {
+  void addToDepositing(Book book) {
     setState(() {
       _depositing.add(book);
       submitColor = Colors.white;
@@ -257,7 +256,7 @@ class _BooksListState extends State<BooksList> {
     try {
       var url = Uri.http(host, "/storage/given-from-id", {"id": guest});
 
-      var res = await http.get(url);  
+      var res = await http.get(url);
 
       return parseBooks(res.body);
     } catch (e) {
