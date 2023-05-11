@@ -112,59 +112,90 @@ class _DisplayState extends State<Display> {
                       return const Text("active");
                     default:
                       return ListView.builder(
-                        itemCount: snapshot.data!.length,
+                        itemCount: snapshot.data!.length + 1,
                         itemBuilder: (context, index) {
-                          return Container(
-                              height: 30,
-                              margin: const EdgeInsets.only(bottom: 5),
-                              decoration: BoxDecoration(
-                                color: primaryColor,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Expanded(
-                                    child: Text(snapshot.data![index].book.title
-                                        .toString()),
-                                  ),
-                                  Expanded(
-                                    child: Text(snapshot
-                                        .data![index].book.subject
-                                        .toString()),
-                                  ),
-                                  Expanded(
-                                    child: Text(snapshot.data![index].book.price
-                                        .toString()),
-                                  ),
-                                  Expanded(
-                                    child: Text(snapshot
-                                        .data![index].book.section
-                                        .toString()),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                        "Posizione: ${snapshot.data![index].seller.id.toString()}"),
-                                  ),
-                                  Expanded(
-                                      child: TextButton(
-                                    onPressed: () {
-                                      addToCart(snapshot.data![index]);
-                                    },
-                                    child: Text(
-                                      "aggiungi al carrello",
-                                      style: defaultTextStyle,
+                          if (index == 0) {
+                            return Container(
+                                height: 30,
+                                margin: const EdgeInsets.only(bottom: 5),
+                                decoration: BoxDecoration(
+                                  color: secondaryColor,
+                                ),
+                                child: Row(
+                                  children: const [
+                                    Expanded(
+                                      child: Text("Titolo"),
                                     ),
-                                  ))
-                                ],
-                              ));
+                                    Expanded(
+                                      child: Text("Materia"),
+                                    ),
+                                    Expanded(
+                                      child: Text("Prezzo"),
+                                    ),
+                                    Expanded(
+                                      child: Text("Classe"),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text("Posizione"),
+                                    ),
+                                  ],
+                                ));
+                          } else {
+                            return Container(
+                                height: 30,
+                                margin: const EdgeInsets.only(bottom: 5),
+                                decoration: BoxDecoration(
+                                  color: primaryColor,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Expanded(
+                                      child: Text(snapshot
+                                          .data![index - 1].book.title
+                                          .toString()),
+                                    ),
+                                    Expanded(
+                                      child: Text(snapshot
+                                          .data![index - 1].book.subject
+                                          .toString()),
+                                    ),
+                                    Expanded(
+                                      child: Text(snapshot
+                                          .data![index - 1].book.price
+                                          .toString()),
+                                    ),
+                                    Expanded(
+                                      child: Text(snapshot
+                                          .data![index - 1].book.section
+                                          .toString()),
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                          "Posizione: ${snapshot.data![index - 1].seller.id.toString()}"),
+                                    ),
+                                    Expanded(
+                                        child: TextButton(
+                                      onPressed: () {
+                                        addToCart(snapshot.data![index - 1]);
+                                      },
+                                      child: Text(
+                                        "aggiungi al carrello",
+                                        style: defaultTextStyle,
+                                      ),
+                                    ))
+                                  ],
+                                ));
+                          }
                         },
                       );
                   }
                 }))
       ])),
       Container(
-        width: 400,
+        width: 600,
         decoration: BoxDecoration(
             border: Border(left: BorderSide(color: secondaryColor, width: 8))),
         child: Scaffold(
