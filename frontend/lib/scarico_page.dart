@@ -99,7 +99,7 @@ class _DisplayState extends State<Display> {
               ),
             )),
         Container(
-            height: 300,
+            height: 2000,
             child: FutureBuilder<List<Storage>>(
                 future: _available,
                 builder: (context, snapshot) {
@@ -111,7 +111,18 @@ class _DisplayState extends State<Display> {
                     case ConnectionState.active:
                       return const Text("active");
                     default:
-                      return ListView.builder(
+                      return GridView.count(
+                          crossAxisCount: 3,
+                          children:
+                              List.generate(snapshot.data!.length, (index) {
+                            return Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.red, width: 2)),
+                                child: snapshot.data![index].book.display());
+                          }));
+
+                      ListView.builder(
                         itemCount: snapshot.data!.length + 1,
                         itemBuilder: (context, index) {
                           if (index == 0) {
@@ -143,12 +154,12 @@ class _DisplayState extends State<Display> {
                                 ));
                           } else {
                             return Container(
-                                height: 30,
                                 margin: const EdgeInsets.only(bottom: 5),
                                 decoration: BoxDecoration(
                                   color: primaryColor,
                                 ),
-                                child: Row(
+                                child: snapshot.data![index - 1].book.display()
+                                /*Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
@@ -187,7 +198,8 @@ class _DisplayState extends State<Display> {
                                       ),
                                     ))
                                   ],
-                                ));
+                                )*/
+                                );
                           }
                         },
                       );

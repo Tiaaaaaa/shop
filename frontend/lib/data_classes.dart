@@ -40,7 +40,7 @@ class Book {
         children: [
           Image(
             image: NetworkImage(
-                'https://covers.openlibrary.org/b/isbn/$isbn-L.jpg'),
+                'https://covers.openlibrary.org/b/isbn/$isbn-M.jpg'),
           ),
           Text("Titolo: $title"),
           Text("Prezzo: $price"),
