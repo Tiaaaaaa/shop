@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 class Book {
   final int isbn;
@@ -28,6 +29,24 @@ class Book {
       publisher: json['publisher'] as String,
       price: json['price'] as int,
       section: json['section'] as String,
+    );
+  }
+
+  Widget display() {
+    return Card(
+      borderOnForeground: true,
+      elevation: 2,
+      child: Column(
+        children: [
+          Image(
+            image: NetworkImage(
+                'https://covers.openlibrary.org/b/isbn/$isbn-L.jpg'),
+          ),
+          Text("Titolo: $title"),
+          Text("Prezzo: $price"),
+          Text("Materia: $subject"),
+        ],
+      ),
     );
   }
 }
