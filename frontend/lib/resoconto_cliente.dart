@@ -43,85 +43,87 @@ class GuestReportPage extends StatelessWidget {
         ),
         body: Row(children: [
           Expanded(
-              child: Container(
-            decoration: BoxDecoration(
-                border: Border(
-                    right: BorderSide(color: secondaryColor, width: 10))),
-            child: Expanded(
+            child: Container(
+                decoration: BoxDecoration(
+                    border: Border(
+                        right: BorderSide(color: secondaryColor, width: 10))),
                 child: Column(
-              children: [
-                AppBar(
-                  backgroundColor: secondaryColor,
-                  automaticallyImplyLeading: false,
-                  title: Row(
-                    children: const [
-                      Text("Acquistati  "),
-                      Icon(
-                        Icons.euro_rounded,
-                        color: Colors.white,
-                        size: 25,
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 40,
-                  decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(color: secondaryColor, width: 3))),
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => ScaricoPage(guest)),
-                      );
-                    },
-                    child: Text(
-                      "Acquista",
-                      style: defaultTextStyle,
+                  children: [
+                    AppBar(
+                      backgroundColor: secondaryColor,
+                      automaticallyImplyLeading: false,
+                      title: Row(
+                        children: const [
+                          Text("Acquistati  "),
+                          Icon(
+                            Icons.euro_rounded,
+                            color: Colors.white,
+                            size: 25,
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-                Expanded(
-                    child: FutureBuilder<List<Book>>(
-                        future: _bougth,
-                        builder: (context, snapshot) {
-                          switch (snapshot.connectionState) {
-                            case ConnectionState.none:
-                              return const Text('Connessione non disponibile');
-                            case ConnectionState.waiting:
-                              return const Text('loading...');
-                            default:
-                              return ListView.builder(
-                                itemCount: snapshot.data!.length,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                      height: 30,
-                                      margin: const EdgeInsets.only(bottom: 5),
-                                      decoration: BoxDecoration(
-                                        color: primaryColor,
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Text(snapshot.data![index].title
-                                              .toString()),
-                                          Text(snapshot.data![index].subject
-                                              .toString()),
-                                          Text(snapshot.data![index].price
-                                              .toString()),
-                                          Text(snapshot.data![index].section
-                                              .toString())
-                                        ],
-                                      ));
-                                },
-                              );
-                          }
-                        }))
-              ],
-            )),
-          )),
+                    Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                          border: Border(
+                              bottom:
+                                  BorderSide(color: secondaryColor, width: 3))),
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => ScaricoPage(guest)),
+                          );
+                        },
+                        child: Text(
+                          "Acquista",
+                          style: defaultTextStyle,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                        child: FutureBuilder<List<Book>>(
+                            future: _bougth,
+                            builder: (context, snapshot) {
+                              switch (snapshot.connectionState) {
+                                case ConnectionState.none:
+                                  return const Text(
+                                      'Connessione non disponibile');
+                                case ConnectionState.waiting:
+                                  return const Text('loading...');
+                                default:
+                                  return ListView.builder(
+                                    itemCount: snapshot.data!.length,
+                                    itemBuilder: (context, index) {
+                                      return Container(
+                                          height: 30,
+                                          margin:
+                                              const EdgeInsets.only(bottom: 5),
+                                          decoration: BoxDecoration(
+                                            color: primaryColor,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Text(snapshot.data![index].title
+                                                  .toString()),
+                                              Text(snapshot.data![index].subject
+                                                  .toString()),
+                                              Text(snapshot.data![index].price
+                                                  .toString()),
+                                              Text(snapshot.data![index].section
+                                                  .toString())
+                                            ],
+                                          ));
+                                    },
+                                  );
+                              }
+                            }))
+                  ],
+                )),
+          ),
           Expanded(
               child: Column(
             children: [

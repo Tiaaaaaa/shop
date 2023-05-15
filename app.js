@@ -31,51 +31,34 @@ db.default({
     ],
     "books": [
         {
-            "isbn": 1234567890123,
-            "subject": "math",
-            "title": "ciao",
-            "volume": "1",
-            "publisher": "sto cazzo",
-            "price": 2,
-            "section": "1 Chimica"
-        },
-        {
-            "isbn": 1597532584565,
-            "subject": "Figologia",
-            "title": "la figa di tua madre",
-            "volume": "1",
-            "publisher": "Michela Murgia",
-            "price": 10,
-            "section": "5 Informatica"
-        },
-        {
-            "isbn": 2123456789012,
-            "subject": "inglese",
-            "title": "ciao",
+            "isbn": 9788891909664,
+            "subject": "Programmazione I",
+            "title": "Programmare in go",
             "volume": "U",
-            "publisher": "sto cazzo",
-            "price": 2,
-            "section": "2 Informatica"
+            "publisher": "Pearson",
+            "price": 3200,
+            "section": "I Informatica"
+        },
+        {
+            "isbn": 9788808352026,
+            "subject": "Architettura degli elaboratori",
+            "title": "Struttura e progetto dei calcolatori",
+            "volume": "U",
+            "publisher": "Zanichelli",
+            "price": 5150,
+            "section": "I Informatica"
+        },
+        {
+            "isbn": 9788820722180,
+            "subject": "Matematica",
+            "title": "Calcolo",
+            "volume": "U",
+            "publisher": "Liguori Editore",
+            "price": 4499,
+            "section": "I Informatica"
         }
     ],
     "storage": [
-        {
-            "book": {
-                "isbn": 1597532584565,
-                "subject": "Figologia",
-                "title": "la figa di tua madre",
-                "volume": "1",
-                "publisher": "Michela Murgia",
-                "price": 10,
-                "section": "5 Informatica"
-            },
-            "buyDate": "2023-05-02T09:38:38.818Z",
-            "seller": {
-                "cf": "RRGMTT01P22F119U",
-                "id": 0
-            },
-            "id": 1,
-        }
     ],
     "sold": [
     ]

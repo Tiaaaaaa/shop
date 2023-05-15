@@ -63,20 +63,6 @@ class HomePage extends StatelessWidget {
                     )
                   },
                 ),
-                /* TextButton(
-                  style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(secondaryColor),
-                      backgroundColor: MaterialStateProperty.all(primaryColor),
-                      textStyle: MaterialStateProperty.all(titleTextStyle)),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => CaricoPage("ciao")),
-                    );
-                  },
-                  child: const Text('Cerca'),
-                )*/
               ],
             )),
             SizedBox(
@@ -95,53 +81,5 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ));
-  }
-}
-
-class IdForm extends StatelessWidget {
-  IdForm({super.key});
-
-  final controller = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          "Inserisci qua il codice fiscale",
-          style: titleTextStyle,
-        ),
-        TextField(
-          controller: controller,
-          autofocus: true,
-          cursorColor: secondaryColor,
-          textCapitalization: TextCapitalization.characters,
-          decoration: InputDecoration(
-              icon: Icon(
-            Icons.person,
-            color: primaryColor,
-            size: 100,
-          )),
-          style: const TextStyle(
-              fontSize: 30, color: Color.fromRGBO(133, 148, 74, 1)),
-        ),
-        TextButton(
-          style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(secondaryColor),
-              backgroundColor: MaterialStateProperty.all(primaryColor),
-              textStyle: MaterialStateProperty.all(titleTextStyle)),
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (context) =>
-                      CaricoPage(controller.text.toUpperCase())),
-            );
-          },
-          child: const Text('Cerca'),
-        )
-      ],
-    ));
   }
 }

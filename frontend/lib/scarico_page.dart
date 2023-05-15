@@ -98,8 +98,7 @@ class _DisplayState extends State<Display> {
                 ],
               ),
             )),
-        Container(
-            height: 2000,
+        Expanded(
             child: FutureBuilder<List<Storage>>(
                 future: _available,
                 builder: (context, snapshot) {
@@ -115,94 +114,10 @@ class _DisplayState extends State<Display> {
                           crossAxisCount: 3,
                           children:
                               List.generate(snapshot.data!.length, (index) {
-                            return Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Colors.red, width: 2)),
-                                child: snapshot.data![index].book.display());
+                            snapshot.data![index].book.display().then((value) {
+                              return value;
+                            });
                           }));
-
-                      ListView.builder(
-                        itemCount: snapshot.data!.length + 1,
-                        itemBuilder: (context, index) {
-                          if (index == 0) {
-                            return Container(
-                                height: 30,
-                                margin: const EdgeInsets.only(bottom: 5),
-                                decoration: BoxDecoration(
-                                  color: secondaryColor,
-                                ),
-                                child: Row(
-                                  children: const [
-                                    Expanded(
-                                      child: Text("Titolo"),
-                                    ),
-                                    Expanded(
-                                      child: Text("Materia"),
-                                    ),
-                                    Expanded(
-                                      child: Text("Prezzo"),
-                                    ),
-                                    Expanded(
-                                      child: Text("Classe"),
-                                    ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Text("Posizione"),
-                                    ),
-                                  ],
-                                ));
-                          } else {
-                            return Container(
-                                margin: const EdgeInsets.only(bottom: 5),
-                                decoration: BoxDecoration(
-                                  color: primaryColor,
-                                ),
-                                child: snapshot.data![index - 1].book.display()
-                                /*Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Expanded(
-                                      child: Text(snapshot
-                                          .data![index - 1].book.title
-                                          .toString()),
-                                    ),
-                                    Expanded(
-                                      child: Text(snapshot
-                                          .data![index - 1].book.subject
-                                          .toString()),
-                                    ),
-                                    Expanded(
-                                      child: Text(snapshot
-                                          .data![index - 1].book.price
-                                          .toString()),
-                                    ),
-                                    Expanded(
-                                      child: Text(snapshot
-                                          .data![index - 1].book.section
-                                          .toString()),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                          "Posizione: ${snapshot.data![index - 1].seller.id.toString()}"),
-                                    ),
-                                    Expanded(
-                                        child: TextButton(
-                                      onPressed: () {
-                                        addToCart(snapshot.data![index - 1]);
-                                      },
-                                      child: Text(
-                                        "aggiungi al carrello",
-                                        style: defaultTextStyle,
-                                      ),
-                                    ))
-                                  ],
-                                )*/
-                                );
-                          }
-                        },
-                      );
                   }
                 }))
       ])),

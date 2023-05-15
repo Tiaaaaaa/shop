@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, no_logic_in_create_state
+// ignore_for_file: must_be_immutable, no_logic_in_create_state, prefer_final_fields
 
 import 'dart:convert';
 
@@ -42,7 +42,6 @@ class CaricoPage extends StatelessWidget {
     );
   }
 }
-
 
 class BooksList extends StatefulWidget {
   BooksList(this.guest, {super.key});
@@ -211,6 +210,9 @@ class _BooksListState extends State<BooksList> {
                   return res;
                 });
               }
+              setState(() {
+                _depositing = [];
+              });
             },
             child: Container(
               width: 1000,
@@ -266,17 +268,16 @@ class _BooksListState extends State<BooksList> {
 
   Future<List<Book>> fetchValidBooks(String isbn) async {
     try {
-      var url = Uri.http(host, "/books/get-books", {"book": isbn});
-
+      Uri url = Uri.http(host, "/books/get-books", {"book": isbn});
       var res = await http.get(url);
 
       return parseBooks(res.body);
     } catch (e) {
+      print("errad $e");
       return [];
     }
   }
 
-  // A function that converts a response body into a List<Book>.
   List<Book> parseBooks(String responseBody) {
     if (responseBody.length == 2) {
       return <Book>[];
