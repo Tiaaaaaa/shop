@@ -72,7 +72,7 @@ const { fetchCover } = require('./backend/server/books/operations');
 let booksList = db.get("books").value();
 
 booksList.forEach(book => {
-    fetchCover(book.isbn);
+    //fetchCover(book.isbn);
 });
 
 const port = 3000;

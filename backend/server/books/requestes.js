@@ -1,3 +1,6 @@
+const { isValid, getCover } = require("./operations");
+const path = require("path");
+
 /**
  * get address for the valid books fetch.
  * if any information is passed the search will be filtered.
@@ -54,5 +57,29 @@ app.get('/books/subjects', (req, res) => {
     });
 
     res.json(subjects);
+
+});
+
+app.get('/books/get-cover', (req, res) => {
+    if (!req.query.isbn || !isValid(req.query.isbn)) res.status(400).send("Bad request, isbn not provided or not valid");
+
+    var infos;
+
+    try {
+        infos = getCover(req.query.isbn);
+        stream = infos.stream;
+        stats = infos.stats;
+    } catch (error) {
+        console.log(error);
+        res.status(400).send(error.toString());
+        return;
+    }
+
+    res.writeHead(200, {
+        'Content-Type': 'image/jpeg',
+        'Content-Length': stats.size
+    });
+
+    stream.pipe(res);
 
 });

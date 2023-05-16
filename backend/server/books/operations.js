@@ -1,6 +1,7 @@
 const check = require("../checkData");
 const fs = require('fs')
 const request = require('request');
+const path = require("path");
 
 /**
  * checks in the db if the isbn of he book 
@@ -73,7 +74,6 @@ exports.addBook = (isbn, subject, title, volume, publisher, price, section) => {
 
 exports.fetchCover = async (isbn) => {
     try {
-        console.log(isbn);
 
         const res = await fetch("https://www.googleapis.com/books/v1/volumes?q=" + isbn, { method: 'GET' });
 
@@ -83,11 +83,8 @@ exports.fetchCover = async (isbn) => {
             if (res["items"][0]["volumeInfo"]["imageLinks"]) {
 
                 prevUrl = res["items"][0]["volumeInfo"]["imageLinks"]["thumbnail"];
-                console.log(prevUrl);
 
                 if (prevUrl) {
-
-
 
                     var download = function (uri, filename, callback) {
                         request.head(uri, function (err, res, body) {
@@ -98,7 +95,7 @@ exports.fetchCover = async (isbn) => {
                         });
                     };
 
-                    download(prevUrl, "./backend/server/books/covers_assets/"+isbn + '.jpeg', function () {
+                    download(prevUrl, "./backend/server/books/covers_assets/" + isbn + '.jpeg', function () {
                         console.log('done');
                     });
 
@@ -111,4 +108,23 @@ exports.fetchCover = async (isbn) => {
     } catch (error) {
         console.log(error);
     }
+}
+
+exports.getCover = (isbn) => {
+
+    if (!this.isValid(isbn))
+        throw new Error("isbn not valid");
+
+    const filePath = path.join(__dirname, '/covers_assets/' + isbn + '.jpeg');
+
+
+    if (fs.existsSync(filePath)) {
+        var stat = fs.statSync(filePath);
+        var readStream = fs.createReadStream(filePath);
+
+        return { "stream": readStream, "stats": stat };
+    } else {
+        throw new Error("File non presente");
+    }
+
 }

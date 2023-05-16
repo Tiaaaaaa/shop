@@ -57,7 +57,7 @@ class Book {
   Future<String> _getImageLink() async {
     try {
       var res = await http.get(
-          Uri.https("www.googleapis.com", "/books/v1/volumes", {"q": title}));
+          Uri.https(host, "/book", {"q": title}));
 
       print(res.request);
       return jsonDecode(res.body)["items"][0]["volumeInfo"]["imageLinks"]
