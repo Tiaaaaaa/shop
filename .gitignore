@@ -28,3 +28,6 @@ migrate_working_dir/
 ./frontend/pub-cache/
 ./frontend/pub/
 /frontend/build/
+
+
+/backend/server/books/covers_assets

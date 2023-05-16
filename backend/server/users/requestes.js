@@ -17,7 +17,6 @@ app.get('/users/get-id', (req, res) => {
     }else{
         res.json({id : usersFun.addUser(req.query.cf).id});
     }
-
 });
 
 app.put('/users/add-user', (req, res) => {

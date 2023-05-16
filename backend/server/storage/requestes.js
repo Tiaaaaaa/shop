@@ -2,7 +2,7 @@ const bodyParser = require('body-parser')
 const usersFun = require("../users/operations")
 const storageFun = require("./operations")
 const check = require("../checkData")
-const recFun = require("../../receipts/operations")
+const recFun = require("../receipts/operations")
 
 // create application/json parser
 let jsonParser = bodyParser.json()

@@ -5,17 +5,15 @@ app = express();
 require("./backend/server/storage/requestes");
 require("./backend/server/books/requestes");
 require("./backend/server/users/requestes");
-require("./backend/receipts/requestes");
+require("./backend/server/receipts/requestes");
 
 const ddl = require("./backend/DB/ddl")
-
 
 const StormDB = require("stormdb");
 
 // start db with "./db.stormdb" storage location
 const engine = new StormDB.localFileEngine('backend/DB/db.stormdb');
 db = new StormDB(engine);
-
 
 // Definizione di default (come si presenta il file json in caso di db vuoto)
 db.default({
@@ -67,11 +65,19 @@ db.default({
 
 db.save();
 
-const port = 3000;
 
-// Interfaces
+// Fetching the covers of all valid books saved into the db
+const { fetchCover } = require('./backend/server/books/operations');
+
+let booksList = db.get("books").value();
+
+booksList.forEach(book => {
+    fetchCover(book.isbn);
+});
+
+const port = 3000;
 
 /**
  * Log alla console del server per il "tutto okay"
- */
+*/
 app.listen(port, () => console.log(`Funziona, porta: ${port}`))

@@ -1,4 +1,6 @@
 const check = require("../checkData");
+const fs = require('fs')
+const request = require('request');
 
 /**
  * checks in the db if the isbn of he book 
@@ -11,25 +13,25 @@ const check = require("../checkData");
 exports.isValid = (isbn) => {
 
     // check if the isbn is valid
-    if(!check.isbn(isbn))
+    if (!check.isbn(isbn))
         throw new Error("isbn not valid");
 
     // check in db if the books is present
     let book = db.get("books").value().filter(b => b.isbn == isbn)[0]
-       
+
     if (!book || book.length == 0) {
-        return false;        
-    }else{
+        return false;
+    } else {
         return true;
     }
-    
+
 }
 
 exports.getBookFromIsbn = (isbn) => {
-    
+
     try {
-        if(!this.isValid(isbn))
-            return false;    
+        if (!this.isValid(isbn))
+            return false;
     } catch (error) {
         return false;
     }
@@ -51,20 +53,62 @@ exports.getBookFromIsbn = (isbn) => {
  * @returns false if the book is already into the db,
  * 			the object of the book if inserted
  */
- exports.addBook = (isbn, subject, title, volume, publisher, price, section) => {
+exports.addBook = (isbn, subject, title, volume, publisher, price, section) => {
 
-	db.get("books").value().filter(b => b.isbn == isbn);
+    db.get("books").value().filter(b => b.isbn == isbn);
 
-	if (db.get("books").value().filter(b => b.isbn == isbn) != []){
-		return false;
-	}
-	
-	let newBook = new ddl.Book(isbn, subject, title, volume, publisher, price, section);
+    if (db.get("books").value().filter(b => b.isbn == isbn) != []) {
+        return false;
+    }
 
-	db.get("books").push(newBook);
+    let newBook = new ddl.Book(isbn, subject, title, volume, publisher, price, section);
 
-	db.save();
+    db.get("books").push(newBook);
 
-	return newBook;
+    db.save();
 
+    return newBook;
+
+}
+
+exports.fetchCover = async (isbn) => {
+    try {
+        console.log(isbn);
+
+        const res = await fetch("https://www.googleapis.com/books/v1/volumes?q=" + isbn, { method: 'GET' });
+
+        let prevUrl;
+
+        res.json().then(async (res) => {
+            if (res["items"][0]["volumeInfo"]["imageLinks"]) {
+
+                prevUrl = res["items"][0]["volumeInfo"]["imageLinks"]["thumbnail"];
+                console.log(prevUrl);
+
+                if (prevUrl) {
+
+
+
+                    var download = function (uri, filename, callback) {
+                        request.head(uri, function (err, res, body) {
+                            console.log('content-type:', res.headers['content-type']);
+                            console.log('content-length:', res.headers['content-length']);
+
+                            request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+                        });
+                    };
+
+                    download(prevUrl, "./backend/server/books/covers_assets/"+isbn + '.jpeg', function () {
+                        console.log('done');
+                    });
+
+
+                }
+            }
+        });
+
+
+    } catch (error) {
+        console.log(error);
+    }
 }
