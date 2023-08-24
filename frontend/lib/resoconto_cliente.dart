@@ -52,8 +52,8 @@ class GuestReportPage extends StatelessWidget {
                     AppBar(
                       backgroundColor: secondaryColor,
                       automaticallyImplyLeading: false,
-                      title: Row(
-                        children: const [
+                      title: const Row(
+                        children: [
                           Text("Acquistati  "),
                           Icon(
                             Icons.euro_rounded,
@@ -130,8 +130,8 @@ class GuestReportPage extends StatelessWidget {
               AppBar(
                 backgroundColor: secondaryColor,
                 automaticallyImplyLeading: false,
-                title: Row(
-                  children: const [
+                title: const Row(
+                  children: [
                     Text("Depositati  "),
                     Icon(
                       Icons.arrow_downward_rounded,

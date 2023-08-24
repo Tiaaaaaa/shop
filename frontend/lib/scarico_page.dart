@@ -87,8 +87,8 @@ class _DisplayState extends State<Display> {
             child: AppBar(
               backgroundColor: secondaryColor,
               automaticallyImplyLeading: false,
-              title: Row(
-                children: const [
+              title: const Row(
+                children: [
                   Text("Disponibili  "),
                   Icon(
                     Icons.warehouse_rounded,
@@ -101,23 +101,23 @@ class _DisplayState extends State<Display> {
         Expanded(
             child: FutureBuilder<List<Storage>>(
                 future: _available,
-                builder: (context, snapshot) {
+                builder: (_, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.none:
                       return const Text('Connessione non disponibile');
                     case ConnectionState.waiting:
                       return const Text('loading...');
-                    case ConnectionState.active:
-                      return const Text("active");
                     default:
-                      return GridView.count(
+                      return GridView.builder(
+                        itemCount: snapshot.data!.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
-                          children:
-                              List.generate(snapshot.data!.length, (index) {
-                            snapshot.data![index].book.display().then((value) {
-                              return value;
-                            });
-                          }));
+                        ),
+                        itemBuilder: (_, int index) {
+                          return snapshot.data![index].book.display();
+                        },
+                      );
                   }
                 }))
       ])),
@@ -127,8 +127,8 @@ class _DisplayState extends State<Display> {
             border: Border(left: BorderSide(color: secondaryColor, width: 8))),
         child: Scaffold(
             appBar: AppBar(
-                title: Row(
-                  children: const [
+                title: const Row(
+                  children: [
                     Text("Carrello "),
                     Icon(
                       Icons.shopping_cart_outlined,

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop/variables.dart';
@@ -35,17 +33,15 @@ class Book {
     );
   }
 
-  Future<Widget> display() async {
-    String link = await _getImageLink();
+  Widget display() {
+    Image image = _getImage();
 
     return Card(
       borderOnForeground: true,
       elevation: 2,
       child: Column(
         children: [
-          Image(
-            image: NetworkImage(link, scale: 1),
-          ),
+          image,
           Text("Titolo: $title"),
           Text("Prezzo: $price"),
           Text("Materia: $subject"),
@@ -54,17 +50,31 @@ class Book {
     );
   }
 
-  Future<String> _getImageLink() async {
+  Image _getImage() {
     try {
-      var res = await http.get(
-          Uri.https(host, "/book", {"q": title}));
+      //  var res = await http.get(Uri.https(host, "/books/cover", {"isbn": isbn}));
 
-      print(res.request);
-      return jsonDecode(res.body)["items"][0]["volumeInfo"]["imageLinks"]
-          ["smallThumbnail"];
+      //print(res.request);
+
+      Image img = Image.network(
+        "http://$host/books/get-cover?isbn=$isbn",
+        errorBuilder: (context, error, stackTrace) {
+          return Icon(
+            Icons.menu_book_outlined,
+            color: secondaryColor,
+          ) as Image;
+        },
+      );
+
+      print(img);
+
+      return img;
     } catch (e) {
       print(e.toString());
-      return "";
+      return Icon(
+        Icons.menu_book_outlined,
+        color: secondaryColor,
+      ) as Image;
     }
   }
 }

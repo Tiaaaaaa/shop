@@ -71,7 +71,7 @@ app.get('/books/get-cover', (req, res) => {
         stats = infos.stats;
     } catch (error) {
         console.log(error);
-        res.status(400).send(error.toString());
+        res.status(404).send(error.toString());
         return;
     }
 

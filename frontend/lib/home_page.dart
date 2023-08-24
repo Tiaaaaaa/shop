@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shop/resoconto_cliente.dart';
 import 'package:shop/variables.dart';
 
-import 'carico_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
