@@ -33,48 +33,51 @@ class Book {
   }
 
   Widget display() {
-    Widget image = _getImage();
+    //Widget image = _getImage();
 
     return Card(
-      borderOnForeground: true,
-      elevation: 2,
-      child: Column(
-        children: [
-          Expanded(
-            child: image,
-          ),
-          Text("Titolo: $title"),
-          Text("Prezzo: $price"),
-          Text("Materia: $subject"),
-        ],
-      ),
-    );
+        borderOnForeground: true,
+        elevation: 2,
+        margin: const EdgeInsets.all(20),
+        child: Container(
+            margin: const EdgeInsets.all(10),
+            child: Column(
+              children: [
+                const Expanded(
+                  child: Icon(Icons.book),
+                ),
+                Text("Titolo: $title"),
+                Text("Prezzo: $price"),
+                Text("Materia: $subject"),
+              ],
+            )));
   }
 
   Widget _getImage() {
+    print("almneno sei dentero");
     try {
-      //  var res = await http.get(Uri.https(host, "/books/cover", {"isbn": isbn}));
+      Widget img = FadeInImage(
+        image: NetworkImage("http://$host/books/get-cover?isbn=$isbn"),
+        placeholder: const AssetImage("assets/flutter-logo.png"),
+        imageErrorBuilder: (context, error, stackTrace) {
+          print("object");
+          return Image.asset('assets/flutter-logo.png', fit: BoxFit.fitWidth);
+        },
+        fit: BoxFit.fitWidth,
+      );
 
-      //print(res.request);
-
-      Image img = Image.network(
+      /* Image d = Image.network(
         "http://$host/books/get-cover?isbn=$isbn",
         errorBuilder: (context, error, stackTrace) {
-          print("error");
+          print(stackTrace);
           return Image.asset("assets/flutter-logo.png");
         },
-      );
+      );*/
 
-      /* Image img = Image.network(
-        "http://$host/books/get-cover?isbn=$isbn",
-        errorBuilder: (context, error, stackTrace) {
-          return Text("diocane");
-        },
-      );
-*/
+      print("caricato http://$host/books/get-cover?isbn=$isbn");
       return img;
     } catch (e) {
-      print("stocazzo");
+      print("e sei anche fuori con errore");
       return Image.asset("assets/flutter-logo.png");
     }
   }

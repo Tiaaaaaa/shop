@@ -60,6 +60,8 @@ class _DisplayState extends State<Display> {
   late List<Storage> _cart = [];
   late Future<List<Storage>> _available = fetchFromStorage("", "", "", "");
 
+  late FilerZone filters = FilerZone();
+
   @override
   Widget build(BuildContext context) {
     return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -78,7 +80,7 @@ class _DisplayState extends State<Display> {
               backgroundColor: secondaryColor,
               shadowColor: const Color(0x00000000),
             ),
-            body: const FilerZone(),
+            body: filters,
           )),
       Expanded(
           child: Column(children: [
@@ -89,7 +91,7 @@ class _DisplayState extends State<Display> {
               automaticallyImplyLeading: false,
               title: const Row(
                 children: [
-                  Text("Disponibili  "),
+                  Text("Disponibili   "),
                   Icon(
                     Icons.warehouse_rounded,
                     color: Colors.white,
@@ -115,7 +117,25 @@ class _DisplayState extends State<Display> {
                           crossAxisCount: 3,
                         ),
                         itemBuilder: (_, int index) {
-                          return snapshot.data![index].book.display();
+                          return Column(children: [
+                            Expanded(
+                              child: snapshot.data![index].book.display(),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                addToCart(snapshot.data![index]);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(3)),
+                                    border: Border.all(
+                                        color: primaryColor, width: 5),
+                                    color: secondaryColor),
+                                child: const Text("aggiungi al carrello"),
+                              ),
+                            )
+                          ]);
                         },
                       );
                   }
