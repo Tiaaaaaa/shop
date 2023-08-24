@@ -50,7 +50,7 @@ exports.getBookFromIsbn = (isbn) => {
  * @param {String} volume 
  * @param {String} publisher 
  * @param {Numer} price 
- * @param {String} section
+ * @param {String} 4
  * @returns false if the book is already into the db,
  * 			the object of the book if inserted
  */
@@ -73,6 +73,14 @@ exports.addBook = (isbn, subject, title, volume, publisher, price, section) => {
 }
 
 exports.fetchCover = async (isbn) => {
+
+    const filePath = path.join(__dirname, '/covers_assets/' + isbn + '.jpeg');
+
+    if (fs.existsSync(filePath)) {
+        console.log("cover of " + isbn + " is already there");
+        return;
+    }
+
     try {
 
         const res = await fetch("https://www.googleapis.com/books/v1/volumes?q=" + isbn, { method: 'GET' });
@@ -88,15 +96,15 @@ exports.fetchCover = async (isbn) => {
 
                     var download = function (uri, filename, callback) {
                         request.head(uri, function (err, res, body) {
-                            console.log('content-type:', res.headers['content-type']);
-                            console.log('content-length:', res.headers['content-length']);
+                            // console.log('content-type:', res.headers['content-type']);
+                            // console.log('content-length:', res.headers['content-length']);
 
                             request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
                         });
                     };
 
                     download(prevUrl, "./backend/server/books/covers_assets/" + isbn + '.jpeg', function () {
-                        console.log('done');
+                        console.log(isbn + 'cover downloaded');
                     });
 
 

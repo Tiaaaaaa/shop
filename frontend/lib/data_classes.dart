@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:shop/variables.dart';
 
 class Book {
@@ -34,14 +33,16 @@ class Book {
   }
 
   Widget display() {
-    Image image = _getImage();
+    Widget image = _getImage();
 
     return Card(
       borderOnForeground: true,
       elevation: 2,
       child: Column(
         children: [
-          image,
+          Expanded(
+            child: image,
+          ),
           Text("Titolo: $title"),
           Text("Prezzo: $price"),
           Text("Materia: $subject"),
@@ -50,7 +51,7 @@ class Book {
     );
   }
 
-  Image _getImage() {
+  Widget _getImage() {
     try {
       //  var res = await http.get(Uri.https(host, "/books/cover", {"isbn": isbn}));
 
@@ -59,22 +60,22 @@ class Book {
       Image img = Image.network(
         "http://$host/books/get-cover?isbn=$isbn",
         errorBuilder: (context, error, stackTrace) {
-          return Icon(
-            Icons.menu_book_outlined,
-            color: secondaryColor,
-          ) as Image;
+          print("error");
+          return Image.asset("assets/flutter-logo.png");
         },
       );
 
-      print(img);
-
+      /* Image img = Image.network(
+        "http://$host/books/get-cover?isbn=$isbn",
+        errorBuilder: (context, error, stackTrace) {
+          return Text("diocane");
+        },
+      );
+*/
       return img;
     } catch (e) {
-      print(e.toString());
-      return Icon(
-        Icons.menu_book_outlined,
-        color: secondaryColor,
-      ) as Image;
+      print("stocazzo");
+      return Image.asset("assets/flutter-logo.png");
     }
   }
 }
