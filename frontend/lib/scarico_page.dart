@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:shop/buy_page.dart';
 import 'package:shop/resoconto_cliente.dart';
 import 'package:shop/variables.dart';
 import 'package:http/http.dart' as http;
@@ -19,32 +20,44 @@ class ScaricoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          leading: TextButton(
-              onPressed: () {
-                while (cart.isNotEmpty) {
-                  cart[0].unstash();
-                  cart.removeAt(0);
-                }
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: TextButton(
+            onPressed: () {
+              while (cart.isNotEmpty) {
+                cart[0].unstash();
+                cart.removeAt(0);
+              }
 
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => GuestReportPage(guest)),
-                );
-              },
-              child: const Icon(
-                Icons.arrow_back_rounded,
-                color: Colors.white,
-              )),
-          title: Text(
-            "Pagina acquisti per $guest",
-            style: defaultTextStyle,
-          ),
-          centerTitle: true,
-          backgroundColor: primaryColor,
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => GuestReportPage(guest)),
+              );
+            },
+            child: const Icon(
+              Icons.arrow_back_rounded,
+              color: Colors.white,
+            )),
+        title: Text(
+          "Pagina acquisti per $guest",
+          style: defaultTextStyle,
         ),
-        body: Display(guest));
+        centerTitle: true,
+        backgroundColor: primaryColor,
+      ),
+      body: Display(guest),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(color: primaryColor),
+        height: 100,
+        child: TextButton(
+          child: Text("Acquista", style: titleTextStyle),
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => BuyPage(guest, cart)),
+            );
+          },
+        ),
+      ),
+    );
   }
 }
 
@@ -134,6 +147,7 @@ class _DisplayState extends State<Display> {
                                 addToCart(snapshot.data![index]);
                               },
                               child: Container(
+                                padding: const EdgeInsets.all(5),
                                 decoration: BoxDecoration(
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(3)),
