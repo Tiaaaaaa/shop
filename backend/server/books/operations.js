@@ -124,7 +124,7 @@ exports.getCover = (isbn) => {
         throw new Error("isbn not valid");
 
     const filePath = path.join(__dirname, '/covers_assets/' + isbn + '.jpeg');
-
+    const path404 = path.join(__dirname, '/covers_assets/404.png');
 
     if (fs.existsSync(filePath)) {
         var stat = fs.statSync(filePath);
@@ -132,7 +132,10 @@ exports.getCover = (isbn) => {
 
         return { "stream": readStream, "stats": stat };
     } else {
-        throw new Error("File non presente");
+        var stat = fs.statSync(path404);
+        var readStream = fs.createReadStream(path404);
+
+        return { "stream": readStream, "stats": stat };
     }
 
 }

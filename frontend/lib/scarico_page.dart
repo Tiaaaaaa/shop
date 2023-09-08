@@ -9,6 +9,8 @@ import 'package:http/http.dart' as http;
 
 import 'data_classes.dart';
 
+List<Storage> cart = [];
+
 class ScaricoPage extends StatelessWidget {
   ScaricoPage(this.guest, {super.key});
 
@@ -20,12 +22,17 @@ class ScaricoPage extends StatelessWidget {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           leading: TextButton(
-              onPressed: () => {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => GuestReportPage(guest)),
-                    )
-                  },
+              onPressed: () {
+                while (cart.isNotEmpty) {
+                  cart[0].unstash();
+                  cart.removeAt(0);
+                }
+
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => GuestReportPage(guest)),
+                );
+              },
               child: const Icon(
                 Icons.arrow_back_rounded,
                 color: Colors.white,
@@ -57,13 +64,14 @@ class _DisplayState extends State<Display> {
 
   String guest;
 
-  late List<Storage> _cart = [];
   late Future<List<Storage>> _available = fetchFromStorage("", "", "", "");
 
   late FilerZone filters = FilerZone();
 
   @override
   Widget build(BuildContext context) {
+    setState(() {});
+
     return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Container(
           width: 400,
@@ -171,18 +179,18 @@ class _DisplayState extends State<Display> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text(_cart[index].book.title.toString()),
-                            Text(_cart[index].book.subject.toString()),
-                            Text(_cart[index].book.price.toString()),
+                            Text(cart[index].book.title.toString()),
+                            Text(cart[index].book.subject.toString()),
+                            Text(cart[index].book.price.toString()),
                             TextButton(
                                 onPressed: () {
-                                  removeFromCart(_cart[index]);
+                                  removeFromCart(cart[index]);
                                 },
                                 child: const Text("Rimuovi"))
                           ],
                         ));
                   },
-                  itemCount: _cart.length,
+                  itemCount: cart.length,
                 ))),
       )
     ]);
@@ -190,46 +198,18 @@ class _DisplayState extends State<Display> {
 
   void addToCart(Storage item) {
     setState(() {
-      stash(item.id);
-      _cart.add(item);
+      item.stash();
+      cart.add(item);
       _available = fetchFromStorage("", "", "", "");
     });
   }
 
   void removeFromCart(Storage item) {
     setState(() {
-      unstash(item.id);
-      _cart.remove(item);
+      item.unstash();
+      cart.remove(item);
       _available = fetchFromStorage("", "", "", "");
     });
-  }
-
-  Future<void> stash(int id) async {
-    try {
-      await http.put(Uri.http(host, "/storage/stash-book"),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(<String, int>{
-            "id": id,
-          }));
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  Future<void> unstash(int id) async {
-    try {
-      await http.put(Uri.http(host, "/storage/unstash-book"),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(<String, int>{
-            "id": id,
-          }));
-    } catch (e) {
-      print(e.toString());
-    }
   }
 
   Future<List<Storage>> fetchFromStorage(

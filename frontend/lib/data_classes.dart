@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shop/variables.dart';
+import 'package:http/http.dart' as http;
 
 class Book {
   final int isbn;
@@ -33,7 +35,7 @@ class Book {
   }
 
   Widget display() {
-    //Widget image = _getImage();
+    Widget image = _getImage();
 
     return Card(
         borderOnForeground: true,
@@ -43,8 +45,8 @@ class Book {
             margin: const EdgeInsets.all(10),
             child: Column(
               children: [
-                const Expanded(
-                  child: Icon(Icons.book),
+                Expanded(
+                  child: image,
                 ),
                 Text("Titolo: $title"),
                 Text("Prezzo: $price"),
@@ -54,7 +56,6 @@ class Book {
   }
 
   Widget _getImage() {
-    print("almneno sei dentero");
     try {
       Widget img = FadeInImage(
         image: NetworkImage("http://$host/books/get-cover?isbn=$isbn"),
@@ -65,19 +66,8 @@ class Book {
         },
         fit: BoxFit.fitWidth,
       );
-
-      /* Image d = Image.network(
-        "http://$host/books/get-cover?isbn=$isbn",
-        errorBuilder: (context, error, stackTrace) {
-          print(stackTrace);
-          return Image.asset("assets/flutter-logo.png");
-        },
-      );*/
-
-      print("caricato http://$host/books/get-cover?isbn=$isbn");
       return img;
     } catch (e) {
-      print("e sei anche fuori con errore");
       return Image.asset("assets/flutter-logo.png");
     }
   }
@@ -112,5 +102,33 @@ class Storage {
         buyDate: json['buyDate'] as String,
         seller: User.fromJson(json['seller']),
         id: json["id"] as int);
+  }
+
+  Future<void> stash() async {
+    try {
+      await http.put(Uri.http(host, "/storage/stash-book"),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, int>{
+            "id": id,
+          }));
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> unstash() async {
+    try {
+      await http.put(Uri.http(host, "/storage/unstash-book"),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, int>{
+            "id": id,
+          }));
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }
