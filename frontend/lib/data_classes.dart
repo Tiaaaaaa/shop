@@ -12,7 +12,7 @@ class Book {
   final double price;
   final String section;
 
-  const Book({
+  Book({
     required this.isbn,
     required this.subject,
     required this.title,
@@ -33,6 +33,17 @@ class Book {
       section: json['section'] as String,
     );
   }
+
+  Map<String, dynamic> toJson() => _$BookToJson(this);
+  Map<String, dynamic> _$BookToJson(Book instance) => <String, dynamic>{
+        "isbn": instance.isbn,
+        "subject": instance.subject,
+        "title": instance.title,
+        "volume": instance.volume,
+        "publisher": instance.publisher,
+        "price": instance.price,
+        "section": instance.section,
+      };
 
   Widget display() {
     Widget image = _getImage();
@@ -82,6 +93,10 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) {
     return User(cf: json["cf"] as String, id: json["id"] as int);
   }
+
+  Map<String, dynamic> toJson() => _$UserToJson(this);
+  Map<String, dynamic> _$UserToJson(User instance) =>
+      <String, dynamic>{"cf": cf, "id": id};
 }
 
 class Storage {
@@ -103,6 +118,14 @@ class Storage {
         seller: User.fromJson(json['seller']),
         id: json["id"] as int);
   }
+
+  Map<String, dynamic> toJson() => _$StorageToJson(this);
+  Map<String, dynamic> _$StorageToJson(Storage instance) => <String, dynamic>{
+        "book": book.toJson(),
+        "buyDate": buyDate,
+        "user": seller.toJson(),
+        "id": id
+      };
 
   Future<void> stash() async {
     try {

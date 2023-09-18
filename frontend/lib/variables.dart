@@ -10,4 +10,4 @@ TextStyle defaultTextStyle =
 TextStyle titleTextStyle =
     TextStyle(color: secondaryColor, fontFamily: "Helvetica", fontSize: 30);
 
-String host = "127.0.0.1:3000";
+const String host = "localhost:3000";

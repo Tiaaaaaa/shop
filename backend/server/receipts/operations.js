@@ -1,6 +1,7 @@
 const { jsPDF } = require("jspdf");
 const fs = require("fs");
 const path = require("path");
+const { log } = require("console");
 
 const folder = "./backend/server/receipts/"
 
@@ -19,7 +20,7 @@ exports.create = (data, buyer) => {
 
     doc.setFontSize(10);
     doc.text("Libri depositati:", 15, 35)
-
+    
     let i = 0;
     data.forEach(row => {
         let j = 0;

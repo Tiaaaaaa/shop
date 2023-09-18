@@ -7,6 +7,8 @@ require("./backend/server/books/requestes");
 require("./backend/server/users/requestes");
 require("./backend/server/receipts/requestes");
 
+var storageFun = require("./backend/server/storage/operations")
+
 const ddl = require("./backend/DB/ddl")
 
 const StormDB = require("stormdb");
@@ -81,3 +83,12 @@ const port = 3000;
  * Log alla console del server per il "tutto okay"
 */
 app.listen(port, () => console.log(`Funziona, porta: ${port}`))
+
+
+process.stdin.addListener("data", (data) => {
+    if (data.toString() == "unstash\n") {
+        storageFun.unstashAll();
+        console.log("All books unstashed");
+    }
+});
+

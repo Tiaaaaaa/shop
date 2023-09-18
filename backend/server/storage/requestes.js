@@ -2,7 +2,6 @@ const bodyParser = require('body-parser')
 const usersFun = require("../users/operations")
 const storageFun = require("./operations")
 const check = require("../checkData")
-const recFun = require("../receipts/operations")
 
 // create application/json parser
 let jsonParser = bodyParser.json()
@@ -152,12 +151,13 @@ app.get('/storage/search-in-storage', (req, res) => {
         inStorage = inStorage.filter(b => b.seller.cf != req.query.seller);
     }
 
+    inStorage = inStorage.filter(b => !b.stashed)
+
     if (inStorage.length == 0) {
         res.status(404).send("Nessun libro presente");
         return;
     }
 
-    inStorage = inStorage.filter(b => !b.stashed)
 
     res.send(inStorage);
 
@@ -194,20 +194,18 @@ app.put('/storage/unstash-book', jsonParser, (req, res) => {
 
 });
 
-app.put('/storage/buy', jsonParser, (req, res) => {
+app.post('/storage/buy', jsonParser, (req, res) => {
 
     data = req.body;
 
-    buyer = data.pop();
+    buyer = data.buyer;
+    try {
 
-    data.forEach(element => {
-        data.book.price += Number(element.price);
-        storageFun.buy(buyer, element.id);
-    });
+        storageFun.buy(buyer, JSON.parse(data.cart));
+        res.status(200).send("Acquisto eseguito");
+    } catch (error) {
+        res.status(400).send("Acquisto non andato a buon fine");
+    }
 
-    recFun.create(data, buyer);
-
-    res.status(200).send("Acquisto eseguito");
 
 })
-
